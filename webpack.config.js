@@ -5,7 +5,7 @@ const webpackRules = require('./webpack.rules');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: './src/app.ts',
+    entry: './src/index.tsx',
     devtool: 'source-map',
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
