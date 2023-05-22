@@ -1,10 +1,4 @@
-import React from 'react';
-import { render } from 'react-dom';
+import { AppController } from './AppController';
 
-interface Props {}
-
-export const App: React.FC<Props> = ({}) => {
-    return <div>App</div>;
-};
-
-render(<App />, document.getElementById('root'));
+const app: AppController = new AppController();
+app.run();
