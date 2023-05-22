@@ -4,9 +4,13 @@
   "description": "bricks-runner",
   "main": "src/app.ts",
   "scripts": {
+    "dev": "npx webpack-dev-server --mode development",
     "start": "ts-node --project tsconfig.json -r tsconfig-paths/register src/app.ts",
     "watch": "nodemon",
-    "test": "jest --testPathPattern=/src/"
+    "test": "jest --testPathPattern=/src/",
+    "build": "webpack --mode production",
+    "builddev": "webpack --mode development",
+    "ts-check": "tsc"
   },
   "keywords": [],
   "author": "Alexander Ponomarenko",
@@ -32,6 +36,13 @@
     "redux-actions": "2.6.5",
     "ts-node": "^10.3.0",
     "tsconfig-paths": "^4.0.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
+    "html-webpack-plugin": "^4.0.3",
+    "copy-webpack-plugin": "^6.0.0",
+    "css-loader": "^5.2.7",
+    "style-loader": "^2.0.0"
   }
 }
