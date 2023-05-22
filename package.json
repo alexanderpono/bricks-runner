@@ -12,7 +12,7 @@
     "builddev": "webpack --mode development",
     "ts-check": "tsc"
   },
-  "keywords": [],
+  "keywords": [], 
   "author": "Alexander Ponomarenko",
   "license": "ISC",
   "devDependencies": {
