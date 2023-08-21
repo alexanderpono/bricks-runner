@@ -3,17 +3,15 @@
     "baseUrl": "./",
     "paths": {
       "@src/*": ["src/*"],
-      "@/*": ["./*"]
     },
     "target": "es6",
     "module": "commonjs",
-    "allowJs": false,
     "jsx": "react",
-    "sourceMap": true,
-    "strict": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "noImplicitAny": false,
-    "outDir": "ts-check"
-  },
-  "include": ["src/**/*"]
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "outDir": "./temp/tsc-build"
+  },  
+  "include": ["src", "custom.d.ts"]
 }
