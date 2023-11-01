@@ -2,6 +2,7 @@ import React from 'react';
 import { drawEdge, drawEdgeCost, drawVertex } from '@src/ports/canvas.lib';
 import { Edge2D, Vertex2D } from '@src/ports/2D.types';
 import { AbstractGraph } from '@src/game/Graph.types';
+import parse from 'html-react-parser';
 
 interface AbstractGraphUIProps {
     graph: AbstractGraph;
@@ -40,8 +41,10 @@ export const AbstractGraphUI: React.FC<AbstractGraphUIProps> = ({
 
     return (
         <>
-            <h3>{caption}</h3>
-            <canvas height="350" width="720" id="GraphUI" ref={canvasRef}></canvas>
+            {caption && <h3>{parse(caption)}</h3>}
+            <div className="canvas">
+                <canvas height="350" width="720" id="GraphUI" ref={canvasRef}></canvas>
+            </div>
         </>
     );
 };

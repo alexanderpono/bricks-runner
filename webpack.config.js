@@ -33,7 +33,7 @@ module.exports = {
     },
     devServer: {
         open: true,
-        port: 8701,
+        port: 8702,
         historyApiFallback: true,
         client: {
             progress: true
