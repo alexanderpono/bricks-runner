@@ -21,7 +21,8 @@ module.exports = {
         }
     },
     entry: {
-        gameField: './src/gameField.tsx'
+        gameField: './src/gameField.tsx',
+        bricksEditor: './src/bricksEditor.tsx'
     },
     output: {
         filename: '[name].js',

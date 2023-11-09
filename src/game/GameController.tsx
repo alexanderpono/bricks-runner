@@ -367,7 +367,11 @@ export class GameController {
     };
 }
 
-function calcManScreenPos(manFieldXY: Point2D, nextManFieldXY: Point2D, miniCounter: number) {
+export function calcManScreenPos(
+    manFieldXY: Point2D,
+    nextManFieldXY: Point2D,
+    miniCounter: number
+) {
     const deltaX = nextManFieldXY.x - manFieldXY.x;
     const deltaY = nextManFieldXY.y - manFieldXY.y;
     const manScreenXY = {
