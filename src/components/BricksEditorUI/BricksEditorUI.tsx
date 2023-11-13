@@ -1,6 +1,5 @@
 import React from 'react';
-import { GameState } from '@src/components/GameFieldUI/Game.types';
-import { BricksEditorControllerForChildren } from '@src/bricksEditor/bricksEditor.types';
+import { GameFieldController, GameState } from '@src/components/GameFieldUI/Game.types';
 import { GameControls } from '@src/components/GameFieldUI/GameControls';
 
 interface BricksEditorUI {
@@ -8,15 +7,11 @@ interface BricksEditorUI {
     title: string;
     canvasW?: number;
     canvasH?: number;
-    ctrl: BricksEditorControllerForChildren;
+    ctrl: GameFieldController;
     gameState: GameState;
 }
 export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI>(
     ({ id, title, canvasW, canvasH, ctrl, gameState }, canvasRef) => {
-        React.useLayoutEffect(() => {
-            ctrl.onUIRender();
-        }, []);
-
         return (
             <div>
                 BricksEditorUI

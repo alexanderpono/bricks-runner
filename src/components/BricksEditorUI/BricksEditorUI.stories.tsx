@@ -1,9 +1,8 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { BricksEditorUI } from './BricksEditorUI';
-import { GameState, defaultGameState } from '../GameFieldUI/Game.types';
+import { GameFieldController, GameState, defaultGameState } from '../GameFieldUI/Game.types';
 import { castPartialTo } from '@src/testFramework/castPartialTo';
-import { BricksEditorControllerForChildren } from '@src/bricksEditor/bricksEditor.types';
 
 export default {
     title: 'BricksEditorUI',
@@ -13,8 +12,7 @@ export default {
 export const Static = () => {
     const canvasRef = React.useRef(null);
     const gameState: GameState = { ...defaultGameState };
-    const ctrl = castPartialTo<BricksEditorControllerForChildren>({
-        onUIRender: () => {},
+    const ctrl = castPartialTo<GameFieldController>({
         onUIMounted: () => {}
     });
     return (
