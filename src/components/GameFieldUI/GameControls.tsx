@@ -13,6 +13,9 @@ interface GameFieldUIProps {
 
 export const GameControls = React.forwardRef<HTMLCanvasElement, GameFieldUIProps>(
     ({ id, title, canvasW, canvasH, ctrl, gameState }, canvasRef) => {
+        React.useEffect(() => {
+            ctrl.onUIMounted();
+        }, []);
         return (
             <>
                 {title && <h3>{parse(title)}</h3>}

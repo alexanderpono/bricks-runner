@@ -5,9 +5,14 @@ import { GameState, RenderOptions, defaultGameState } from '@src/components/Game
 import { Cell, GameField, Point2D, defaultPoint2D } from './GameField';
 import { ManAni, SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
 import ImgSprite from '@src/components/GameFieldUI/sprite.png';
-import { GameFieldUI } from '@src/components/GameFieldUI/GameFieldUI';
 import { GraphFromField } from './GraphFromField';
 import { AbstractGraph } from './Graph.types';
+import { GRField } from '@src/ports/GRField';
+import { GRGold } from '@src/ports/GRGold';
+import { GRGraph } from '@src/ports/GRGraph';
+import { GRMan } from '@src/ports/GRMan';
+import { GRSelect } from '@src/ports/GRSelect';
+import { GameControls } from '@src/components/GameFieldUI/GameControls';
 
 export class GameController {
     protected gameState: GameState;
@@ -30,7 +35,7 @@ export class GameController {
         protected graphBuilder: GraphFromField,
         protected calculator: typeof GraphCalculator,
         protected verbose: boolean,
-        stepNo: number = ALL_NODES
+        protected maxStepNo: number = ALL_NODES
     ) {
         this.gameState = {
             ...defaultGameState,
@@ -47,7 +52,7 @@ export class GameController {
             miniCounter: 0,
             manAni: ManAni.STAND,
             highlightCells: options.highlightCells,
-            maxCalcStep: stepNo,
+            maxCalcStep: this.maxStepNo,
             showBtNodes: options.showBtNodes,
             showBtEdges: options.showBtEdges,
             showBtStartStop: options.showBtStartStop,
@@ -56,76 +61,140 @@ export class GameController {
             showProgress: options.showProgress
         };
         this.canvasRef = React.createRef<HTMLCanvasElement>();
+    }
 
+    go = () => {
+        this.renderUI();
+    };
+
+    calcField = () => {
+        const getEmptyMap = (s: string): string => {
+            let s2 = s.replace('$', ' ');
+            s2 = s2.replace('M', ' ');
+            return s2;
+        };
+        const emptyMap = getEmptyMap(this.map);
+        const field = GameField.create().initFromText(emptyMap);
+        this.emptyField = field;
+
+        const gameField = GameField.create().initFromText(this.map);
+        let graph = this.graphBuilder.graphFromField(gameField);
+        const mIndex = this.graphBuilder.getVertexIndex(this.map, 'M');
+        const dIndex = this.graphBuilder.getVertexIndex(this.map, '$');
+        graph = new this.calculator().calculateGraph(
+            graph,
+            mIndex,
+            dIndex,
+            SILENT,
+            this.maxStepNo,
+            gameField
+        );
+        this.w = gameField.getWidth();
+        const goldScreenXY = gameField.vertexIndexToCoords(dIndex, this.w);
+        const manFieldXY = gameField.vertexIndexToCoords(mIndex, this.w);
+        const manScreenXY = calcManScreenPos(
+            manFieldXY,
+            this.nextManFieldXY,
+            this.gameState.miniCounter
+        );
+
+        this.graph = graph;
+        this.gameField = gameField;
+        this.manFieldXY = manFieldXY;
+        this.gameState = {
+            ...this.gameState,
+            manScreenXY,
+            goldScreenXY,
+            curVertexIndex: graph.curVertexIndex
+        };
+
+        this.manVIndex = mIndex;
+        this.nextManVIndex = mIndex;
+        this.curPathPos = 0;
+    };
+
+    onUIMounted = () => {
         this.loadPic().then(() => {
             this.picLoaded = true;
 
-            const getEmptyMap = (s: string): string => {
-                let s2 = s.replace('$', ' ');
-                s2 = s2.replace('M', ' ');
-                return s2;
-            };
-            const emptyMap = getEmptyMap(this.map);
-            const field = GameField.create().initFromText(emptyMap);
-            this.emptyField = field;
-
-            const gameField = GameField.create().initFromText(map);
-            let graph = this.graphBuilder.graphFromField(gameField);
-            const mIndex = this.graphBuilder.getVertexIndex(map, 'M');
-            const dIndex = this.graphBuilder.getVertexIndex(map, '$');
-            graph = new calculator().calculateGraph(
-                graph,
-                mIndex,
-                dIndex,
-                SILENT,
-                stepNo,
-                gameField
-            );
-            this.w = gameField.getWidth();
-            const goldScreenXY = gameField.vertexIndexToCoords(dIndex, this.w);
-            const manFieldXY = gameField.vertexIndexToCoords(mIndex, this.w);
-            const manScreenXY = calcManScreenPos(
-                manFieldXY,
-                this.nextManFieldXY,
-                this.gameState.miniCounter
-            );
-
-            this.graph = graph;
-            this.gameField = gameField;
-            this.manFieldXY = manFieldXY;
-            this.gameState = {
-                ...this.gameState,
-                manScreenXY,
-                goldScreenXY,
-                curVertexIndex: graph.curVertexIndex
-            };
-
-            this.manVIndex = mIndex;
-            this.nextManVIndex = mIndex;
-            this.curPathPos = 0;
-
-            this.renderUI();
+            this.calcField();
+            this.renderScene();
         });
-    }
+    };
+
+    renderScene = () => {
+        if (!this.picLoaded) {
+            console.log('GameFieldUI() !picLoaded');
+            return;
+        }
+
+        const canvas = this.canvasRef.current;
+        const gameState = this.gameState;
+        const graph = this.graph;
+        const field = this.gameField;
+
+        if (canvas === null) {
+            console.log('GameFieldUI() canvas === null');
+            return;
+        }
+        const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+        context.fillStyle = 'orange';
+        context.strokeStyle = '#FF0000';
+        context.lineWidth = 3;
+        context.strokeRect(0, 0, canvas.width, canvas.height);
+
+        if (canvas === null || context === null || graph === null) {
+            console.log('GameFieldUI() graph === null');
+            return;
+        }
+
+        const options: RenderOptions = {
+            nodes: gameState.nodesChecked,
+            lines: gameState.linesChecked,
+            path: gameState.pathChecked,
+            nodesCost: gameState.nodesCostChecked,
+            nodesShortCost: gameState.nodesShortCost,
+            map: gameState.mapChecked,
+            showBtMap: gameState.showBtMap,
+            showBtNodes: gameState.showBtNodes,
+            showBtEdges: gameState.showBtEdges,
+            showBtStartStop: gameState.showBtStartStop,
+            highlightCells: gameState.highlightCells,
+            showBtPath: gameState.showBtPath,
+            showBtCost: gameState.showBtCost,
+            showProgress: gameState.showProgress,
+            curVertexIndex: gameState.curVertexIndex
+        };
+
+        GRField.create(context, this.emptyField, gameState.pic, options).draw();
+        GRGold.create(context, gameState.goldScreenXY, gameState.pic).draw();
+        GRGraph.create(context, field, graph, options).draw();
+        GRMan.create(
+            context,
+            gameState.manScreenXY,
+            gameState.manTargetScreenXY,
+            gameState.manAni,
+            gameState.pic,
+            gameState.miniCounter
+        ).draw();
+        gameState.highlightCells.forEach((point: Point2D) => {
+            GRSelect.create(context, point, gameState.pic).draw();
+        });
+    };
 
     renderUI = () => {
         render(this.getUI(), document.getElementById(this.target));
     };
 
     getUI = () => (
-        <GameFieldUI
-            field={this.gameField}
-            emptyField={this.emptyField}
-            graph={this.graph}
+        <GameControls
             id={this.target}
             title={this.title}
             canvasW={this.canvasW}
             canvasH={this.canvasH}
             ref={this.canvasRef}
-            canvas={this.canvasRef.current}
             ctrl={this}
             gameState={this.gameState}
-            picLoaded={this.picLoaded}
         />
     );
 
@@ -142,22 +211,27 @@ export class GameController {
     nodesClicked = () => {
         this.patchState({ nodesChecked: !this.gameState.nodesChecked });
         this.renderUI();
+        this.renderScene();
     };
     linesClicked = () => {
         this.patchState({ linesChecked: !this.gameState.linesChecked });
         this.renderUI();
+        this.renderScene();
     };
     pathClicked = () => {
         this.patchState({ pathChecked: !this.gameState.pathChecked });
         this.renderUI();
+        this.renderScene();
     };
     nodesCostClicked = () => {
         this.patchState({ nodesCostChecked: !this.gameState.nodesCostChecked });
         this.renderUI();
+        this.renderScene();
     };
     mapClicked = () => {
         this.gameState = { ...this.gameState, mapChecked: !this.gameState.mapChecked };
         this.renderUI();
+        this.renderScene();
     };
     onBtStartClick = () => {
         this.patchState({ manAni: ManAni.RIGHT });
@@ -181,6 +255,7 @@ export class GameController {
 
         this.patchState({ miniCounter, manAni: ManAni.STAND, manScreenXY });
         this.renderUI();
+        this.renderScene();
     };
 
     stepNo = 0;
@@ -219,7 +294,7 @@ export class GameController {
                 };
             }
             this.patchState({ manScreenXY, miniCounter, manTargetScreenXY });
-            this.renderUI();
+            this.renderScene();
         } else {
             const miniCounter = this.gameState.miniCounter + 1;
             let manScreenXY = calcManScreenPos(this.manFieldXY, this.nextManFieldXY, miniCounter);
@@ -235,13 +310,13 @@ export class GameController {
                 };
             }
             this.patchState({ manScreenXY, miniCounter, manTargetScreenXY });
-            this.renderUI();
+            this.renderScene();
         }
         if (this.stepNo < this.graph.cheapestPath.length) {
             setTimeout(() => this.tick(), 25);
         } else {
             this.patchState({ manAni: ManAni.STAND });
-            this.renderUI();
+            this.renderScene();
         }
     };
 

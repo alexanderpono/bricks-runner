@@ -41,55 +41,59 @@ export const SupaFieldUI = React.forwardRef<HTMLCanvasElement, SupaFieldUIProps>
         canvasRef
     ) => {
         React.useEffect(() => {
-            if (!picLoaded) {
-                return;
-            }
+            ctrl.onUIMounted();
+        }, []);
 
-            if (canvas === null) {
-                return;
-            }
-            const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-            context.fillStyle = 'orange';
-            context.strokeStyle = '#FF0000';
-            context.lineWidth = 3;
-            context.strokeRect(0, 0, canvas.width, canvas.height);
+        // React.useEffect(() => {
+        //     if (!picLoaded) {
+        //         return;
+        //     }
 
-            if (canvas === null || context === null || graph === null) {
-                return;
-            }
+        //     if (canvas === null) {
+        //         return;
+        //     }
+        //     const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+        //     context.fillStyle = 'orange';
+        //     context.strokeStyle = '#FF0000';
+        //     context.lineWidth = 3;
+        //     context.strokeRect(0, 0, canvas.width, canvas.height);
 
-            const options: RenderOptions = {
-                nodes: gameState.nodesChecked,
-                lines: gameState.linesChecked,
-                path: gameState.pathChecked,
-                nodesCost: gameState.nodesCostChecked,
-                nodesShortCost: gameState.nodesShortCost,
-                map: gameState.mapChecked,
-                showBtMap: gameState.showBtMap,
-                showBtNodes: gameState.showBtNodes,
-                showBtEdges: gameState.showBtEdges,
-                showBtStartStop: gameState.showBtStartStop,
-                highlightCells: gameState.highlightCells,
-                showBtPath: gameState.showBtPath,
-                showBtCost: gameState.showBtCost,
-                showProgress: gameState.showProgress,
-                curVertexIndex: gameState.curVertexIndex
-            };
+        //     if (canvas === null || context === null || graph === null) {
+        //         return;
+        //     }
 
-            GRField.create(context, emptyField, gameState.pic, options).draw();
-            GRGold.create(context, gameState.goldScreenXY, gameState.pic).draw();
-            GRGraph.create(context, field, graph, options).draw();
-            GREater.create(
-                context,
-                gameState.manScreenXY,
-                gameState.manAni,
-                gameState.pic,
-                gameState.miniCounter
-            ).draw();
-            gameState.highlightCells.forEach((point: Point2D) => {
-                GRSelect.create(context, point, gameState.pic).draw();
-            });
-        }, [gameState, canvas, graph, picLoaded]);
+        //     const options: RenderOptions = {
+        //         nodes: gameState.nodesChecked,
+        //         lines: gameState.linesChecked,
+        //         path: gameState.pathChecked,
+        //         nodesCost: gameState.nodesCostChecked,
+        //         nodesShortCost: gameState.nodesShortCost,
+        //         map: gameState.mapChecked,
+        //         showBtMap: gameState.showBtMap,
+        //         showBtNodes: gameState.showBtNodes,
+        //         showBtEdges: gameState.showBtEdges,
+        //         showBtStartStop: gameState.showBtStartStop,
+        //         highlightCells: gameState.highlightCells,
+        //         showBtPath: gameState.showBtPath,
+        //         showBtCost: gameState.showBtCost,
+        //         showProgress: gameState.showProgress,
+        //         curVertexIndex: gameState.curVertexIndex
+        //     };
+
+        //     GRField.create(context, emptyField, gameState.pic, options).draw();
+        //     GRGold.create(context, gameState.goldScreenXY, gameState.pic).draw();
+        //     GRGraph.create(context, field, graph, options).draw();
+        //     GREater.create(
+        //         context,
+        //         gameState.manScreenXY,
+        //         gameState.manAni,
+        //         gameState.pic,
+        //         gameState.miniCounter
+        //     ).draw();
+        //     gameState.highlightCells.forEach((point: Point2D) => {
+        //         GRSelect.create(context, point, gameState.pic).draw();
+        //     });
+        // }, [gameState, canvas, graph, picLoaded]);
 
         return (
             <GameControls

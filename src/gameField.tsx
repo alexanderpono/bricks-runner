@@ -122,16 +122,7 @@ function renderGameField(
     calculator: typeof GraphCalculator,
     stepNo: number = ALL_NODES
 ) {
-    new GameController(
-        title,
-        map,
-        target,
-        options,
-        graphBuilder,
-        calculator,
-        SILENT,
-        stepNo
-    ).renderUI();
+    new GameController(title, map, target, options, graphBuilder, calculator, SILENT, stepNo).go();
 }
 
 const map12 = `
@@ -184,14 +175,5 @@ function renderSupaField(
     calculator: typeof GraphCalculator,
     stepNo: number = ALL_NODES
 ) {
-    new SupaController(
-        title,
-        map,
-        target,
-        options,
-        calcCost,
-        calculator,
-        SILENT,
-        stepNo
-    ).renderUI();
+    new SupaController(title, map, target, options, calcCost, calculator, SILENT, stepNo).go();
 }

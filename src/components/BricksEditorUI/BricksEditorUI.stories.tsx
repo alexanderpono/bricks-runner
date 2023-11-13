@@ -14,7 +14,8 @@ export const Static = () => {
     const canvasRef = React.useRef(null);
     const gameState: GameState = { ...defaultGameState };
     const ctrl = castPartialTo<BricksEditorControllerForChildren>({
-        onUIRender: () => {}
+        onUIRender: () => {},
+        onUIMounted: () => {}
     });
     return (
         <BricksEditorUI
