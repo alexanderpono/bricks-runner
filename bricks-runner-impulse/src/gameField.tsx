@@ -10,7 +10,7 @@ import { RenderOptions, defaultRenderOptions } from './components/GameFieldUI/Ga
 import { SupaController } from './game/SupaController';
 import { GraphFromFieldTeleport } from './game/GraphFromFieldTeleport';
 
-console.log('gameField!');
+console.log('gameField2!');
 
 const map1 = `
 ▓ M              ▓
