@@ -1,0 +1,1 @@
+{"version":3,"file":"bricksEditor.js","mappings":"mBAEAA,QAAQC,IAAI,gB","sources":["webpack://bricks-runner/./src/bricksEditor.tsx"],"sourcesContent":["import { BricksEditorController } from './bricksEditor/BricksEditorController';\n\nconsole.log('bricksEditor!');\n\n// new BricksEditorController().go();\n"],"names":["console","log"],"sourceRoot":""}
