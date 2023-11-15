@@ -15,6 +15,9 @@ export const GameControls = React.forwardRef<HTMLCanvasElement, GameFieldUIProps
     ({ id, title, canvasW, canvasH, ctrl, gameState }, canvasRef) => {
         React.useEffect(() => {
             ctrl.onUIMounted();
+            return () => {
+                ctrl.onUIUnmounted();
+            };
         }, []);
         return (
             <>

@@ -17,6 +17,10 @@ export interface GameFieldController {
     onBtNextJumpClick: () => void;
     onBtToFinishClick: () => void;
     onUIMounted: () => void;
+    onUIUnmounted: () => void;
+    handleClickBtBrick?: () => void;
+    handleClickBtStairs?: () => void;
+    handleClickBtGold?: () => void;
 }
 export interface GameState {
     nodesChecked: boolean;

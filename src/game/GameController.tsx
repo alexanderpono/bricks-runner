@@ -113,14 +113,15 @@ export class GameController {
         this.curPathPos = 0;
     };
 
-    onUIMounted = () => {
+    onUIMounted() {
         this.loadPic().then(() => {
             this.picLoaded = true;
 
             this.calcField();
             this.renderScene();
         });
-    };
+    }
+    onUIUnmounted() {}
 
     renderScene = () => {
         if (!this.picLoaded) {

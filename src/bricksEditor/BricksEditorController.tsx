@@ -1,27 +1,18 @@
 import { BricksEditorUI } from '@src/components/BricksEditorUI';
 import {
-    GameState,
     RenderOptions,
     defaultGameState,
     defaultRenderOptions
 } from '@src/components/GameFieldUI/Game.types';
-import { GameController, calcManScreenPos } from '@src/game/GameController';
-import { GameField, Point2D, defaultPoint2D } from '@src/game/GameField';
-import { AbstractGraph } from '@src/game/Graph.types';
-import { ALL_NODES, GraphCalculator, SILENT } from '@src/game/GraphCalculator';
+import { GameController } from '@src/game/GameController';
+import { FieldChars, defaultPoint2D } from '@src/game/GameField';
+import { ALL_NODES } from '@src/game/GraphCalculator';
 import { GraphCalculatorV2 } from '@src/game/GraphCalculatorV2';
-import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
 import { GraphFromField } from '@src/game/GraphFromField';
 import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
 import React from 'react';
 import { render } from 'react-dom';
-import ImgSprite from '@src/components/GameFieldUI/sprite.png';
-import { GRField } from '@src/ports/GRField';
-import { GRGold } from '@src/ports/GRGold';
-import { GRGraph } from '@src/ports/GRGraph';
-import { GRMan } from '@src/ports/GRMan';
-import { GRSelect } from '@src/ports/GRSelect';
-import { ManAni } from '@src/ports/GR.types';
+import { ManAni, SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -49,6 +40,7 @@ const SIMPLE = new GraphFromField();
 const ADVANCED_V2 = new GraphFromFieldAdvancedV2();
 export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
+    curChar: string = FieldChars.wall;
 
     constructor() {
         super(
@@ -89,6 +81,40 @@ export class BricksEditorController extends GameController {
         // this.canvasRef = React.createRef<HTMLCanvasElement>();
     }
 
+    onUIMounted() {
+        console.log('onUIMounted!! this.canvasRef.current=', this.canvasRef.current);
+        super.onUIMounted();
+        this.canvasRef.current.addEventListener('click', this.handleCanvasClick);
+    }
+
+    onUIUnmounted() {
+        this.canvasRef.current.removeEventListener('click', this.handleCanvasClick);
+    }
+
+    handleCanvasClick = (evt: MouseEvent) => {
+        const x = evt.offsetX;
+        const y = evt.offsetY;
+        const cellX = Math.floor(x / SPRITE_WIDTH);
+        const cellY = Math.floor(y / SPRITE_HEIGHT);
+        console.log('handleCanvasClick() cellX, cellY=', cellX, cellY);
+        console.log('handleCanvasClick() this.map=', this.map);
+        const lines = this.map.trim().split('\n');
+        const line = lines[cellY];
+        console.log('handleCanvasClick() line=', line);
+        const lineAr = line.split('');
+        const curVal = lineAr[cellX];
+        const newVal = curVal === this.curChar ? FieldChars.space : this.curChar;
+        console.log(`handleCanvasClick() ${curVal} -> ${newVal}`);
+        lineAr[cellX] = newVal;
+        lines[cellY] = lineAr.join('');
+        const newMap = lines.join('\n');
+        console.log('handleCanvasClick() newMap=', newMap);
+        this.map = newMap;
+
+        this.calcField();
+        this.renderScene();
+    };
+
     renderUI = () => {
         render(
             <BricksEditorUI
@@ -102,5 +128,18 @@ export class BricksEditorController extends GameController {
             />,
             document.getElementById('bricksEditor')
         );
+    };
+
+    handleClickBtBrick = () => {
+        console.log('handleClickBtBrick()');
+        this.curChar = FieldChars.wall;
+    };
+    handleClickBtStairs = () => {
+        console.log('handleClickBtStairs()');
+        this.curChar = FieldChars.stairs;
+    };
+    handleClickBtGold = () => {
+        console.log('handleClickBtGold()');
+        this.curChar = FieldChars.gold;
     };
 }

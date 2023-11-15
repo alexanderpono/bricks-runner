@@ -6,12 +6,13 @@ export enum Cell {
     gold = 4,
     teleport = 5
 }
-enum FieldChars {
+export enum FieldChars {
     wall = '▓',
     stairs = '╡',
     man = 'M',
     gold = '$',
-    teleport = '1'
+    teleport = '1',
+    space = ' '
 }
 
 export interface Point2D {

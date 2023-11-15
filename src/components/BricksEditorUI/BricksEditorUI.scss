@@ -1,0 +1,41 @@
+.red {
+    border: 1px solid red;
+}
+
+.editorUI {
+    display: grid;
+    grid-template-areas: "level editControls";
+    grid-template-columns: "750px auto";
+}
+
+.level {
+    grid-area: level;
+}
+
+.editControls {
+    grid-area: editControls;
+}
+
+:global(.canvas) {
+    width: 750px;
+}
+.brick {
+    width: 40px;
+    height: 40px;
+    background: url(../GameFieldUI/sprite.png);
+    background-position: -40px -120px;
+}
+
+.stairs {
+    width: 40px;
+    height: 40px;
+    background: url(../GameFieldUI/sprite.png);
+    background-position: -120px -120px;
+}
+
+.gold {
+    width: 40px;
+    height: 40px;
+    background: url(../GameFieldUI/sprite.png);
+    background-position: -200px -120px;
+}
