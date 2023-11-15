@@ -44,5 +44,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: bricks-runner/temp/ui-dist  # The folder the action should deploy.
-          TARGET_FOLDER: .
+          TARGET_FOLDER: bricks-runner
           CLEAN: true # Automatically remove deleted files from the deploy branch
