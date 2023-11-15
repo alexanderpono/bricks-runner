@@ -44,7 +44,7 @@ export class BricksEditorController extends GameController {
 
     constructor() {
         super(
-            'title',
+            '',
             map2,
             'target',
             { ...TELEPORT_CONTROLS },

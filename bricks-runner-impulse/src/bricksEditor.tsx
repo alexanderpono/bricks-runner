@@ -2,4 +2,4 @@ import { BricksEditorController } from './bricksEditor/BricksEditorController';
 
 console.log('bricksEditor!');
 
-// new BricksEditorController().go();
+new BricksEditorController().go();
