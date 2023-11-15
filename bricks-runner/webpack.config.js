@@ -29,7 +29,7 @@ module.exports = {
         chunkFilename: '[name].[chunkhash].js',
         assetModuleFilename: '[path][name]-[hash:8][ext]',
         sourceMapFilename: '[file].map',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'temp/ui-dist'),
         clean: true
     },
     devServer: {

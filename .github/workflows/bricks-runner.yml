@@ -1,17 +1,17 @@
-name: bricks-impulse-12-2023
+name: bricks-runner
 on:
   push:
-    branches: [ bricks-runner-impulse ]
+    branches: [ master ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  app-bricks-impulse-12-2023:
+  bricks-runner:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: bricks-runner-impulse
+        working-directory: bricks-runner
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -37,12 +37,12 @@ jobs:
         id: Project-build
         run: npm run build
 
-      - name: Deploy application to GHP /ponomarenko-alex-otus/bricks-runner/impulse 🚀
+      - name: Deploy application to GHP /ponomarenko-alex-otus/bricks-runner 🚀
         id: Deploy-app
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: bricks-runner-impulse/temp/ui-dist  # The folder the action should deploy.
-          TARGET_FOLDER: impulse
+          FOLDER: bricks-runner/temp/ui-dist  # The folder the action should deploy.
+          TARGET_FOLDER: .
           CLEAN: true # Automatically remove deleted files from the deploy branch
