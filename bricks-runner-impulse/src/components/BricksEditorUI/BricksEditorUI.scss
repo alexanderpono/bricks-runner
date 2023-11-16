@@ -20,6 +20,7 @@
     width: 750px;
 }
 .brick {
+    cursor: pointer;
     width: 40px;
     height: 40px;
     background: url(../GameFieldUI/sprite.png);
@@ -27,6 +28,7 @@
 }
 
 .stairs {
+    cursor: pointer;
     width: 40px;
     height: 40px;
     background: url(../GameFieldUI/sprite.png);
@@ -34,8 +36,42 @@
 }
 
 .gold {
+    cursor: pointer;
     width: 40px;
     height: 40px;
     background: url(../GameFieldUI/sprite.png);
     background-position: -200px -120px;
+}
+
+.space {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background: url(../GameFieldUI/sprite.png);
+    background-position: 0px -120px;
+}
+
+.wrapLoad {
+    background: white;
+}
+.btLoad {
+    cursor: pointer;
+    width: 50px;
+    height: 40px;
+    overflow: hidden;
+    border: 1px solid lightgrey;
+    &::before {
+        content: 'LOAD';
+        display: block;
+        width: 40px;
+        height: 40px;
+        left: 0px;
+        top: 0px;
+        opacity: 1;
+    }
+}
+
+.save {
+    cursor: pointer;
+    height: 40px;
 }

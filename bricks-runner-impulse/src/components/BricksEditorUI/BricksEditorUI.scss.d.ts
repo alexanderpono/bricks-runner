@@ -2,12 +2,16 @@
 // Please do not change this file!
 interface CssExports {
   'brick': string;
+  'btLoad': string;
   'editControls': string;
   'editorUI': string;
   'gold': string;
   'level': string;
   'red': string;
+  'save': string;
+  'space': string;
   'stairs': string;
+  'wrapLoad': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

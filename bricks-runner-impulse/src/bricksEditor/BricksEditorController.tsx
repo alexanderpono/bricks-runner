@@ -13,6 +13,7 @@ import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
 import React from 'react';
 import { render } from 'react-dom';
 import { ManAni, SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
+import saveas from 'file-saver';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -96,19 +97,14 @@ export class BricksEditorController extends GameController {
         const y = evt.offsetY;
         const cellX = Math.floor(x / SPRITE_WIDTH);
         const cellY = Math.floor(y / SPRITE_HEIGHT);
-        console.log('handleCanvasClick() cellX, cellY=', cellX, cellY);
-        console.log('handleCanvasClick() this.map=', this.map);
         const lines = this.map.trim().split('\n');
         const line = lines[cellY];
-        console.log('handleCanvasClick() line=', line);
         const lineAr = line.split('');
         const curVal = lineAr[cellX];
         const newVal = curVal === this.curChar ? FieldChars.space : this.curChar;
-        console.log(`handleCanvasClick() ${curVal} -> ${newVal}`);
         lineAr[cellX] = newVal;
         lines[cellY] = lineAr.join('');
         const newMap = lines.join('\n');
-        console.log('handleCanvasClick() newMap=', newMap);
         this.map = newMap;
 
         this.calcField();
@@ -131,15 +127,48 @@ export class BricksEditorController extends GameController {
     };
 
     handleClickBtBrick = () => {
-        console.log('handleClickBtBrick()');
         this.curChar = FieldChars.wall;
     };
     handleClickBtStairs = () => {
-        console.log('handleClickBtStairs()');
         this.curChar = FieldChars.stairs;
     };
     handleClickBtGold = () => {
-        console.log('handleClickBtGold()');
         this.curChar = FieldChars.gold;
+    };
+    handleClickBtSpace = () => {
+        this.curChar = FieldChars.space;
+    };
+    readFile = (file: File) => {
+        console.log('readFile() file=', file);
+
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            const contents = e.target.result;
+            console.log('contents=', contents);
+            this.map = contents.toString().trim();
+            this.calcField();
+            this.renderScene();
+        };
+        reader.readAsText(file);
+    };
+    onUploadFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let file: File | null = e.target.files ? e.target.files[0] : null;
+
+        if (typeof file?.name !== 'string') {
+            console.log('onUploadFileChange(): unrecognized data');
+            return;
+        }
+        try {
+            this.readFile(file);
+        } catch (e) {
+            console.error('onUploadFileChange() e=', e);
+        }
+        e.target.value = '';
+    };
+
+    handleClickBtSaveAs = () => {
+        var blob = new Blob([this.map], { type: 'text/plain;charset=utf-8' });
+
+        saveas(blob, 'save.txt');
     };
 }

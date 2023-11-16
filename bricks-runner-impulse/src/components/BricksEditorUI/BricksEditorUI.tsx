@@ -27,9 +27,27 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                     />
                 </div>
                 <div className={styles.editControls}>
-                    <button className={styles.brick} onClick={ctrl.handleClickBtBrick}></button>
-                    <button className={styles.stairs} onClick={ctrl.handleClickBtStairs}></button>
-                    <button className={styles.gold} onClick={ctrl.handleClickBtGold}></button>
+                    <div>
+                        <button className={styles.brick} onClick={ctrl.handleClickBtBrick}></button>
+                        <button
+                            className={styles.stairs}
+                            onClick={ctrl.handleClickBtStairs}
+                        ></button>
+                        <button className={styles.gold} onClick={ctrl.handleClickBtGold}></button>
+                        <button className={styles.space} onClick={ctrl.handleClickBtSpace}></button>
+                    </div>
+                    <div className={styles.wrapLoad}>
+                        <input
+                            type="file"
+                            name="file"
+                            className={styles.btLoad}
+                            // onClick={ctrl.handleClickBtStairs}
+                            onChange={ctrl.onUploadFileChange}
+                        />
+                    </div>
+                    <button className={styles.save} onClick={ctrl.handleClickBtSaveAs}>
+                        SAVE
+                    </button>
                 </div>
             </div>
         );

@@ -21,6 +21,9 @@ export interface GameFieldController {
     handleClickBtBrick?: () => void;
     handleClickBtStairs?: () => void;
     handleClickBtGold?: () => void;
+    handleClickBtSpace?: () => void;
+    onUploadFileChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleClickBtSaveAs?: () => void;
 }
 export interface GameState {
     nodesChecked: boolean;
