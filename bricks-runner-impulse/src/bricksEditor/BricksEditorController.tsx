@@ -7,13 +7,15 @@ import {
 import { GameController } from '@src/game/GameController';
 import { FieldChars, defaultPoint2D } from '@src/game/GameField';
 import { ALL_NODES } from '@src/game/GraphCalculator';
-import { GraphCalculatorV2 } from '@src/game/GraphCalculatorV2';
 import { GraphFromField } from '@src/game/GraphFromField';
 import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
 import React from 'react';
 import { render } from 'react-dom';
 import { ManAni, SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
 import { MapStorageService } from '@src/services/MapStrorageService';
+import { GraphFromFieldAdvanced } from '@src/game/GraphFromFieldAdvanced';
+import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
+import { GraphCalculatorV5f } from '@src/game/GraphCalculatorV5f';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -28,6 +30,7 @@ const TELEPORT_CONTROLS: RenderOptions = {
 };
 
 const SIMPLE = new GraphFromField();
+const ADVANCED = new GraphFromFieldAdvanced();
 const ADVANCED_V2 = new GraphFromFieldAdvancedV2();
 export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
@@ -41,7 +44,8 @@ export class BricksEditorController extends GameController {
             'target',
             { ...TELEPORT_CONTROLS },
             ADVANCED_V2,
-            GraphCalculatorV2,
+            GraphCalculatorV3,
+            // GraphCalculatorV5f,
             false,
             ALL_NODES,
             1440,
