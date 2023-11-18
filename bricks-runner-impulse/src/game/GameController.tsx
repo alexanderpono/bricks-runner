@@ -22,8 +22,6 @@ export class GameController {
     protected nextManFieldXY: Point2D = { ...defaultPoint2D };
     protected graph: AbstractGraph = null;
     protected gameField: GameField = null;
-    protected canvasW = 720;
-    protected canvasH = 320;
     protected canvasRef: React.RefObject<HTMLCanvasElement>;
     protected w: number = 0;
 
@@ -35,7 +33,9 @@ export class GameController {
         protected graphBuilder: GraphFromField,
         protected calculator: typeof GraphCalculator,
         protected verbose: boolean,
-        protected maxStepNo: number = ALL_NODES
+        protected maxStepNo: number = ALL_NODES,
+        protected canvasW = 720,
+        protected canvasH = 320
     ) {
         this.gameState = {
             ...defaultGameState,

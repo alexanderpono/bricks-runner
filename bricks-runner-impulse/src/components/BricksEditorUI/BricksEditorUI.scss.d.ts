@@ -6,7 +6,6 @@ interface CssExports {
   'editControls': string;
   'editorUI': string;
   'gold': string;
-  'level': string;
   'red': string;
   'save': string;
   'space': string;

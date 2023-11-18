@@ -3,22 +3,13 @@
 }
 
 .editorUI {
-    display: grid;
-    grid-template-areas: "level editControls";
-    grid-template-columns: "750px auto";
-}
-
-.level {
-    grid-area: level;
+    display: flex;
 }
 
 .editControls {
-    grid-area: editControls;
+    padding-left: 40px;
 }
 
-:global(.canvas) {
-    width: 750px;
-}
 .brick {
     cursor: pointer;
     width: 40px;

@@ -43,7 +43,9 @@ export class BricksEditorController extends GameController {
             ADVANCED_V2,
             GraphCalculatorV2,
             false,
-            ALL_NODES
+            ALL_NODES,
+            1440,
+            760
         );
         this.mapStorage = new MapStorageService();
         this.graphBuilder = ADVANCED_V2;

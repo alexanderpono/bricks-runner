@@ -15,7 +15,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
     ({ id, title, canvasW, canvasH, ctrl, gameState }, canvasRef) => {
         return (
             <div className={styles.editorUI}>
-                <div className={styles.level}>
+                <div>
                     <GameControls
                         id={id}
                         title={title}
