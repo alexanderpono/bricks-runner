@@ -78,6 +78,7 @@ export class BricksEditorController extends GameController {
         const isInCache = this.mapStorage.isMapInCache();
         if (!isInCache) {
             this.map = this.mapStorage.getDefaultMap();
+            this.mapStorage.cacheMap(this.map);
         } else {
             this.map = this.mapStorage.getMapFromCache();
         }
@@ -86,7 +87,6 @@ export class BricksEditorController extends GameController {
     };
 
     onUIMounted() {
-        console.log('onUIMounted!! this.canvasRef.current=', this.canvasRef.current);
         super.onUIMounted();
         this.canvasRef.current.addEventListener('click', this.handleCanvasClick);
     }
@@ -125,6 +125,7 @@ export class BricksEditorController extends GameController {
                 ref={this.canvasRef}
                 ctrl={this}
                 gameState={this.gameState}
+                curPathPos={this.curPathPos}
             />,
             document.getElementById('bricksEditor')
         );
@@ -152,6 +153,7 @@ export class BricksEditorController extends GameController {
         try {
             this.mapStorage.readMap(file).then((map: string) => {
                 this.map = map;
+                this.mapStorage.cacheMap(this.map);
                 this.calcField();
                 this.renderScene();
             });
@@ -163,5 +165,9 @@ export class BricksEditorController extends GameController {
 
     handleClickBtSaveAs = () => {
         this.mapStorage.saveMap(this.map);
+    };
+
+    onUpdateCurPathPos = () => {
+        this.renderUI();
     };
 }

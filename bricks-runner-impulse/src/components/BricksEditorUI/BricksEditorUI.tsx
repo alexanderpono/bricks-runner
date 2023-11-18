@@ -10,9 +10,10 @@ interface BricksEditorUI {
     canvasH?: number;
     ctrl: GameFieldController;
     gameState: GameState;
+    curPathPos: number;
 }
 export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI>(
-    ({ id, title, canvasW, canvasH, ctrl, gameState }, canvasRef) => {
+    ({ id, title, canvasW, canvasH, ctrl, gameState, curPathPos }, canvasRef) => {
         return (
             <div className={styles.editorUI}>
                 <div>
@@ -48,6 +49,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                     <button className={styles.save} onClick={ctrl.handleClickBtSaveAs}>
                         SAVE
                     </button>
+                    <div>Пройденный путь: {curPathPos}</div>
                 </div>
             </div>
         );

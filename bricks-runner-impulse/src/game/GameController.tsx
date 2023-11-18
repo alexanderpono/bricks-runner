@@ -111,6 +111,7 @@ export class GameController {
         this.manVIndex = mIndex;
         this.nextManVIndex = mIndex;
         this.curPathPos = 0;
+        this.onUpdateCurPathPos();
     };
 
     onUIMounted() {
@@ -247,6 +248,7 @@ export class GameController {
         this.manVIndex = mIndex;
         this.nextManVIndex = mIndex;
         this.curPathPos = 0;
+        this.onUpdateCurPathPos();
 
         this.doTrajectoryStep();
         this.manFieldXY = this.gameField.vertexIndexToCoords(mIndex, this.w);
@@ -258,6 +260,8 @@ export class GameController {
         this.renderUI();
         this.renderScene();
     };
+
+    onUpdateCurPathPos = () => {};
 
     stepNo = 0;
     maxMiniCounter = 9;
@@ -278,6 +282,7 @@ export class GameController {
         if ((this.gameState.miniCounter + 1) % 10 === 0) {
             if (this.curPathPos < this.graph.cheapestPath.length) {
                 this.curPathPos++;
+                this.onUpdateCurPathPos();
                 this.stepNo++;
             }
             this.manVIndex = this.nextManVIndex;
