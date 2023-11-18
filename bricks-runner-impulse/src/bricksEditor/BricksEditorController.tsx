@@ -13,7 +13,7 @@ import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
 import React from 'react';
 import { render } from 'react-dom';
 import { ManAni, SPRITE_HEIGHT, SPRITE_WIDTH } from '@src/ports/GR.types';
-import saveas from 'file-saver';
+import { MapStorageService } from '@src/services/MapStrorageService';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -26,27 +26,18 @@ const TELEPORT_CONTROLS: RenderOptions = {
     showBtCost: true,
     showBtStartStop: true
 };
-const map2 = `
-▓ M              ▓
-▓▓▓▓▓▓▓▓╡▓▓▓▓▓▓▓▓▓
-▓       ╡        ▓
-▓▓▓▓▓▓▓▓▓▓▓▓╡▓▓▓▓▓
-▓           ╡    ▓
-▓▓▓╡▓▓▓▓▓╡▓▓▓▓╡▓▓▓
-▓  ╡     ╡   $╡  ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-    `;
 
 const SIMPLE = new GraphFromField();
 const ADVANCED_V2 = new GraphFromFieldAdvancedV2();
 export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
     curChar: string = FieldChars.wall;
+    private mapStorage: MapStorageService = null;
 
     constructor() {
         super(
             '',
-            map2,
+            '',
             'target',
             { ...TELEPORT_CONTROLS },
             ADVANCED_V2,
@@ -54,8 +45,8 @@ export class BricksEditorController extends GameController {
             false,
             ALL_NODES
         );
+        this.mapStorage = new MapStorageService();
         this.graphBuilder = ADVANCED_V2;
-        this.map = map2;
         this.gameState = {
             ...defaultGameState,
             nodesChecked: this.options.nodes,
@@ -79,8 +70,18 @@ export class BricksEditorController extends GameController {
             showBtCost: this.options.showBtCost,
             showProgress: this.options.showProgress
         };
-        // this.canvasRef = React.createRef<HTMLCanvasElement>();
     }
+
+    go = () => {
+        const isInCache = this.mapStorage.isMapInCache();
+        if (!isInCache) {
+            this.map = this.mapStorage.getDefaultMap();
+        } else {
+            this.map = this.mapStorage.getMapFromCache();
+        }
+        this.calcField();
+        this.renderUI();
+    };
 
     onUIMounted() {
         console.log('onUIMounted!! this.canvasRef.current=', this.canvasRef.current);
@@ -109,6 +110,7 @@ export class BricksEditorController extends GameController {
 
         this.calcField();
         this.renderScene();
+        this.mapStorage.cacheMap(this.map);
     };
 
     renderUI = () => {
@@ -138,19 +140,6 @@ export class BricksEditorController extends GameController {
     handleClickBtSpace = () => {
         this.curChar = FieldChars.space;
     };
-    readFile = (file: File) => {
-        console.log('readFile() file=', file);
-
-        var reader = new FileReader();
-        reader.onload = (e) => {
-            const contents = e.target.result;
-            console.log('contents=', contents);
-            this.map = contents.toString().trim();
-            this.calcField();
-            this.renderScene();
-        };
-        reader.readAsText(file);
-    };
     onUploadFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let file: File | null = e.target.files ? e.target.files[0] : null;
 
@@ -159,7 +148,11 @@ export class BricksEditorController extends GameController {
             return;
         }
         try {
-            this.readFile(file);
+            this.mapStorage.readMap(file).then((map: string) => {
+                this.map = map;
+                this.calcField();
+                this.renderScene();
+            });
         } catch (e) {
             console.error('onUploadFileChange() e=', e);
         }
@@ -167,8 +160,6 @@ export class BricksEditorController extends GameController {
     };
 
     handleClickBtSaveAs = () => {
-        var blob = new Blob([this.map], { type: 'text/plain;charset=utf-8' });
-
-        saveas(blob, 'save.txt');
+        this.mapStorage.saveMap(this.map);
     };
 }
