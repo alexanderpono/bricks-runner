@@ -38,7 +38,7 @@ export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
     curChar: string = FieldChars.wall;
     private mapStorage: MapStorageService = null;
-    private isDevelopMope = true;
+    private isDevelopMope = false;
     private levelsAnswer: LevelsApiAnswer;
     private currentLevel = 0;
     private inventory: Inventory = { ...defaultInventory };

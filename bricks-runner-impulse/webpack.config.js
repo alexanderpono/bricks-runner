@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     plugins: [
@@ -12,6 +13,9 @@ module.exports = {
         new CompressionWebpackPlugin(),
         new MiniCssExtractPlugin({
             chunkFilename: '[name].[chunkhash].css'
+        }),
+        new CopyPlugin({
+            patterns: [{ from: 'public/data', to: path.resolve(__dirname, 'temp/ui-dist/data') }]
         })
     ],
     resolve: {
@@ -30,8 +34,7 @@ module.exports = {
         assetModuleFilename: '[path][name]-[hash:8][ext]',
         sourceMapFilename: '[file].map',
         path: path.resolve(__dirname, 'temp/ui-dist'),
-        clean: true,
-        publicPath: './static'
+        clean: true
     },
     devServer: {
         open: true,
