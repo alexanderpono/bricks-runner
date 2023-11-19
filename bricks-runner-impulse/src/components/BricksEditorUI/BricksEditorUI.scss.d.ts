@@ -3,10 +3,13 @@
 interface CssExports {
   'brick': string;
   'btLoad': string;
+  'categories': string;
+  'cur': string;
   'editControls': string;
   'editorUI': string;
   'gameStats': string;
   'gold': string;
+  'inventory': string;
   'red': string;
   'save': string;
   'space': string;

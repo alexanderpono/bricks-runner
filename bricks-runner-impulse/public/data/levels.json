@@ -2,16 +2,38 @@
     "levels": [
         {
             "mapFile": "01.txt",
-            "inventory": {
-                "bricks": {
-                    "enabled": "true",
-                    "count": 10
+            "inventory": [
+                {
+                    "name": "stairs",
+                    "count": 5,
+                    "char": "╡"
                 },
-                "stairs": {
-                    "enabled": "true",
-                    "count": 5
+                {
+                    "name": "space",
+                    "count": 10,
+                    "char": " "
                 }
-            }
+            ]
+        },
+        {
+            "mapFile": "02.txt",
+            "inventory": [
+                {
+                    "name": "brick",
+                    "count": 10,
+                    "char": "▓"
+                },
+                {
+                    "name": "stairs",
+                    "count": 5,
+                    "char": "╡"
+                },
+                {
+                    "name": "space",
+                    "count": 10,
+                    "char": " "
+                }
+            ]
         }
     ]
 }

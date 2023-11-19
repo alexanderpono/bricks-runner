@@ -16,7 +16,7 @@ import { MapStorageService } from '@src/services/MapStrorageService';
 import { GraphFromFieldAdvanced } from '@src/game/GraphFromFieldAdvanced';
 import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
 import { GraphCalculatorV5f } from '@src/game/GraphCalculatorV5f';
-import { Inventory, LevelsApiAnswer, defaultInventory } from './BricksEditorController.types';
+import { InventoryItem, LevelsApiAnswer } from './BricksEditorController.types';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -40,7 +40,7 @@ export class BricksEditorController extends GameController {
     private isDevelopMope = false;
     private levelsAnswer: LevelsApiAnswer;
     private levelIndex = 0;
-    private inventory: Inventory = { ...defaultInventory };
+    private inventory: InventoryItem[] = [];
 
     constructor() {
         super(
@@ -81,7 +81,30 @@ export class BricksEditorController extends GameController {
             showBtCost: this.options.showBtCost,
             showProgress: this.options.showProgress
         };
+        this.showButtonsIfDevelopMode();
     }
+
+    showButtonsIfDevelopMode = () => {
+        if (!this.isDevelopMope) {
+            this.patchState({
+                showBtMap: false,
+                showBtNodes: false,
+                showBtEdges: false,
+                showBtStartStop: false,
+                showBtPath: false,
+                showBtCost: false
+            });
+        } else {
+            this.patchState({
+                showBtMap: true,
+                showBtNodes: true,
+                showBtEdges: true,
+                showBtStartStop: true,
+                showBtPath: true,
+                showBtCost: true
+            });
+        }
+    };
 
     go = () => {
         const isInCache = this.mapStorage.isMapInCache();
@@ -117,6 +140,30 @@ export class BricksEditorController extends GameController {
         const line = lines[cellY];
         const lineAr = line.split('');
         const curVal = lineAr[cellX];
+
+        if (!this.isDevelopMope && curVal === this.curChar) {
+            return;
+        }
+        if (!this.isDevelopMope) {
+            const currentInventoryItem = this.inventory.find(
+                (item: InventoryItem) => item.char === this.curChar
+            );
+            if (!currentInventoryItem) {
+                console.error(
+                    `Cannot find inventory item "${this.curChar}" in inventory`,
+                    this.inventory
+                );
+                return;
+            }
+            console.log('currentInventoryItem=', currentInventoryItem);
+            if (currentInventoryItem.count > 0) {
+                currentInventoryItem.count--;
+            } else {
+                console.log(`No items "${this.curChar}" left in inventory`);
+                return;
+            }
+        }
+
         const newVal = curVal === this.curChar ? FieldChars.space : this.curChar;
         lineAr[cellX] = newVal;
         lines[cellY] = lineAr.join('');
@@ -143,7 +190,8 @@ export class BricksEditorController extends GameController {
                     isDevelopMope: this.isDevelopMope,
                     curPathPos: this.curPathPos,
                     inventory: this.inventory,
-                    levelIndex: this.levelIndex
+                    levelIndex: this.levelIndex,
+                    curChar: this.curChar
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -196,13 +244,12 @@ export class BricksEditorController extends GameController {
 
     loadGame = () => {
         this.loadLevels().then((levelsAnswer: LevelsApiAnswer) => {
-            console.log('levelsAnswer=', levelsAnswer);
             this.levelsAnswer = levelsAnswer;
             this.loadLevel(this.levelIndex).then((map) => {
                 this.map = map.trim();
-                this.inventory = { ...this.levelsAnswer.levels[this.levelIndex].inventory };
-                console.log('this.inventory=', this.inventory);
+                this.inventory = [...this.levelsAnswer.levels[this.levelIndex].inventory];
                 this.mapStorage.cacheMap(this.map);
+                this.curChar = this.inventory[0].char;
                 this.calcField();
                 this.renderScene();
             });
@@ -234,29 +281,18 @@ export class BricksEditorController extends GameController {
     };
 
     handleClickIsDevelopMode = () => {
-        console.log('this.handleClickIsDevelopMode()');
         this.isDevelopMope = !this.isDevelopMope;
+        this.showButtonsIfDevelopMode();
+
         if (!this.isDevelopMope) {
-            this.patchState({
-                showBtMap: false,
-                showBtNodes: false,
-                showBtEdges: false,
-                showBtStartStop: false,
-                showBtPath: false,
-                showBtCost: false
-            });
             this.loadGame();
-        } else {
-            this.patchState({
-                showBtMap: true,
-                showBtNodes: true,
-                showBtEdges: true,
-                showBtStartStop: true,
-                showBtPath: true,
-                showBtCost: true
-            });
         }
 
+        this.renderUI();
+    };
+
+    handleSelectInventoryItem = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        this.curChar = evt.target.value;
         this.renderUI();
     };
 }

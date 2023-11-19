@@ -12,33 +12,26 @@ export interface BricksEditorControllerForUI extends GameFieldController {
 export interface ShellState {
     isDevelopMope: boolean;
     curPathPos: number;
-    inventory: Inventory;
+    inventory: InventoryItem[];
     levelIndex: number;
+    curChar: string;
 }
 
 export interface InventoryItem {
-    enabled: boolean;
+    name: string;
     count: number;
+    char: string;
 }
 
 const defaultInventoryItem: InventoryItem = {
-    enabled: false,
-    count: 0
-};
-
-export interface Inventory {
-    bricks: InventoryItem;
-    stairs: InventoryItem;
-}
-
-export const defaultInventory: Inventory = {
-    bricks: { ...defaultInventoryItem },
-    stairs: { ...defaultInventoryItem }
+    name: '',
+    count: 0,
+    char: ''
 };
 
 export interface LevelInfo {
     mapFile: string;
-    inventory: Inventory;
+    inventory: InventoryItem[];
 }
 
 export interface LevelsApiAnswer {

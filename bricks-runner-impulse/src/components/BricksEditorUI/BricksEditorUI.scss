@@ -103,7 +103,7 @@
 }
 
 
-.brick {
+.brick, :global(.brick) {
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -111,7 +111,7 @@
     background-position: -40px -120px;
 }
 
-.stairs {
+.stairs, :global(.stairs) {
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -119,7 +119,7 @@
     background-position: -120px -120px;
 }
 
-.gold {
+.gold, :global(.gold) {
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -127,7 +127,7 @@
     background-position: -200px -120px;
 }
 
-.space {
+.space, :global(.space) {
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -158,4 +158,45 @@
 .save {
     cursor: pointer;
     height: 40px;
+}
+
+.inventory {
+    input[type="radio"] {
+        display: none;
+    }
+
+    .categories {
+        margin: 30px 0px 30px 0px;
+        display: flex;
+        flex-direction: column;
+        font-family: PCSenior, Arial, Helvetica, sans-serif;
+
+        label {
+            display: block;
+            border: 2px solid #fff;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 140%;
+            position: relative;
+            cursor: pointer;
+            margin: 0px;
+
+            &.cur {
+                border: 2px solid #c0c040;
+            }
+        }
+    }
+    .brick, .stairs, .gold, .space {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+    }
+       
+}
+:global(.brick),  :global(.stairs),  :global(.gold),  :global(.space) {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
 }

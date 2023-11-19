@@ -25,6 +25,7 @@ export interface GameFieldController {
     onUploadFileChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleClickBtSaveAs?: () => void;
     handleClickIsDevelopMode?: () => void;
+    handleSelectInventoryItem?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export interface GameState {
     nodesChecked: boolean;

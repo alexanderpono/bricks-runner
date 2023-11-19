@@ -2,7 +2,8 @@ import React from 'react';
 import { GameFieldController, GameState } from '@src/components/GameFieldUI/Game.types';
 import { GameControls } from '@src/components/GameFieldUI/GameControls';
 import styles from './BricksEditorUI.scss';
-import { ShellState } from '@src/bricksEditor/BricksEditorController.types';
+import { InventoryItem, ShellState } from '@src/bricksEditor/BricksEditorController.types';
+import cn from 'classnames';
 
 interface BricksEditorUI {
     id: string;
@@ -18,7 +19,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
     ({ id, title, canvasW, canvasH, ctrl, gameState, shellState }, canvasRef) => {
         return (
             <div className={styles.editorUI}>
-                <div className={styles.red}>
+                <div>
                     <section className={styles.gameStats}>
                         <article className={styles.statsGold}>0</article>
                         <article className={styles.statsSteps}>{shellState.curPathPos}</article>
@@ -40,10 +41,10 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                             <input
                                 type="checkbox"
                                 name="develop"
-                                checked={shellState.isDevelopMope}
+                                checked={!shellState.isDevelopMope}
                                 onChange={ctrl.handleClickIsDevelopMode}
                             />
-                            Режим разработки
+                            Режим {shellState.isDevelopMope ? 'разработки' : 'игры'}
                         </label>
                     </div>
                     {shellState.isDevelopMope && (
@@ -80,9 +81,43 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         </>
                     )}
                     {!shellState.isDevelopMope && (
-                        <button onClick={ctrl.onBtStartClick} className="appButton">
-                            Поехали
-                        </button>
+                        <>
+                            <div className={styles.inventory}>
+                                {shellState.inventory.map((item: InventoryItem) => {
+                                    return (
+                                        <div key={item.name}>
+                                            <input
+                                                type="radio"
+                                                id={item.name}
+                                                name="category"
+                                                value={item.char}
+                                                onChange={ctrl.handleSelectInventoryItem}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                                <section className={styles.categories}>
+                                    {shellState.inventory.map((item: InventoryItem) => {
+                                        return (
+                                            <label
+                                                key={item.name}
+                                                htmlFor={item.name}
+                                                id={`${item.name}-label`}
+                                                className={cn({
+                                                    [styles.cur]: item.char === shellState.curChar
+                                                })}
+                                            >
+                                                <span className={item.name}></span>
+                                                {item.count}
+                                            </label>
+                                        );
+                                    })}
+                                </section>
+                            </div>
+                            <button onClick={ctrl.onBtStartClick} className="appButton">
+                                Поехали
+                            </button>
+                        </>
                     )}
 
                     <div>Пройденный путь: {shellState.curPathPos}</div>
