@@ -16,7 +16,6 @@ import { MapStorageService } from '@src/services/MapStrorageService';
 import { GraphFromFieldAdvanced } from '@src/game/GraphFromFieldAdvanced';
 import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
 import { GraphCalculatorV5f } from '@src/game/GraphCalculatorV5f';
-import axios from 'axios';
 import { Inventory, LevelsApiAnswer, defaultInventory } from './BricksEditorController.types';
 
 const TELEPORT_CONTROLS: RenderOptions = {
@@ -191,21 +190,7 @@ export class BricksEditorController extends GameController {
     };
 
     loadLevels = (): Promise<LevelsApiAnswer> => {
-        return axios({
-            method: 'get',
-            url: './data/levels.json',
-            responseType: 'stream'
-        })
-            .then(function (response) {
-                console.log('loadGame() response.data=', response.data);
-                const levels = JSON.parse(response.data);
-                console.log('loadGame() levels=', levels);
-                //   response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
-                return levels;
-            })
-            .catch((err) => {
-                console.log('loadGame() err=', err);
-            });
+        return this.mapStorage.loadLevels();
     };
 
     loadGame = () => {
@@ -233,20 +218,7 @@ export class BricksEditorController extends GameController {
 
     getMapForLevel = (levelLndex: number): Promise<string> => {
         const levelInfo = this.levelsAnswer.levels[levelLndex];
-        return axios({
-            method: 'get',
-            url: `./data/${levelInfo.mapFile}`,
-            responseType: 'stream'
-        })
-            .then((response) => {
-                return this.wait(1000).then(() => {
-                    return response.data;
-                });
-            })
-            .catch((err) => {
-                console.log('getMapForLevel() err=', err);
-                return '';
-            });
+        return this.mapStorage.getMapFromHttpFile(`./data/${levelInfo.mapFile}`);
     };
 
     loading = false;

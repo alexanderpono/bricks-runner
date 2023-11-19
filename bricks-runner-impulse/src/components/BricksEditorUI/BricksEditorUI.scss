@@ -6,9 +6,77 @@
     display: flex;
 }
 
+.wrapGame {
+    display: flex;
+    flex-direction: column;
+}
 .editControls {
     padding-left: 40px;
 }
+.gameStats {
+    height: 50px;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    &::before  {
+        position: absolute;
+        display: block;
+        content: '';
+        color: white;
+        bottom: 1px;
+        left: 0px;
+        width: 1440px;
+        height: 8px;
+        background: #c0c040;
+        background-repeat: repeat-x;
+    }
+
+    .statsGold {
+        left: 40px;
+        width: 80px;
+        height: 40px;
+        position: relative;
+        padding-left: 40px;
+        color: white;
+        line-height: 40px;
+
+        &::before {
+            position: absolute;
+            display: block;
+            content: '';
+            top: 0px;
+            left: 0px;
+            width: 40px;
+            height: 40px;
+            background: url(../GameFieldUI/sprite.png);
+            background-position: -200px -120px;
+        }
+    }
+
+    .statsSteps {
+        left: 40px;
+        width: 80px;
+        height: 40px;
+        position: relative;
+        padding-left: 40px;
+        color: white;
+        line-height: 40px;
+
+        &::before {
+            position: absolute;
+            display: block;
+            content: '';
+            top: 0px;
+            left: 0px;
+            width: 40px;
+            height: 40px;
+            background: url(../GameFieldUI/sprite.png);
+            background-position: -80px -0px;
+        }
+    }
+}
+
 
 .brick {
     cursor: pointer;

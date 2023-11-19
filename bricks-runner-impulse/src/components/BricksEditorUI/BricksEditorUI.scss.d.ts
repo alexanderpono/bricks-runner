@@ -5,11 +5,15 @@ interface CssExports {
   'btLoad': string;
   'editControls': string;
   'editorUI': string;
+  'gameStats': string;
   'gold': string;
   'red': string;
   'save': string;
   'space': string;
   'stairs': string;
+  'statsGold': string;
+  'statsSteps': string;
+  'wrapGame': string;
   'wrapLoad': string;
 }
 export const cssExports: CssExports;
