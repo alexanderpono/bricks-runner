@@ -39,7 +39,7 @@ export class BricksEditorController extends GameController {
     private mapStorage: MapStorageService = null;
     private isDevelopMope = false;
     private levelsAnswer: LevelsApiAnswer;
-    private currentLevel = 0;
+    private levelIndex = 0;
     private inventory: Inventory = { ...defaultInventory };
 
     constructor() {
@@ -142,7 +142,8 @@ export class BricksEditorController extends GameController {
                 shellState={{
                     isDevelopMope: this.isDevelopMope,
                     curPathPos: this.curPathPos,
-                    inventory: this.inventory
+                    inventory: this.inventory,
+                    levelIndex: this.levelIndex
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -197,9 +198,9 @@ export class BricksEditorController extends GameController {
         this.loadLevels().then((levelsAnswer: LevelsApiAnswer) => {
             console.log('levelsAnswer=', levelsAnswer);
             this.levelsAnswer = levelsAnswer;
-            this.loadLevel(0).then((map) => {
+            this.loadLevel(this.levelIndex).then((map) => {
                 this.map = map.trim();
-                this.inventory = { ...this.levelsAnswer.levels[0].inventory };
+                this.inventory = { ...this.levelsAnswer.levels[this.levelIndex].inventory };
                 console.log('this.inventory=', this.inventory);
                 this.mapStorage.cacheMap(this.map);
                 this.calcField();

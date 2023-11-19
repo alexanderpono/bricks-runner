@@ -13,6 +13,7 @@ export interface ShellState {
     isDevelopMope: boolean;
     curPathPos: number;
     inventory: Inventory;
+    levelIndex: number;
 }
 
 export interface InventoryItem {

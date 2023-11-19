@@ -22,6 +22,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                     <section className={styles.gameStats}>
                         <article className={styles.statsGold}>0</article>
                         <article className={styles.statsSteps}>{shellState.curPathPos}</article>
+                        <article className={styles.statsLevel}>{shellState.levelIndex + 1}</article>
                     </section>
                     <GameControls
                         id={id}

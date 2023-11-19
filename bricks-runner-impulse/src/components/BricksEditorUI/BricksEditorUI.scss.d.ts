@@ -12,6 +12,7 @@ interface CssExports {
   'space': string;
   'stairs': string;
   'statsGold': string;
+  'statsLevel': string;
   'statsSteps': string;
   'wrapGame': string;
   'wrapLoad': string;
