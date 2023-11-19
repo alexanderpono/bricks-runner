@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'PCSenior';
+    src: url('./pc-senior/pcsenior.ttf')  format('truetype'); /* Safari, Android, iOS */
+        
+}
 .red {
     border: 1px solid red;
 }
@@ -14,11 +19,15 @@
     padding-left: 40px;
 }
 .gameStats {
+    font-family: PCSenior, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 48px;
     height: 50px;
     background: #000;
     position: relative;
     overflow: hidden;
     display: flex;
+    color: #ffff40;
     &::before  {
         position: absolute;
         display: block;
@@ -37,15 +46,13 @@
         width: 80px;
         height: 40px;
         position: relative;
-        padding-left: 40px;
-        color: white;
-        line-height: 40px;
+        padding-left: 50px;
 
         &::before {
             position: absolute;
             display: block;
             content: '';
-            top: 0px;
+            top: -8px;
             left: 0px;
             width: 40px;
             height: 40px;
@@ -59,9 +66,7 @@
         width: 80px;
         height: 40px;
         position: relative;
-        padding-left: 40px;
-        color: white;
-        line-height: 40px;
+        padding-left: 44px;
 
         &::before {
             position: absolute;
