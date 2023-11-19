@@ -16,6 +16,8 @@ import { MapStorageService } from '@src/services/MapStrorageService';
 import { GraphFromFieldAdvanced } from '@src/game/GraphFromFieldAdvanced';
 import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
 import { GraphCalculatorV5f } from '@src/game/GraphCalculatorV5f';
+import axios from 'axios';
+import { Inventory, LevelsApiAnswer, defaultInventory } from './BricksEditorController.types';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -36,6 +38,10 @@ export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
     curChar: string = FieldChars.wall;
     private mapStorage: MapStorageService = null;
+    private isDevelopMope = true;
+    private levelsAnswer: LevelsApiAnswer;
+    private currentLevel = 0;
+    private inventory: Inventory = { ...defaultInventory };
 
     constructor() {
         super(
@@ -88,6 +94,10 @@ export class BricksEditorController extends GameController {
         }
         this.calcField();
         this.renderUI();
+
+        if (!this.isDevelopMope) {
+            this.loadGame();
+        }
     };
 
     onUIMounted() {
@@ -130,6 +140,11 @@ export class BricksEditorController extends GameController {
                 ctrl={this}
                 gameState={this.gameState}
                 curPathPos={this.curPathPos}
+                shellState={{
+                    isDevelopMope: this.isDevelopMope,
+                    curPathPos: this.curPathPos,
+                    inventory: this.inventory
+                }}
             />,
             document.getElementById('bricksEditor')
         );
@@ -172,6 +187,103 @@ export class BricksEditorController extends GameController {
     };
 
     onUpdateCurPathPos = () => {
+        this.renderUI();
+    };
+
+    loadLevels = (): Promise<LevelsApiAnswer> => {
+        return axios({
+            method: 'get',
+            url: './data/levels.json',
+            responseType: 'stream'
+        })
+            .then(function (response) {
+                console.log('loadGame() response.data=', response.data);
+                const levels = JSON.parse(response.data);
+                console.log('loadGame() levels=', levels);
+                //   response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
+                return levels;
+            })
+            .catch((err) => {
+                console.log('loadGame() err=', err);
+            });
+    };
+
+    loadGame = () => {
+        this.loadLevels().then((levelsAnswer: LevelsApiAnswer) => {
+            console.log('levelsAnswer=', levelsAnswer);
+            this.levelsAnswer = levelsAnswer;
+            this.loadLevel(0).then((map) => {
+                this.map = map.trim();
+                this.inventory = { ...this.levelsAnswer.levels[0].inventory };
+                console.log('this.inventory=', this.inventory);
+                this.mapStorage.cacheMap(this.map);
+                this.calcField();
+                this.renderScene();
+            });
+        });
+    };
+
+    wait = (millisec: number): Promise<void> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, millisec);
+        });
+    };
+
+    getMapForLevel = (levelLndex: number): Promise<string> => {
+        const levelInfo = this.levelsAnswer.levels[levelLndex];
+        return axios({
+            method: 'get',
+            url: `./data/${levelInfo.mapFile}`,
+            responseType: 'stream'
+        })
+            .then((response) => {
+                return this.wait(1000).then(() => {
+                    return response.data;
+                });
+            })
+            .catch((err) => {
+                console.log('getMapForLevel() err=', err);
+                return '';
+            });
+    };
+
+    loading = false;
+    loadLevel = async (levelLndex: number) => {
+        this.loading = true;
+        console.log('loadLevel() this.loading=', this.loading);
+        const levelMap = await this.getMapForLevel(levelLndex);
+        console.log('loadLevel() levelMap=', levelMap);
+        this.loading = false;
+        console.log('loadLevel() this.loading=', this.loading);
+        return levelMap;
+    };
+
+    handleClickIsDevelopMode = () => {
+        console.log('this.handleClickIsDevelopMode()');
+        this.isDevelopMope = !this.isDevelopMope;
+        if (!this.isDevelopMope) {
+            this.patchState({
+                showBtMap: false,
+                showBtNodes: false,
+                showBtEdges: false,
+                showBtStartStop: false,
+                showBtPath: false,
+                showBtCost: false
+            });
+            this.loadGame();
+        } else {
+            this.patchState({
+                showBtMap: true,
+                showBtNodes: true,
+                showBtEdges: true,
+                showBtStartStop: true,
+                showBtPath: true,
+                showBtCost: true
+            });
+        }
+
         this.renderUI();
     };
 }

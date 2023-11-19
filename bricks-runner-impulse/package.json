@@ -16,6 +16,7 @@
   "author": "Alexander Ponomarenko",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.2",
     "file-saver": "^2.0.5",
     "html-react-parser": "^4.2.1",
     "react-redux": "^8.1.1",
