@@ -7,11 +7,6 @@
                     "name": "stairs",
                     "count": 5,
                     "char": "╡"
-                },
-                {
-                    "name": "space",
-                    "count": 10,
-                    "char": " "
                 }
             ]
         },
