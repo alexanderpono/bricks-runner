@@ -117,6 +117,18 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                             <button onClick={ctrl.onBtStartClick} className="appButton">
                                 Поехали
                             </button>
+                            {shellState.isGameOver && (
+                                <article>
+                                    {shellState.levelStats.map((levelStats, index) => (
+                                        <div key={index}>
+                                            <p>steps={levelStats.steps}</p>
+                                        </div>
+                                    ))}
+                                    <p>Введите ваше имя:</p>
+                                    <input type="text" name="userName" id="userName"></input>
+                                    <button onClick={ctrl.onSendResultsClick}>Отправить</button>
+                                </article>
+                            )}
                         </>
                     )}
 

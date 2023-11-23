@@ -1,4 +1,5 @@
 import { GameFieldController } from '@src/components/GameFieldUI/Game.types';
+import { Cell, Point2D } from '@src/game/GameField';
 
 export interface BricksEditorControllerForUI extends GameFieldController {
     handleClickBtBrick?: () => void;
@@ -15,6 +16,8 @@ export interface ShellState {
     inventory: InventoryItem[];
     levelIndex: number;
     curChar: string;
+    levelStats: LevelStats[];
+    isGameOver: boolean;
 }
 
 export interface InventoryItem {
@@ -36,4 +39,13 @@ export interface LevelInfo {
 
 export interface LevelsApiAnswer {
     levels: LevelInfo[];
+}
+
+export interface DynamicObject {
+    point: Point2D;
+    type: Cell;
+}
+
+export interface LevelStats {
+    steps: number;
 }

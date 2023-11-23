@@ -67,8 +67,10 @@ export class GameController {
         this.renderUI();
     };
 
-    calcField = () => {
+    calcField() {
         const getEmptyMap = (s: string): string => {
+            // let s2 = s.split('$').join(' ');
+            // s2 = s2.split('M').join(' ');
             let s2 = s.replace('$', ' ');
             s2 = s2.replace('M', ' ');
             return s2;
@@ -112,7 +114,7 @@ export class GameController {
         this.nextManVIndex = mIndex;
         this.curPathPos = 0;
         this.onUpdateCurPathPos();
-    };
+    }
 
     onUIMounted() {
         this.loadPic().then(() => {
@@ -262,6 +264,7 @@ export class GameController {
     };
 
     onUpdateCurPathPos = () => {};
+    checkCollisions() {}
 
     stepNo = 0;
     maxMiniCounter = 9;
@@ -301,6 +304,7 @@ export class GameController {
             }
             this.patchState({ manScreenXY, miniCounter, manTargetScreenXY });
             this.renderScene();
+            this.checkCollisions();
         } else {
             const miniCounter = this.gameState.miniCounter + 1;
             let manScreenXY = calcManScreenPos(this.manFieldXY, this.nextManFieldXY, miniCounter);

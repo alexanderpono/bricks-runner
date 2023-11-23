@@ -26,6 +26,7 @@ export interface GameFieldController {
     handleClickBtSaveAs?: () => void;
     handleClickIsDevelopMode?: () => void;
     handleSelectInventoryItem?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onSendResultsClick?: () => void;
 }
 export interface GameState {
     nodesChecked: boolean;

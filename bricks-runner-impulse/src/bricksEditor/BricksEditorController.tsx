@@ -5,7 +5,7 @@ import {
     defaultRenderOptions
 } from '@src/components/GameFieldUI/Game.types';
 import { GameController } from '@src/game/GameController';
-import { FieldChars, defaultPoint2D } from '@src/game/GameField';
+import { Cell, FieldChars, GameField, defaultPoint2D } from '@src/game/GameField';
 import { ALL_NODES } from '@src/game/GraphCalculator';
 import { GraphFromField } from '@src/game/GraphFromField';
 import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
@@ -16,7 +16,12 @@ import { MapStorageService } from '@src/services/MapStrorageService';
 import { GraphFromFieldAdvanced } from '@src/game/GraphFromFieldAdvanced';
 import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
 import { GraphCalculatorV5f } from '@src/game/GraphCalculatorV5f';
-import { InventoryItem, LevelsApiAnswer } from './BricksEditorController.types';
+import {
+    DynamicObject,
+    InventoryItem,
+    LevelStats,
+    LevelsApiAnswer
+} from './BricksEditorController.types';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -41,6 +46,10 @@ export class BricksEditorController extends GameController {
     private levelsAnswer: LevelsApiAnswer;
     private levelIndex = 0;
     private inventory: InventoryItem[] = [];
+    private dObjects: DynamicObject[] = [];
+    private gold: DynamicObject;
+    private levelStats: LevelStats[] = [];
+    private isGameOver: boolean = false;
 
     constructor() {
         super(
@@ -191,7 +200,9 @@ export class BricksEditorController extends GameController {
                     curPathPos: this.curPathPos,
                     inventory: this.inventory,
                     levelIndex: this.levelIndex,
-                    curChar: this.curChar
+                    curChar: this.curChar,
+                    levelStats: this.levelStats,
+                    isGameOver: this.isGameOver
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -252,6 +263,7 @@ export class BricksEditorController extends GameController {
                 this.curChar = this.inventory[0].char;
                 this.calcField();
                 this.renderScene();
+                this.onBtClearClick();
             });
         });
     };
@@ -294,5 +306,70 @@ export class BricksEditorController extends GameController {
     handleSelectInventoryItem = (evt: React.ChangeEvent<HTMLInputElement>) => {
         this.curChar = evt.target.value;
         this.renderUI();
+    };
+
+    calcField = () => {
+        super.calcField();
+
+        const getDynanicObjects = (field: GameField): DynamicObject[] => {
+            const dynamicTypes = [Cell.gold, Cell.man];
+            const h = field.field.length;
+            const w = field.field[0].length;
+            const result: DynamicObject[] = [];
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const cell = field.field[y][x];
+                    const pos = dynamicTypes.findIndex((type) => type === cell);
+                    if (pos >= 0) {
+                        result.push({ point: { x, y }, type: cell });
+                    }
+                }
+            }
+            return result;
+        };
+
+        this.dObjects = getDynanicObjects(this.gameField);
+
+        const gold = this.dObjects.find((dObject) => dObject.type === Cell.gold);
+        if (typeof gold === 'object') {
+            this.gold = gold;
+        }
+    };
+
+    checkCollisions() {
+        if (this.gold.point.x === this.manFieldXY.x && this.gold.point.y === this.manFieldXY.y) {
+            this.onGoldCollision();
+        }
+    }
+
+    onGoldCollision = () => {
+        console.log('gold collision');
+        this.saveLevelStats();
+        if (this.levelIndex < this.levelsAnswer.levels.length - 1) {
+            this.gotoNewLevel();
+        } else {
+            this.gotoEndGame();
+        }
+    };
+
+    saveLevelStats = () => {
+        this.levelStats.push({ steps: this.curPathPos });
+        console.log('gotoNewLevel() this.levelStats=', this.levelStats);
+    };
+    gotoNewLevel = () => {
+        console.log('gotoNewLevel()');
+        this.levelIndex++;
+        this.loadGame();
+    };
+
+    gotoEndGame = () => {
+        this.isGameOver = true;
+        console.log('end()');
+        this.renderUI();
+    };
+
+    onSendResultsClick = () => {
+        const userName = (document.getElementById('userName') as HTMLInputElement).value;
+        console.log('onSendResultsClick() userName=', userName);
     };
 }

@@ -29,6 +29,21 @@
                     "char": " "
                 }
             ]
+        },
+        {
+            "mapFile": "03.txt",
+            "inventory": [
+                {
+                    "name": "brick",
+                    "count": 10,
+                    "char": "▓"
+                },
+                {
+                    "name": "stairs",
+                    "count": 5,
+                    "char": "╡"
+                }
+            ]
         }
     ]
 }
