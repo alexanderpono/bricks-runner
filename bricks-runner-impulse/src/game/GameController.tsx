@@ -13,6 +13,7 @@ import { GRGraph } from '@src/ports/GRGraph';
 import { GRMan } from '@src/ports/GRMan';
 import { GRSelect } from '@src/ports/GRSelect';
 import { GameControls } from '@src/components/GameFieldUI/GameControls';
+import { GameControllerBuilder } from './GameControllerBuilder';
 
 export class GameController {
     protected gameState: GameState;
@@ -25,40 +26,51 @@ export class GameController {
     protected canvasRef: React.RefObject<HTMLCanvasElement>;
     protected w: number = 0;
 
-    constructor(
-        protected title: string,
-        protected map: string,
-        protected target: string,
-        options: RenderOptions,
-        protected graphBuilder: GraphFromField,
-        protected calculator: typeof GraphCalculator,
-        protected verbose: boolean,
-        protected maxStepNo: number = ALL_NODES,
-        protected canvasW = 720,
-        protected canvasH = 320
-    ) {
+    protected title: string = '';
+    protected map: string = '';
+    protected target: string = '';
+    protected options: RenderOptions = null;
+    protected graphBuilder: GraphFromField = null;
+    protected calculator: typeof GraphCalculator;
+    protected verbose: boolean = false;
+    protected maxStepNo: number = 0;
+    protected canvasW: number = 0;
+    protected canvasH: number = 0;
+
+    constructor(builder: GameControllerBuilder) {
+        this.title = builder.title;
+        this.map = builder.map;
+        this.target = builder.target;
+        this.options = builder.options;
+        this.graphBuilder = builder.graphBuilder;
+        this.calculator = builder.calculator;
+        this.verbose = builder.verbose;
+        this.maxStepNo = builder.maxStepNo;
+        this.canvasW = builder.canvasW;
+        this.canvasH = builder.canvasH;
+
         this.gameState = {
             ...defaultGameState,
-            nodesChecked: options.nodes,
-            linesChecked: options.lines,
-            pathChecked: options.path,
-            nodesCostChecked: options.nodesCost,
-            nodesShortCost: options.nodesShortCost,
-            mapChecked: options.map,
+            nodesChecked: this.options.nodes,
+            linesChecked: this.options.lines,
+            pathChecked: this.options.path,
+            nodesCostChecked: this.options.nodesCost,
+            nodesShortCost: this.options.nodesShortCost,
+            mapChecked: this.options.map,
             showControls: true,
             pic: new Image(),
             goldScreenXY: { ...defaultPoint2D },
             manScreenXY: { ...defaultPoint2D },
             miniCounter: 0,
             manAni: ManAni.STAND,
-            highlightCells: options.highlightCells,
+            highlightCells: this.options.highlightCells,
             maxCalcStep: this.maxStepNo,
-            showBtNodes: options.showBtNodes,
-            showBtEdges: options.showBtEdges,
-            showBtStartStop: options.showBtStartStop,
-            showBtPath: options.showBtPath,
-            showBtCost: options.showBtCost,
-            showProgress: options.showProgress
+            showBtNodes: this.options.showBtNodes,
+            showBtEdges: this.options.showBtEdges,
+            showBtStartStop: this.options.showBtStartStop,
+            showBtPath: this.options.showBtPath,
+            showBtCost: this.options.showBtCost,
+            showProgress: this.options.showProgress
         };
         this.canvasRef = React.createRef<HTMLCanvasElement>();
     }

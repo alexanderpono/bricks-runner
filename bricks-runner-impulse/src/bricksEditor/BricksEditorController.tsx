@@ -23,6 +23,7 @@ import {
     LevelsApiAnswer
 } from './BricksEditorController.types';
 import { ResultsStorageService } from '@src/services/ResultsStorageService';
+import { GameControllerBuilder } from '@src/game/GameControllerBuilder';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -55,17 +56,15 @@ export class BricksEditorController extends GameController {
 
     constructor() {
         super(
-            '',
-            '',
-            'target',
-            { ...TELEPORT_CONTROLS },
-            ADVANCED_V2,
-            GraphCalculatorV3,
-            // GraphCalculatorV5f,
-            false,
-            ALL_NODES,
-            1440,
-            760
+            new GameControllerBuilder()
+                .setTarget('target')
+                .setOptions({ ...TELEPORT_CONTROLS })
+                .setGraphBuilder(ADVANCED_V2)
+                .setCalculator(GraphCalculatorV3)
+                .setVerbose(false)
+                .setMaxStepNo(ALL_NODES)
+                .setCanvasW(1440)
+                .setCanvasH(760)
         );
         this.mapStorage = new MapStorageService();
         this.resultsStorage = new ResultsStorageService();
