@@ -67,7 +67,7 @@ export class GameController {
         this.renderUI();
     };
 
-    calcField() {
+    initEmptyField = () => {
         const getEmptyMap = (s: string): string => {
             // let s2 = s.split('$').join(' ');
             // s2 = s2.split('M').join(' ');
@@ -78,9 +78,15 @@ export class GameController {
         const emptyMap = getEmptyMap(this.map);
         const field = GameField.create().initFromText(emptyMap);
         this.emptyField = field;
+    };
 
+    initGameField = () => {
         const gameField = GameField.create().initFromText(this.map);
-        let graph = this.graphBuilder.graphFromField(gameField);
+        this.gameField = gameField;
+    };
+
+    calculateShortestPath = () => {
+        let graph = this.graphBuilder.graphFromField(this.gameField);
         const mIndex = this.graphBuilder.getVertexIndex(this.map, 'M');
         const dIndex = this.graphBuilder.getVertexIndex(this.map, '$');
         graph = new this.calculator().calculateGraph(
@@ -89,29 +95,47 @@ export class GameController {
             dIndex,
             SILENT,
             this.maxStepNo,
-            gameField
+            this.gameField
         );
-        this.w = gameField.getWidth();
-        const goldScreenXY = gameField.vertexIndexToCoords(dIndex, this.w);
-        const manFieldXY = gameField.vertexIndexToCoords(mIndex, this.w);
+        this.graph = graph;
+    };
+
+    getGoldScreenXY = () => {
+        const dIndex = this.graphBuilder.getVertexIndex(this.map, '$');
+        return this.gameField.vertexIndexToCoords(dIndex, this.w);
+    };
+
+    calcManVIndex = () => {
+        this.manVIndex = this.graphBuilder.getVertexIndex(this.map, 'M');
+    };
+    calcManFieldXY = () => {
+        return this.gameField.vertexIndexToCoords(this.manVIndex, this.w);
+    };
+
+    calcField() {
+        this.initEmptyField();
+        this.initGameField();
+        this.calculateShortestPath();
+        this.w = this.gameField.getWidth();
+        this.calcManVIndex();
+
+        const goldScreenXY = this.getGoldScreenXY();
+        const manFieldXY = this.calcManFieldXY();
         const manScreenXY = calcManScreenPos(
             manFieldXY,
             this.nextManFieldXY,
             this.gameState.miniCounter
         );
 
-        this.graph = graph;
-        this.gameField = gameField;
         this.manFieldXY = manFieldXY;
         this.gameState = {
             ...this.gameState,
             manScreenXY,
             goldScreenXY,
-            curVertexIndex: graph.curVertexIndex
+            curVertexIndex: this.graph.curVertexIndex
         };
 
-        this.manVIndex = mIndex;
-        this.nextManVIndex = mIndex;
+        this.nextManVIndex = this.manVIndex;
         this.curPathPos = 0;
         this.onUpdateCurPathPos();
     }
