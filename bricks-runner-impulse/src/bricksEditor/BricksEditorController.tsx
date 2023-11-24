@@ -22,6 +22,7 @@ import {
     LevelStats,
     LevelsApiAnswer
 } from './BricksEditorController.types';
+import { ResultsStorageService } from '@src/services/ResultsStorageService';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -42,6 +43,7 @@ export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
     curChar: string = FieldChars.wall;
     private mapStorage: MapStorageService = null;
+    private resultsStorage: ResultsStorageService = null;
     private isDevelopMope = false;
     private levelsAnswer: LevelsApiAnswer;
     private levelIndex = 0;
@@ -66,6 +68,7 @@ export class BricksEditorController extends GameController {
             760
         );
         this.mapStorage = new MapStorageService();
+        this.resultsStorage = new ResultsStorageService();
         this.graphBuilder = ADVANCED_V2;
         this.gameState = {
             ...defaultGameState,
@@ -370,6 +373,6 @@ export class BricksEditorController extends GameController {
 
     onSendResultsClick = () => {
         const userName = (document.getElementById('userName') as HTMLInputElement).value;
-        console.log('onSendResultsClick() userName=', userName);
+        this.resultsStorage.saveGameResults(userName, this.levelStats);
     };
 }
