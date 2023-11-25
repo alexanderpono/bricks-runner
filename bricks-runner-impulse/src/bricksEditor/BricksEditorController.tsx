@@ -214,11 +214,26 @@ export class BricksEditorController extends GameController {
         );
     };
 
-    handleClickBtBrick = () => (this.curChar = Cell.wall);
-    handleClickBtStairs = () => (this.curChar = Cell.stairs);
-    handleClickBtGold = () => (this.curChar = Cell.gold);
-    handleClickBtSpace = () => (this.curChar = Cell.space);
-    handleClickBtCoin = () => (this.curChar = Cell.coin);
+    handleClickBtBrick = () => {
+        this.curChar = Cell.wall;
+        this.renderUI();
+    };
+    handleClickBtStairs = () => {
+        this.curChar = Cell.stairs;
+        this.renderUI();
+    };
+    handleClickBtGold = () => {
+        this.curChar = Cell.gold;
+        this.renderUI();
+    };
+    handleClickBtSpace = () => {
+        this.curChar = Cell.space;
+        this.renderUI();
+    };
+    handleClickBtCoin = () => {
+        this.curChar = Cell.coin;
+        this.renderUI();
+    };
     onUploadFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let file: File | null = e.target.files ? e.target.files[0] : null;
 
@@ -370,7 +385,7 @@ export class BricksEditorController extends GameController {
     };
 
     saveLevelStats = () => {
-        this.levelStats.push({ steps: this.curPathPos });
+        this.levelStats.push({ steps: this.curPathPos, coins: this.coinsTaken });
         console.log('gotoNewLevel() this.levelStats=', this.levelStats);
     };
     gotoNewLevel = () => {

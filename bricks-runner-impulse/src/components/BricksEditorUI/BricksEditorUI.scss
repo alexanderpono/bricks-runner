@@ -1,6 +1,11 @@
 @font-face {
     font-family: 'PCSenior';
-    src: url('./pc-senior/pcsenior.ttf')  format('truetype'); /* Safari, Android, iOS */
+    src: url('./pc-senior/pcsenior.ttf') format('truetype');
+        
+}
+@font-face {
+    font-family: 'Born2bsporty';
+    src: url('./born2bsporty-fs/Born2bSportyFS.otf') format('opentype');
         
 }
 .red {
@@ -143,45 +148,20 @@
     background-position: -480px -40px;
 }
 
-.wrapLoad {
-    background: white;
-}
-.btLoad {
-    cursor: pointer;
-    width: 50px;
-    height: 40px;
-    overflow: hidden;
-    border: 1px solid lightgrey;
-    &::before {
-        content: 'LOAD';
-        display: block;
-        width: 40px;
-        height: 40px;
-        left: 0px;
-        top: 0px;
-        opacity: 1;
-    }
-}
-
-.save {
-    cursor: pointer;
-    height: 40px;
-}
-
 .inventory {
     input[type="radio"] {
         display: none;
     }
 
     .categories {
-        margin: 30px 0px 30px 0px;
+        margin: 50px 0px 42px 0px;
         display: flex;
         flex-direction: column;
         font-family: PCSenior, Arial, Helvetica, sans-serif;
 
         label {
             display: block;
-            border: 2px solid #fff;
+            border: 2px solid #000;
             height: 40px;
             line-height: 40px;
             text-align: center;
@@ -189,10 +169,15 @@
             position: relative;
             cursor: pointer;
             margin: 0px;
+            width: 160px;
 
             &.cur {
                 border: 2px solid #c0c040;
             }
+        }
+
+        .count {
+            margin-left: 35px;
         }
     }
     .brick, .stairs, .gold, .space {
@@ -206,5 +191,93 @@
     position: absolute;
     left: 0px;
     top: 0px;
+    border: 1px solid white;
+}
 
+.btGo {
+    font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    line-height: 100%;
+    position: relative;
+    overflow: hidden;
+    margin: 0px 0px 42px 2px;
+    width: 150px;
+    height: 36px;
+    border: 2px solid white;
+    box-sizing: content-box;
+    letter-spacing: 3px;
+    background: #c0c040;
+    span {
+        position: absolute;
+        left: 10px;
+        top: -4px;
+    }
+}
+
+:global(h1) {
+    font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+    letter-spacing: 0.15em;
+    font-size: 50px;
+    padding: 0px;
+    margin: 0px 0px 10px 10px;
+    font-weight: normal;
+}
+
+.screen {
+    border: 1px solid #ffffff;
+}
+
+.develop {
+    .editInventory {
+        margin: 50px 0px 42px 0px;
+    }
+    
+    .wrapLoad {
+        background: black;
+        margin-bottom: 42px;
+        padding: 0px;
+    }
+    .btLoad {
+        cursor: pointer;
+        width: 100%;
+        height: 40px;
+        overflow: hidden;
+        border: 1px solid lightgrey;
+        border-radius: 0px;
+        font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+        font-size: 30px;
+        margin: 0px;
+        position: relative;
+        &::before {
+            content: 'ЗАГРУЗИТЬ УРОВЕНЬ';
+            display: block;
+            width: 100%;
+            height: 40px;
+            left: 0px;
+            top: 0px;
+            text-align: center;
+            line-height: 40px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            background: black;
+        }
+    }
+    
+    .save {
+        cursor: pointer;
+        height: 40px;
+        width: 100%;
+        border-radius: 0px;
+        border: 1px solid lightgrey;
+        font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+        font-size: 30px;
+        background: black;
+        color: #ffff40;
+        margin-bottom: 42px;
+    }
+    
+    .cur {
+        border: 1px solid #ffff40;
+    }
 }

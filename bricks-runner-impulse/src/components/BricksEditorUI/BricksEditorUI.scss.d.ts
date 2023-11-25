@@ -2,17 +2,22 @@
 // Please do not change this file!
 interface CssExports {
   'brick': string;
+  'btGo': string;
   'btLoad': string;
   'categories': string;
   'coin': string;
+  'count': string;
   'cur': string;
+  'develop': string;
   'editControls': string;
+  'editInventory': string;
   'editorUI': string;
   'gameStats': string;
   'gold': string;
   'inventory': string;
   'red': string;
   'save': string;
+  'screen': string;
   'space': string;
   'stairs': string;
   'statsCoins': string;

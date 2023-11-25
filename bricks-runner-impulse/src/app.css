@@ -3,6 +3,8 @@ body {
     font-family: Times, serif;
     padding: 8px;
     margin: 0px;
+    background: #000;
+    color: #ffff40;
 }
 
 nav ul {
@@ -18,14 +20,6 @@ nav li {
 p.greeting {
     font-size: 100%;
     margin-bottom: 30px;
-}
-
-h1 {
-    font-size: 120%;
-}
-
-h2 {
-    font-size: 120%;
 }
 
 .table{

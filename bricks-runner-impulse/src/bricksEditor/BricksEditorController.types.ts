@@ -49,4 +49,5 @@ export interface DynamicObject {
 
 export interface LevelStats {
     steps: number;
+    coins: number;
 }
