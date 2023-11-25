@@ -4,9 +4,19 @@
             "mapFile": "01.txt",
             "inventory": [
                 {
+                    "name": "brick",
+                    "count": 10,
+                    "char": "▓"
+                },
+                {
                     "name": "stairs",
-                    "count": 5,
+                    "count": 10,
                     "char": "╡"
+                },
+                {
+                    "name": "space",
+                    "count": 10,
+                    "char": " "
                 }
             ]
         },
