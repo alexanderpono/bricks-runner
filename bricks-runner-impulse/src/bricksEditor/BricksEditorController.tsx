@@ -386,11 +386,12 @@ export class BricksEditorController extends GameController {
 
     saveLevelStats = () => {
         this.levelStats.push({ steps: this.curPathPos, coins: this.coinsTaken });
-        console.log('gotoNewLevel() this.levelStats=', this.levelStats);
+        console.log('saveLevelStats() this.levelStats=', this.levelStats);
     };
     gotoNewLevel = () => {
         console.log('gotoNewLevel()');
         this.levelIndex++;
+        this.coinsTaken = 0;
         this.loadGame();
     };
 

@@ -141,7 +141,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                                                 </p>
                                             </div>
                                         ))}
-                                        <p>Введите ваше имя:</p>
+                                        <p>Введите свой ник в Telegram:</p>@
                                         <input type="text" name="userName" id="userName"></input>
                                         <button onClick={ctrl.onSendResultsClick}>Отправить</button>
                                     </article>
