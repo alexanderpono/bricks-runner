@@ -92,6 +92,10 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         )}
                         {!shellState.isDevelopMope && (
                             <>
+                                <div className={styles.tip}>
+                                    1. Отредактируйте уровень при помощи инвентаря, чтобы собрать
+                                    больше монет:
+                                </div>
                                 <div className={styles.inventory}>
                                     {shellState.inventory.map((item: InventoryItem) => {
                                         return (
@@ -127,6 +131,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                                         })}
                                     </section>
                                 </div>
+                                <div className={styles.tip}>2. Нажмите на кнопку:</div>
                                 <button onClick={ctrl.onBtStartClick} className={styles.btGo}>
                                     <span>ПОЕХАЛИ</span>
                                 </button>
