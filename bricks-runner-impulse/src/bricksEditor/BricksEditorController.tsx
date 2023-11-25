@@ -18,9 +18,11 @@ import { GraphCalculatorV3 } from '@src/game/GraphCalculatorV3';
 import { GraphCalculatorV5f } from '@src/game/GraphCalculatorV5f';
 import {
     DynamicObject,
+    GameScreen,
     InventoryItem,
     LevelStats,
-    LevelsApiAnswer
+    LevelsApiAnswer,
+    Render
 } from './BricksEditorController.types';
 import { ResultsStorageService } from '@src/services/ResultsStorageService';
 import { GameControllerBuilder } from '@src/game/GameControllerBuilder';
@@ -56,6 +58,7 @@ export class BricksEditorController extends GameController {
     private isGameOver: boolean = false;
     private coinsTaken = 0;
     private levelTime = 0;
+    private screen: GameScreen = GameScreen.default;
 
     constructor() {
         super(
@@ -189,6 +192,23 @@ export class BricksEditorController extends GameController {
         this.mapStorage.cacheMap(this.map);
     };
 
+    getWhatToRender = (): number => {
+        let whatToRender = 0;
+        if (this.isDevelopMope) {
+            whatToRender = whatToRender | Render.developControls | Render.gameScreen;
+        } else {
+            if (this.screen !== GameScreen.intro) {
+                whatToRender = whatToRender | Render.gameScreen;
+                if (this.isGameOver) {
+                    whatToRender = whatToRender | Render.gameOverScreen;
+                } else {
+                    whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
+                }
+            }
+        }
+        return whatToRender;
+    };
+
     renderUI = () => {
         render(
             <BricksEditorUI
@@ -207,9 +227,9 @@ export class BricksEditorController extends GameController {
                     levelIndex: this.levelIndex,
                     curChar: this.curChar,
                     levelStats: this.levelStats,
-                    isGameOver: this.isGameOver,
                     coinsTaken: this.coinsTaken,
-                    levelTime: this.levelTime
+                    levelTime: this.levelTime,
+                    render: this.getWhatToRender()
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -320,6 +340,9 @@ export class BricksEditorController extends GameController {
 
         if (!this.isDevelopMope) {
             this.loadGame();
+        } else {
+            this.stopTimer();
+            this.resetTimer();
         }
 
         this.renderUI();
@@ -437,6 +460,7 @@ export class BricksEditorController extends GameController {
     stopTimer = () => {
         this.isTimerStarted = false;
     };
+    resetTimer = () => (this.levelTime = 0);
     subsribeNextSecond = () => {
         setTimeout(this.onNextSecond, 1000);
     };

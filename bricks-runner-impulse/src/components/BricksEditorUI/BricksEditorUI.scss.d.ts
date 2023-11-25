@@ -12,8 +12,10 @@ interface CssExports {
   'editControls': string;
   'editInventory': string;
   'editorUI': string;
+  'gameOverScreen': string;
   'gameStats': string;
   'gold': string;
+  'hideGameScreen': string;
   'inventory': string;
   'red': string;
   'save': string;
@@ -24,6 +26,7 @@ interface CssExports {
   'statsLevel': string;
   'statsSteps': string;
   'statsTime': string;
+  'tgLogin': string;
   'tip': string;
   'wrapGame': string;
   'wrapLoad': string;

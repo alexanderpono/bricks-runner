@@ -225,18 +225,16 @@
     font-family: Born2bsporty, Arial, Helvetica, sans-serif;
     font-size: 40px;
     line-height: 100%;
-    position: relative;
     overflow: hidden;
     margin: 0px 0px 42px 2px;
-    width: 150px;
-    height: 36px;
+    padding: 0px 10px 0px 10px;
+    height: 38px;
     border: 2px solid white;
     box-sizing: content-box;
     letter-spacing: 3px;
     background: #c0c040;
     span {
-        position: absolute;
-        left: 10px;
+        position: relative;
         top: -4px;
     }
 }
@@ -307,4 +305,32 @@
     .cur {
         border: 1px solid #ffff40;
     }
+}
+
+.gameOverScreen {
+    font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+    font-size: 30px;
+
+    p {
+        margin: 0;
+    }
+    input[type="text"] {
+        border: 1px solid white;
+        font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+        font-size: 30px;
+        padding: 0px 10px 0px 10px;
+        margin-left: 10px;
+        width: 200px;
+        color: white;
+        background: black;
+        border-radius: 0;
+    }
+    .tgLogin {
+        margin: 10px 0px;
+    }
+}
+
+.hideGameScreen {
+    // visibility: hidden;
+    opacity: 0.5;
 }

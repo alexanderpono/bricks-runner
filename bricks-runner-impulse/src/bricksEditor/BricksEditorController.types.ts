@@ -17,9 +17,9 @@ export interface ShellState {
     levelIndex: number;
     curChar: string;
     levelStats: LevelStats[];
-    isGameOver: boolean;
     coinsTaken: number;
     levelTime: number;
+    render: number;
 }
 
 export interface InventoryItem {
@@ -52,4 +52,17 @@ export interface LevelStats {
     steps: number;
     coins: number;
     time: number;
+}
+
+export enum GameScreen {
+    default = '',
+    intro = 'intro'
+}
+
+export enum Render {
+    gameScreen = 1,
+    gameOverScreen = 2,
+    gameLevelControls = 4,
+    developControls = 8,
+    levelStats = 16
 }
