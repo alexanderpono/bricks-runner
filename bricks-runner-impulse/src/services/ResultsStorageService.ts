@@ -1,3 +1,4 @@
+import { formatTime } from '@src/adapters/formatTime';
 import { LevelStats } from '@src/bricksEditor/BricksEditorController.types';
 import saveas from 'file-saver';
 
@@ -7,7 +8,9 @@ export class ResultsStorageService {
 Telegram: @${userName}
 ${stats
     .map((levelStats: LevelStats, index) => {
-        return `level ${index + 1} steps:${levelStats.steps} coins:${levelStats.coins}`;
+        return `level ${index + 1} steps:${levelStats.steps} coins:${
+            levelStats.coins
+        } time:${formatTime(levelStats.time)}`;
     })
     .join('\n')}
 `;

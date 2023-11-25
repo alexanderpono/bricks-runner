@@ -274,12 +274,12 @@ export class GameController {
         this.renderUI();
         this.renderScene();
     };
-    onBtStartClick = () => {
+    onBtStartClick() {
         this.patchState({ manAni: ManAni.RIGHT });
         this.doTrajectoryStep();
         this.nextManFieldXY = this.gameField.vertexIndexToCoords(this.nextManVIndex, this.w);
         this.tick();
-    };
+    }
     onBtClearClick = () => {
         this.stepNo = 0;
         this.maxMiniCounter = 9;

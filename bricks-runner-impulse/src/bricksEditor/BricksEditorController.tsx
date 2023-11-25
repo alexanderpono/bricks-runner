@@ -55,6 +55,7 @@ export class BricksEditorController extends GameController {
     private levelStats: LevelStats[] = [];
     private isGameOver: boolean = false;
     private coinsTaken = 0;
+    private levelTime = 0;
 
     constructor() {
         super(
@@ -207,7 +208,8 @@ export class BricksEditorController extends GameController {
                     curChar: this.curChar,
                     levelStats: this.levelStats,
                     isGameOver: this.isGameOver,
-                    coinsTaken: this.coinsTaken
+                    coinsTaken: this.coinsTaken,
+                    levelTime: this.levelTime
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -270,15 +272,22 @@ export class BricksEditorController extends GameController {
         this.loadLevels().then((levelsAnswer: LevelsApiAnswer) => {
             this.levelsAnswer = levelsAnswer;
             this.loadLevel(this.levelIndex).then((map) => {
-                this.map = map.trim();
-                this.inventory = [...this.levelsAnswer.levels[this.levelIndex].inventory];
-                this.mapStorage.cacheMap(this.map);
-                this.curChar = this.inventory[0].char;
-                this.calcField();
-                this.renderScene();
-                this.onBtClearClick();
+                this.onLoadLevel(this.levelIndex, map);
             });
         });
+    };
+    onLoadLevel = (levelIndex: number, map: string) => {
+        this.map = map.trim();
+        this.inventory = [...this.levelsAnswer.levels[levelIndex].inventory];
+        this.mapStorage.cacheMap(this.map);
+        this.curChar = this.inventory[0].char;
+        this.levelTime = 0;
+        this.calcField();
+        this.renderScene();
+        this.onBtClearClick();
+        if (!this.isDevelopMope) {
+            this.startTimer();
+        }
     };
 
     wait = (millisec: number): Promise<void> => {
@@ -385,7 +394,11 @@ export class BricksEditorController extends GameController {
     };
 
     saveLevelStats = () => {
-        this.levelStats.push({ steps: this.curPathPos, coins: this.coinsTaken });
+        this.levelStats.push({
+            steps: this.curPathPos,
+            coins: this.coinsTaken,
+            time: this.levelTime
+        });
         console.log('saveLevelStats() this.levelStats=', this.levelStats);
     };
     gotoNewLevel = () => {
@@ -414,5 +427,29 @@ export class BricksEditorController extends GameController {
         });
 
         return context;
+    };
+
+    isTimerStarted = false;
+    startTimer = () => {
+        this.isTimerStarted = true;
+        this.subsribeNextSecond();
+    };
+    stopTimer = () => {
+        this.isTimerStarted = false;
+    };
+    subsribeNextSecond = () => {
+        setTimeout(this.onNextSecond, 1000);
+    };
+    onNextSecond = () => {
+        if (this.isTimerStarted) {
+            this.levelTime++;
+            this.subsribeNextSecond();
+            this.renderUI();
+        }
+    };
+
+    onBtStartClick = () => {
+        this.stopTimer();
+        super.onBtStartClick();
     };
 }

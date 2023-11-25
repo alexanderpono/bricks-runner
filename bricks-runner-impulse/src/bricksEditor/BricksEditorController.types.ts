@@ -19,6 +19,7 @@ export interface ShellState {
     levelStats: LevelStats[];
     isGameOver: boolean;
     coinsTaken: number;
+    levelTime: number;
 }
 
 export interface InventoryItem {
@@ -50,4 +51,5 @@ export interface DynamicObject {
 export interface LevelStats {
     steps: number;
     coins: number;
+    time: number;
 }

@@ -23,6 +23,7 @@ interface CssExports {
   'statsCoins': string;
   'statsLevel': string;
   'statsSteps': string;
+  'statsTime': string;
   'tip': string;
   'wrapGame': string;
   'wrapLoad': string;

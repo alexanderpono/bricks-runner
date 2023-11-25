@@ -101,7 +101,29 @@
             left: 0px;
             width: 40px;
             height: 40px;
-            background: url(./level.png);
+            background: url(../GameFieldUI/sprite.png);
+            background-position: -80px -160px;
+        }
+
+    }
+
+    .statsTime {
+        left: 40px;
+        width: 80px;
+        height: 40px;
+        position: relative;
+        padding-left: 45px;
+
+        &::before {
+            position: absolute;
+            display: block;
+            content: '';
+            top: 0px;
+            left: 0px;
+            width: 40px;
+            height: 40px;
+            background: url(../GameFieldUI/sprite.png);
+            background-position: -120px -160px;
         }
 
     }

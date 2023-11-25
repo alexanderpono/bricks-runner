@@ -5,6 +5,7 @@ import styles from './BricksEditorUI.scss';
 import { InventoryItem, ShellState } from '@src/bricksEditor/BricksEditorController.types';
 import cn from 'classnames';
 import { Cell } from '@src/game/GameField';
+import { formatTime } from '@src/adapters/formatTime';
 
 interface BricksEditorUI {
     id: string;
@@ -16,6 +17,7 @@ interface BricksEditorUI {
     curPathPos: number;
     shellState: ShellState;
 }
+
 export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI>(
     ({ id, title, canvasW, canvasH, ctrl, gameState, shellState }, canvasRef) => {
         return (
@@ -30,6 +32,9 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                             <article className={styles.statsSteps}>{shellState.curPathPos}</article>
                             <article className={styles.statsLevel}>
                                 {shellState.levelIndex + 1}
+                            </article>
+                            <article className={styles.statsTime}>
+                                {formatTime(shellState.levelTime)}
                             </article>
                         </section>
                         <GameControls
@@ -142,7 +147,8 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                                                 <p>
                                                     level:{index + 1} steps:{levelStats.steps}{' '}
                                                     coins:
-                                                    {levelStats.coins}
+                                                    {levelStats.coins} time:
+                                                    {formatTime(levelStats.time)}
                                                 </p>
                                             </div>
                                         ))}
