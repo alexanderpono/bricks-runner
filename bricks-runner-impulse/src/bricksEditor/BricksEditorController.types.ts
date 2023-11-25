@@ -57,7 +57,8 @@ export interface LevelStats {
 export enum GameScreen {
     default = '',
     intro = 'intro',
-    level = 'level'
+    level = 'level',
+    gameOver = 'gameOver'
 }
 
 export enum Render {

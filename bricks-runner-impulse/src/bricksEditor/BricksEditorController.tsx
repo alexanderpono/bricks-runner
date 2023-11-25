@@ -55,7 +55,6 @@ export class BricksEditorController extends GameController {
     private dObjects: DynamicObject[] = [];
     private gold: DynamicObject;
     private levelStats: LevelStats[] = [];
-    private isGameOver: boolean = false;
     private coinsTaken = 0;
     private levelTime = 0;
     private screen: GameScreen = GameScreen.intro;
@@ -108,7 +107,7 @@ export class BricksEditorController extends GameController {
         } else {
             if (this.screen !== GameScreen.intro) {
                 whatToRender = whatToRender | Render.gameScreen;
-                if (this.isGameOver) {
+                if (this.screen === GameScreen.gameOver) {
                     whatToRender = whatToRender | Render.gameOverScreen;
                 } else {
                     whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
@@ -434,7 +433,7 @@ export class BricksEditorController extends GameController {
     };
 
     gotoEndGame = () => {
-        this.isGameOver = true;
+        this.screen = GameScreen.gameOver;
         console.log('end()');
         this.renderUI();
     };
@@ -442,6 +441,8 @@ export class BricksEditorController extends GameController {
     onSendResultsClick = () => {
         const userName = (document.getElementById('userName') as HTMLInputElement).value;
         this.resultsStorage.saveGameResults(userName, this.levelStats);
+        this.screen = GameScreen.intro;
+        this.renderUI();
     };
 
     renderScene = () => {

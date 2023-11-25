@@ -46,6 +46,9 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         {ifRender(Render.introScreen) && (
                             <IntroScreen ctrl={ctrl} shellState={shellState} />
                         )}
+                        {ifRender(Render.gameOverScreen) && (
+                            <GameOverScreen ctrl={ctrl} shellState={shellState} />
+                        )}
                     </div>
                     <div className={styles.editControls}>
                         {ifRender(Render.developControls) && (
@@ -53,9 +56,6 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         )}
                         {ifRender(Render.gameLevelControls) && (
                             <GameLevelControls ctrl={ctrl} shellState={shellState} />
-                        )}
-                        {ifRender(Render.gameOverScreen) && (
-                            <GameOverScreen ctrl={ctrl} shellState={shellState} />
                         )}
 
                         <div>
