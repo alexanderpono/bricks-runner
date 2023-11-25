@@ -47,8 +47,8 @@ export const GameLevelControls: React.FC<GameLevelControlsProps> = ({ ctrl, shel
                 </section>
             </div>
             <div className={styles.tip}>2. Нажмите на кнопку:</div>
-            <button onClick={ctrl.onBtStartClick} className={styles.btGo}>
-                <span>ПОЕХАЛИ</span>
+            <button onClick={ctrl.onBtStartClick} className={cn(styles.appBut, styles.btGo)}>
+                <div>ПОЕХАЛИ</div>
             </button>
         </>
     );

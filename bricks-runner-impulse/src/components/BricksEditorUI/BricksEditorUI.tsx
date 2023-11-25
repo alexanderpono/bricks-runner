@@ -8,6 +8,7 @@ import { GameLevelControls } from './components/GameLevelControls';
 import { DevelopControls } from './components/DevelopControls';
 import { LevelStats } from './components/LevelStats';
 import { GameFieldController, GameState } from '../GameFieldUI/Game.types';
+import { IntroScreen } from './components/InrtroScreen';
 
 interface BricksEditorUIProps {
     id: string;
@@ -29,14 +30,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                     <h1>МОДИФИКАЦИЯ BRICKS RUNNER ДЛЯ КОНФЕРЕНЦИИ ИМПУЛЬС</h1>
                 </section>
                 <div className={styles.editorUI}>
-                    <div
-                        className={
-                            (styles.screen,
-                            cn({
-                                [styles.hideGameScreen]: !ifRender(Render.gameScreen)
-                            }))
-                        }
-                    >
+                    <div className={styles.screen}>
                         <section className={styles.gameStats}>
                             {ifRender(Render.levelStats) && <LevelStats shellState={shellState} />}
                         </section>
@@ -49,6 +43,9 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                             ctrl={ctrl}
                             gameState={gameState}
                         />
+                        {ifRender(Render.introScreen) && (
+                            <IntroScreen ctrl={ctrl} shellState={shellState} />
+                        )}
                     </div>
                     <div className={styles.editControls}>
                         {ifRender(Render.developControls) && (

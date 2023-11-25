@@ -24,8 +24,8 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({ ctrl, shellState
             <p className={styles.tgLogin}>
                 @<input type="text" name="userName" id="userName"></input>
             </p>
-            <button className={styles.btGo} onClick={ctrl.onSendResultsClick}>
-                <span>ОТПРАВИТЬ</span>
+            <button className={styles.appBut} onClick={ctrl.onSendResultsClick}>
+                <div>ОТПРАВИТЬ</div>
             </button>
         </section>
     );

@@ -58,7 +58,7 @@ export class BricksEditorController extends GameController {
     private isGameOver: boolean = false;
     private coinsTaken = 0;
     private levelTime = 0;
-    private screen: GameScreen = GameScreen.default;
+    private screen: GameScreen = GameScreen.intro;
 
     constructor() {
         super(
@@ -100,6 +100,25 @@ export class BricksEditorController extends GameController {
         };
         this.showButtonsIfDevelopMode();
     }
+
+    getWhatToRender = (): number => {
+        let whatToRender = 0;
+        if (this.isDevelopMope) {
+            whatToRender = whatToRender | Render.developControls | Render.gameScreen;
+        } else {
+            if (this.screen !== GameScreen.intro) {
+                whatToRender = whatToRender | Render.gameScreen;
+                if (this.isGameOver) {
+                    whatToRender = whatToRender | Render.gameOverScreen;
+                } else {
+                    whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
+                }
+            } else {
+                whatToRender = whatToRender | Render.introScreen;
+            }
+        }
+        return whatToRender;
+    };
 
     showButtonsIfDevelopMode = () => {
         if (!this.isDevelopMope) {
@@ -190,23 +209,6 @@ export class BricksEditorController extends GameController {
         this.calcField();
         this.renderScene();
         this.mapStorage.cacheMap(this.map);
-    };
-
-    getWhatToRender = (): number => {
-        let whatToRender = 0;
-        if (this.isDevelopMope) {
-            whatToRender = whatToRender | Render.developControls | Render.gameScreen;
-        } else {
-            if (this.screen !== GameScreen.intro) {
-                whatToRender = whatToRender | Render.gameScreen;
-                if (this.isGameOver) {
-                    whatToRender = whatToRender | Render.gameOverScreen;
-                } else {
-                    whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
-                }
-            }
-        }
-        return whatToRender;
     };
 
     renderUI = () => {
@@ -475,5 +477,12 @@ export class BricksEditorController extends GameController {
     onBtStartClick = () => {
         this.stopTimer();
         super.onBtStartClick();
+    };
+
+    onBtToLevel1 = () => {
+        console.log('onBtToLevel1()');
+        this.screen = GameScreen.level;
+        this.levelTime = 0;
+        this.renderUI();
     };
 }

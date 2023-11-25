@@ -170,6 +170,21 @@
     background-position: -480px -40px;
 }
 
+.timer {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background: url(../GameFieldUI/sprite.png);
+    background-position: -120px -160px;
+}
+
+.level {
+    width: 40px;
+    height: 40px;
+    background: url(../GameFieldUI/sprite.png);
+    background-position: -80px -160px;
+}
+
 .tip {
     margin: 50px 0px 12px 0px;
     font-family: Born2bsporty, Arial, Helvetica, sans-serif;
@@ -218,25 +233,30 @@
     position: absolute;
     left: 0px;
     top: 0px;
-    border: 1px solid white;
+    // border: 1px solid white;
 }
 
-.btGo {
+:global(.space) {
+    border: 1px solid #c0c040;
+}
+
+.appBut {
     font-family: Born2bsporty, Arial, Helvetica, sans-serif;
     font-size: 40px;
-    line-height: 100%;
-    overflow: hidden;
-    margin: 0px 0px 42px 2px;
     padding: 0px 10px 0px 10px;
     height: 38px;
-    border: 2px solid white;
+    border: 2px solid #c0c040;
     box-sizing: content-box;
     letter-spacing: 3px;
     background: #c0c040;
-    span {
+    cursor: pointer;
+    div {
         position: relative;
-        top: -4px;
+        top: -8px;
     }
+}
+.btGo {
+    margin: 0px 0px 42px 2px;
 }
 
 :global(h1) {
@@ -246,10 +266,6 @@
     padding: 0px;
     margin: 0px 0px 10px 10px;
     font-weight: normal;
-}
-
-.screen {
-    border: 1px solid #ffffff;
 }
 
 .develop {
@@ -330,7 +346,96 @@
     }
 }
 
-.hideGameScreen {
-    // visibility: hidden;
-    opacity: 0.5;
+.screen {
+    position: relative;
+}
+
+.introScreen {
+    .bg {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        background: url(./wall.png);
+
+    }
+    .content {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        .win {
+            font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            letter-spacing: 3px;
+            max-width: 80%;
+            background: rgba(0,0,0,0.9);
+            padding: 40px;
+
+            h1 {
+                margin-left: 0px;
+            }
+            ul {
+                margin: 0px;
+                padding: 0px;
+                list-style: none;
+            }
+
+            p.pretty, li.pretty {
+                text-indent: -60px;
+                margin-left: 60px;
+            }            
+            p {
+                margin: 20px 0px;
+            }
+
+            .bt {
+                margin-top: 20px;
+            }
+            span {
+                width: 40px;
+                height: 40px;
+                display: inline-block;
+                position: relative;
+                margin-right: 10px;
+
+                &.coin {
+                    top: 10px;
+                    border: 1px solid #ffff40;
+                }
+
+                &.brick {
+                    top: 2px;
+                }
+
+                &.space {
+                    border: 1px solid #ffff40;
+                }
+
+                &.timer {
+                    top: 1px;
+                    border: 1px solid #ffff40;
+                }
+
+                &.level {
+                    top: 1px;
+                    border: 1px solid #ffff40;
+                }
+
+                &.gold {
+                    margin-right: 18px;
+                    border: 1px solid #ffff40;
+                }
+
+            }
+        }
+    
+    }
 }

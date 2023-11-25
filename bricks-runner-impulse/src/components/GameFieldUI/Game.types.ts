@@ -28,6 +28,7 @@ export interface GameFieldController {
     handleClickIsDevelopMode?: () => void;
     handleSelectInventoryItem?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSendResultsClick?: () => void;
+    onBtToLevel1?: () => void;
 }
 export interface GameState {
     nodesChecked: boolean;

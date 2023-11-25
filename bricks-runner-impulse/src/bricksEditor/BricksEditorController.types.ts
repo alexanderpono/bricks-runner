@@ -56,7 +56,8 @@ export interface LevelStats {
 
 export enum GameScreen {
     default = '',
-    intro = 'intro'
+    intro = 'intro',
+    level = 'level'
 }
 
 export enum Render {
@@ -64,5 +65,6 @@ export enum Render {
     gameOverScreen = 2,
     gameLevelControls = 4,
     developControls = 8,
-    levelStats = 16
+    levelStats = 16,
+    introScreen = 32
 }
