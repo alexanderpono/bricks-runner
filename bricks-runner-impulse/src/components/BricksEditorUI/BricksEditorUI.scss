@@ -41,7 +41,7 @@
         background-repeat: repeat-x;
     }
 
-    .statsGold {
+    .statsCoins {
         left: 40px;
         width: 80px;
         height: 40px;
@@ -52,12 +52,12 @@
             position: absolute;
             display: block;
             content: '';
-            top: -8px;
+            top: 2px;
             left: 0px;
             width: 40px;
             height: 40px;
             background: url(../GameFieldUI/sprite.png);
-            background-position: -200px -120px;
+            background-position: -480px -40px;
         }
     }
 
@@ -133,6 +133,14 @@
     height: 40px;
     background: url(../GameFieldUI/sprite.png);
     background-position: 0px -120px;
+}
+
+.coin, :global(.coin) {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background: black url(../GameFieldUI/sprite.png);
+    background-position: -480px -40px;
 }
 
 .wrapLoad {

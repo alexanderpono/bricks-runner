@@ -4,6 +4,7 @@ interface CssExports {
   'brick': string;
   'btLoad': string;
   'categories': string;
+  'coin': string;
   'cur': string;
   'editControls': string;
   'editorUI': string;
@@ -14,7 +15,7 @@ interface CssExports {
   'save': string;
   'space': string;
   'stairs': string;
-  'statsGold': string;
+  'statsCoins': string;
   'statsLevel': string;
   'statsSteps': string;
   'wrapGame': string;

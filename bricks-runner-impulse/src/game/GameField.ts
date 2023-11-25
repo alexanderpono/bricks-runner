@@ -1,18 +1,11 @@
 export enum Cell {
-    man = 3,
-    wall = 2,
-    stairs = 1,
-    space = 0,
-    gold = 4,
-    teleport = 5
-}
-export enum FieldChars {
     wall = '▓',
     stairs = '╡',
     man = 'M',
     gold = '$',
     teleport = '1',
-    space = ' '
+    space = ' ',
+    coin = 'c'
 }
 
 export interface Point2D {
@@ -28,39 +21,20 @@ export class GameField {
     field: Cell[][] = [];
 
     initFromText = (text: string) => {
-        // console.log('initFromText() text=', text);
         const lines = text.trim().split('\n');
         const fieldWidth = lines.reduce(
             (width: number, line) => (line.length < width ? width : line.length),
             0
         );
+        const cells = new Set(Object.values(Cell));
 
         this.field = lines.map((line: string): Cell[] => {
             const fieldLine = Array(fieldWidth).fill(Cell.space);
             line.split('').forEach((char: string, index) => {
-                switch (char) {
-                    case FieldChars.wall:
-                        fieldLine[index] = Cell.wall;
-                        break;
-
-                    case FieldChars.stairs:
-                        fieldLine[index] = Cell.stairs;
-                        break;
-
-                    case FieldChars.man:
-                        fieldLine[index] = Cell.man;
-                        break;
-
-                    case FieldChars.gold:
-                        fieldLine[index] = Cell.gold;
-                        break;
-
-                    case FieldChars.teleport:
-                        fieldLine[index] = Cell.teleport;
-                        break;
-
-                    default:
-                        fieldLine[index] = Cell.space;
+                if (cells.has(char as Cell)) {
+                    fieldLine[index] = char;
+                } else {
+                    fieldLine[index] = Cell.space;
                 }
             });
             return fieldLine;

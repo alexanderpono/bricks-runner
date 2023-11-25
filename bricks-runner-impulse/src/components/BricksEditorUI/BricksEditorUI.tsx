@@ -21,7 +21,7 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
             <div className={styles.editorUI}>
                 <div>
                     <section className={styles.gameStats}>
-                        <article className={styles.statsGold}>0</article>
+                        <article className={styles.statsCoins}>{shellState.coinsTaken}</article>
                         <article className={styles.statsSteps}>{shellState.curPathPos}</article>
                         <article className={styles.statsLevel}>{shellState.levelIndex + 1}</article>
                     </section>
@@ -65,6 +65,10 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                                 <button
                                     className={styles.space}
                                     onClick={ctrl.handleClickBtSpace}
+                                ></button>
+                                <button
+                                    className={styles.coin}
+                                    onClick={ctrl.handleClickBtCoin}
                                 ></button>
                             </div>
                             <div className={styles.wrapLoad}>

@@ -112,6 +112,10 @@ export const telePortal: Sprite = {
     x: 520,
     y: 120
 };
+export const coin: Sprite = {
+    x: 480,
+    y: 40
+};
 
 export enum ManAni {
     STAND = 'STAND',

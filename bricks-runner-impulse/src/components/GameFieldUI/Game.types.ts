@@ -22,6 +22,7 @@ export interface GameFieldController {
     handleClickBtStairs?: () => void;
     handleClickBtGold?: () => void;
     handleClickBtSpace?: () => void;
+    handleClickBtCoin?: () => void;
     onUploadFileChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleClickBtSaveAs?: () => void;
     handleClickIsDevelopMode?: () => void;

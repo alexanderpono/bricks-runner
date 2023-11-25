@@ -18,6 +18,7 @@ export interface ShellState {
     curChar: string;
     levelStats: LevelStats[];
     isGameOver: boolean;
+    coinsTaken: number;
 }
 
 export interface InventoryItem {

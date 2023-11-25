@@ -5,7 +5,7 @@ import {
     defaultRenderOptions
 } from '@src/components/GameFieldUI/Game.types';
 import { GameController } from '@src/game/GameController';
-import { Cell, FieldChars, GameField, defaultPoint2D } from '@src/game/GameField';
+import { Cell, GameField, defaultPoint2D } from '@src/game/GameField';
 import { ALL_NODES } from '@src/game/GraphCalculator';
 import { GraphFromField } from '@src/game/GraphFromField';
 import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
@@ -24,6 +24,7 @@ import {
 } from './BricksEditorController.types';
 import { ResultsStorageService } from '@src/services/ResultsStorageService';
 import { GameControllerBuilder } from '@src/game/GameControllerBuilder';
+import { GRCoin } from '@src/ports/GRCoin';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -42,7 +43,7 @@ const ADVANCED = new GraphFromFieldAdvanced();
 const ADVANCED_V2 = new GraphFromFieldAdvancedV2();
 export class BricksEditorController extends GameController {
     options: RenderOptions = { ...TELEPORT_CONTROLS };
-    curChar: string = FieldChars.wall;
+    curChar: string = Cell.wall;
     private mapStorage: MapStorageService = null;
     private resultsStorage: ResultsStorageService = null;
     private isDevelopMope = false;
@@ -53,6 +54,7 @@ export class BricksEditorController extends GameController {
     private gold: DynamicObject;
     private levelStats: LevelStats[] = [];
     private isGameOver: boolean = false;
+    private coinsTaken = 0;
 
     constructor() {
         super(
@@ -175,7 +177,7 @@ export class BricksEditorController extends GameController {
             }
         }
 
-        const newVal = curVal === this.curChar ? FieldChars.space : this.curChar;
+        const newVal = curVal === this.curChar ? Cell.space : this.curChar;
         lineAr[cellX] = newVal;
         lines[cellY] = lineAr.join('');
         const newMap = lines.join('\n');
@@ -204,25 +206,19 @@ export class BricksEditorController extends GameController {
                     levelIndex: this.levelIndex,
                     curChar: this.curChar,
                     levelStats: this.levelStats,
-                    isGameOver: this.isGameOver
+                    isGameOver: this.isGameOver,
+                    coinsTaken: this.coinsTaken
                 }}
             />,
             document.getElementById('bricksEditor')
         );
     };
 
-    handleClickBtBrick = () => {
-        this.curChar = FieldChars.wall;
-    };
-    handleClickBtStairs = () => {
-        this.curChar = FieldChars.stairs;
-    };
-    handleClickBtGold = () => {
-        this.curChar = FieldChars.gold;
-    };
-    handleClickBtSpace = () => {
-        this.curChar = FieldChars.space;
-    };
+    handleClickBtBrick = () => (this.curChar = Cell.wall);
+    handleClickBtStairs = () => (this.curChar = Cell.stairs);
+    handleClickBtGold = () => (this.curChar = Cell.gold);
+    handleClickBtSpace = () => (this.curChar = Cell.space);
+    handleClickBtCoin = () => (this.curChar = Cell.coin);
     onUploadFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let file: File | null = e.target.files ? e.target.files[0] : null;
 
@@ -314,7 +310,7 @@ export class BricksEditorController extends GameController {
         super.calcField();
 
         const getDynanicObjects = (field: GameField): DynamicObject[] => {
-            const dynamicTypes = [Cell.gold, Cell.man];
+            const dynamicTypes = [Cell.gold, Cell.man, Cell.coin];
             const h = field.field.length;
             const w = field.field[0].length;
             const result: DynamicObject[] = [];
@@ -342,7 +338,26 @@ export class BricksEditorController extends GameController {
         if (this.gold.point.x === this.manFieldXY.x && this.gold.point.y === this.manFieldXY.y) {
             this.onGoldCollision();
         }
+        const coins = this.dObjects.filter((obj: DynamicObject) => obj.type === Cell.coin);
+        coins.forEach((coin: DynamicObject, index) => {
+            if (coin.point.x === this.manFieldXY.x && coin.point.y === this.manFieldXY.y) {
+                this.onCoinCollision(coin);
+            }
+        });
     }
+
+    removeCapturedCoinFromMap = (coin: DynamicObject) => {
+        const newDObjects = this.dObjects.filter(
+            (obj: DynamicObject) => obj.point.x !== coin.point.x || obj.point.y !== coin.point.y
+        );
+        this.dObjects = newDObjects;
+    };
+
+    onCoinCollision = (coin: DynamicObject) => {
+        this.removeCapturedCoinFromMap(coin);
+        this.coinsTaken++;
+        this.renderUI();
+    };
 
     onGoldCollision = () => {
         console.log('gold collision');
@@ -373,5 +388,15 @@ export class BricksEditorController extends GameController {
     onSendResultsClick = () => {
         const userName = (document.getElementById('userName') as HTMLInputElement).value;
         this.resultsStorage.saveGameResults(userName, this.levelStats);
+    };
+
+    renderScene = () => {
+        const context = super.renderScene();
+        const coins = this.dObjects.filter((obj: DynamicObject) => obj.type === Cell.coin);
+        coins.forEach((coin: DynamicObject) => {
+            GRCoin.create(context, coin.point, this.gameState.pic).draw();
+        });
+
+        return context;
     };
 }

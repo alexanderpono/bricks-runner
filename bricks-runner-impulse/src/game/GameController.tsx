@@ -162,10 +162,10 @@ export class GameController {
     }
     onUIUnmounted() {}
 
-    renderScene = () => {
+    renderScene(): CanvasRenderingContext2D {
         if (!this.picLoaded) {
             console.log('GameFieldUI() !picLoaded');
-            return;
+            return null;
         }
 
         const canvas = this.canvasRef.current;
@@ -175,7 +175,7 @@ export class GameController {
 
         if (canvas === null) {
             console.log('GameFieldUI() canvas === null');
-            return;
+            return null;
         }
         const context = canvas.getContext('2d') as CanvasRenderingContext2D;
         context.fillStyle = 'orange';
@@ -220,7 +220,8 @@ export class GameController {
         gameState.highlightCells.forEach((point: Point2D) => {
             GRSelect.create(context, point, gameState.pic).draw();
         });
-    };
+        return context;
+    }
 
     renderUI = () => {
         render(this.getUI(), document.getElementById(this.target));
