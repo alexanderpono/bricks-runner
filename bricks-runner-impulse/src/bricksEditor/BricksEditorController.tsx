@@ -57,7 +57,7 @@ export class BricksEditorController extends GameController {
     private levelStats: LevelStats[] = [];
     private coinsTaken = 0;
     private levelTime = 0;
-    private screen: GameScreen = GameScreen.level;
+    private screen: GameScreen = GameScreen.intro;
 
     constructor() {
         super(
@@ -445,7 +445,8 @@ export class BricksEditorController extends GameController {
         this.renderUI();
     };
 
-    renderObjects = (context: CanvasRenderingContext2D) => {
+    renderObjects = (context: CanvasRenderingContext2D, options: RenderOptions) => {
+        super.renderObjects(context, options);
         const coins = this.dObjects.filter((obj: DynamicObject) => obj.type === Cell.coin);
         coins.forEach((coin: DynamicObject) => {
             GRCoin.create(context, coin.point, this.gameState.pic).draw();
