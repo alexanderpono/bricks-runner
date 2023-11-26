@@ -142,6 +142,8 @@ export class BricksEditorController extends GameController {
     };
 
     go = () => {
+        this.installHashListener();
+        this.processHash(this.getHash());
         const isInCache = this.mapStorage.isMapInCache();
         if (!isInCache) {
             this.map = this.mapStorage.getDefaultMap();
@@ -411,7 +413,9 @@ export class BricksEditorController extends GameController {
         console.log('gold collision');
         this.saveLevelStats();
         if (this.levelIndex < this.levelsAnswer.levels.length - 1) {
-            this.gotoNewLevel();
+            setTimeout(() => {
+                this.gotoNewLevel();
+            }, 1500);
         } else {
             this.gotoEndGame();
         }
@@ -483,5 +487,18 @@ export class BricksEditorController extends GameController {
         this.screen = GameScreen.level;
         this.levelTime = 0;
         this.renderUI();
+    };
+
+    getHash = () => window.location.hash;
+    processHash = (hash: string) => {
+        this.isDevelopMope = hash === '#dev';
+    };
+
+    onRouteChanged = () => {
+        this.processHash(this.getHash());
+    };
+
+    installHashListener = () => {
+        window.addEventListener('hashchange', this.onRouteChanged);
     };
 }

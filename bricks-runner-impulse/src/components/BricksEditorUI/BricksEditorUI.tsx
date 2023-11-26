@@ -57,18 +57,6 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         {ifRender(Render.gameLevelControls) && (
                             <GameLevelControls ctrl={ctrl} shellState={shellState} />
                         )}
-
-                        <div>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    name="develop"
-                                    checked={!shellState.isDevelopMope}
-                                    onChange={ctrl.handleClickIsDevelopMode}
-                                />
-                                Режим {shellState.isDevelopMope ? 'разработки' : 'игры'}
-                            </label>
-                        </div>
                     </div>
                 </div>
             </>
