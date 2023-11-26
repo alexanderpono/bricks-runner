@@ -162,6 +162,11 @@ export class GameController {
     }
     onUIUnmounted() {}
 
+    renderObjects(context: CanvasRenderingContext2D, options: RenderOptions) {
+        GRGold.create(context, this.gameState.goldScreenXY, this.gameState.pic).draw();
+        GRGraph.create(context, this.gameField, this.graph, options).draw();
+    }
+
     renderScene(): CanvasRenderingContext2D {
         if (!this.picLoaded) {
             console.log('GameFieldUI() !picLoaded');
@@ -207,8 +212,7 @@ export class GameController {
         };
 
         GRField.create(context, this.emptyField, gameState.pic, options).draw();
-        GRGold.create(context, gameState.goldScreenXY, gameState.pic).draw();
-        GRGraph.create(context, field, graph, options).draw();
+        this.renderObjects(context, options);
         GRMan.create(
             context,
             gameState.manScreenXY,

@@ -113,7 +113,7 @@ export const telePortal: Sprite = {
     y: 120
 };
 export const coin: Sprite = {
-    x: 480,
+    x: 600,
     y: 40
 };
 
