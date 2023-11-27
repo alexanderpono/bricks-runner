@@ -484,3 +484,67 @@
     
     }
 }
+
+.finishLevelScreen {
+    border: 1px solid red;
+
+    .bg {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        background: rgba(0,0,0,0.5);
+
+    }
+    .content {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        .win {
+            font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            letter-spacing: 3px;
+            max-width: 80%;
+            background: rgba(0,0,0,0.9);
+            padding: 40px;
+
+            h1 {
+                margin: 0px 0px 50px 0px;
+            }
+
+            .enterLogin {
+                margin: 50px 0px 0px 0px;
+            }
+
+            input[type="text"] {
+                border: 1px solid var(--frame-color);
+                font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+                font-size: 30px;
+                padding: 0px 10px 0px 10px;
+                margin-left: 10px;
+                width: 200px;
+                color: var(--text-color);
+                background: black;
+                border-radius: 0;
+                &:focus {
+                    outline: none!important;
+                    border: 1px solid var(--frame-color);
+                    border-radius: 0;
+                }
+            }
+            .tgLogin {
+                margin: 30px 0px;
+            }
+        
+        }
+        
+    }
+}

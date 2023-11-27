@@ -22,7 +22,8 @@ import {
     InventoryItem,
     LevelStats,
     LevelsApiAnswer,
-    Render
+    Render,
+    defaultLevelsApiAnswer
 } from './BricksEditorController.types';
 import { ResultsStorageService } from '@src/services/ResultsStorageService';
 import { GameControllerBuilder } from '@src/game/GameControllerBuilder';
@@ -49,7 +50,7 @@ export class BricksEditorController extends GameController {
     private mapStorage: MapStorageService = null;
     private resultsStorage: ResultsStorageService = null;
     private isDevelopMope = false;
-    private levelsAnswer: LevelsApiAnswer;
+    private levelsAnswer: LevelsApiAnswer = { ...defaultLevelsApiAnswer };
     private levelIndex = 0;
     private inventory: InventoryItem[] = [];
     private dObjects: DynamicObject[] = [];
@@ -105,15 +106,25 @@ export class BricksEditorController extends GameController {
         if (this.isDevelopMope) {
             whatToRender = whatToRender | Render.developControls | Render.gameScreen;
         } else {
-            if (this.screen !== GameScreen.intro) {
-                whatToRender = whatToRender | Render.gameScreen;
-                if (this.screen === GameScreen.gameOver) {
-                    whatToRender = whatToRender | Render.gameOverScreen;
-                } else {
-                    whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
+            switch (this.screen) {
+                case GameScreen.intro: {
+                    whatToRender = whatToRender | Render.introScreen;
+                    break;
                 }
-            } else {
-                whatToRender = whatToRender | Render.introScreen;
+                case GameScreen.level: {
+                    whatToRender = whatToRender | Render.gameScreen;
+                    whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
+                    break;
+                }
+                case GameScreen.finishLevel: {
+                    whatToRender = whatToRender | Render.gameScreen;
+                    whatToRender = whatToRender | Render.finishLevelScreen;
+                    break;
+                }
+                case GameScreen.gameOver: {
+                    whatToRender = whatToRender | Render.gameOverScreen;
+                    break;
+                }
             }
         }
         return whatToRender;
@@ -232,7 +243,8 @@ export class BricksEditorController extends GameController {
                     levelStats: this.levelStats,
                     coinsTaken: this.coinsTaken,
                     levelTime: this.levelTime,
-                    render: this.getWhatToRender()
+                    render: this.getWhatToRender(),
+                    levels: this.levelsAnswer.levels
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -414,11 +426,17 @@ export class BricksEditorController extends GameController {
         this.saveLevelStats();
         if (this.levelIndex < this.levelsAnswer.levels.length - 1) {
             setTimeout(() => {
-                this.gotoNewLevel();
-            }, 1500);
+                this.screen = GameScreen.finishLevel;
+                this.renderUI();
+            }, 0);
         } else {
             this.gotoEndGame();
         }
+    };
+
+    onBtNextLevelClick = () => {
+        this.gotoNewLevel();
+        this.screen = GameScreen.level;
     };
 
     saveLevelStats = () => {

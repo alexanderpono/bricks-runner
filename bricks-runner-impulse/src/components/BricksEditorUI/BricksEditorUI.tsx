@@ -2,13 +2,13 @@ import React from 'react';
 import { GameControls } from '@src/components/GameFieldUI/GameControls';
 import styles from './BricksEditorUI.scss';
 import { Render, ShellState } from '@src/bricksEditor/BricksEditorController.types';
-import cn from 'classnames';
 import { GameOverScreen } from './components/GameOverScreen';
 import { GameLevelControls } from './components/GameLevelControls';
 import { DevelopControls } from './components/DevelopControls';
 import { LevelStats } from './components/LevelStats';
 import { GameFieldController, GameState } from '../GameFieldUI/Game.types';
 import { IntroScreen } from './components/InrtroScreen';
+import { FinishLevelScreen } from './components/FinishLevelScreen';
 
 interface BricksEditorUIProps {
     id: string;
@@ -48,6 +48,9 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         )}
                         {ifRender(Render.gameOverScreen) && (
                             <GameOverScreen ctrl={ctrl} shellState={shellState} />
+                        )}
+                        {ifRender(Render.finishLevelScreen) && (
+                            <FinishLevelScreen ctrl={ctrl} shellState={shellState} />
                         )}
                     </div>
                     <div className={styles.editControls}>

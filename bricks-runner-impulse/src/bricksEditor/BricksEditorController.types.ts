@@ -20,6 +20,7 @@ export interface ShellState {
     coinsTaken: number;
     levelTime: number;
     render: number;
+    levels: LevelInfo[];
 }
 
 export interface InventoryItem {
@@ -42,6 +43,9 @@ export interface LevelInfo {
 export interface LevelsApiAnswer {
     levels: LevelInfo[];
 }
+export const defaultLevelsApiAnswer: LevelsApiAnswer = {
+    levels: []
+};
 
 export interface DynamicObject {
     point: Point2D;
@@ -53,11 +57,17 @@ export interface LevelStats {
     coins: number;
     time: number;
 }
+export const defaultLevelStats: LevelStats = {
+    steps: 0,
+    coins: 0,
+    time: 0
+};
 
 export enum GameScreen {
     default = '',
     intro = 'intro',
     level = 'level',
+    finishLevel = 'finishLevel',
     gameOver = 'gameOver'
 }
 
@@ -67,5 +77,6 @@ export enum Render {
     gameLevelControls = 4,
     developControls = 8,
     levelStats = 16,
-    introScreen = 32
+    introScreen = 32,
+    finishLevelScreen = 64
 }

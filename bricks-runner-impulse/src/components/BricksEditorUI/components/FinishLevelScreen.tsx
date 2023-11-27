@@ -8,43 +8,42 @@ import {
     defaultLevelStats
 } from '@src/bricksEditor/BricksEditorController.types';
 
-interface GameOverScreenProps {
+interface FinishLevelScreenProps {
     ctrl: GameFieldController;
     shellState: ShellState;
 }
-export const GameOverScreen: React.FC<GameOverScreenProps> = ({ ctrl, shellState }) => {
+export const FinishLevelScreen: React.FC<FinishLevelScreenProps> = ({ ctrl, shellState }) => {
+    const levelStats =
+        shellState.levelStats.length > 0
+            ? shellState.levelStats[shellState.levelStats.length - 1]
+            : { ...defaultLevelStats };
+
     const currentSumma: LevelStats = { ...defaultLevelStats };
     shellState.levelStats.forEach((level) => {
         currentSumma.coins += level.coins;
         currentSumma.steps += level.steps;
         currentSumma.time += level.time;
     });
-
     return (
-        <section className={styles.gameOverScreen}>
+        <section className={styles.finishLevelScreen}>
             <div className={styles.bg}></div>
             <div className={styles.content}>
                 <div className={styles.win}>
-                    <h1>ВАШИ РЕЗУЛЬТАТЫ:</h1>
-                    {shellState.levelStats.map((levelStats, index) => (
-                        <div key={index}>
-                            УРОВЕНЬ {index + 1} &nbsp; МОНЕТ:
-                            {levelStats.coins} &nbsp; ВРЕМЯ:
-                            {formatTime(levelStats.time)} <br />
-                        </div>
-                    ))}
-
+                    <h1>
+                        ПРОЙДЕН УРОВЕНЬ {shellState.levelIndex + 1} / {shellState.levels.length}
+                    </h1>
+                    <p>
+                        КОЛИЧЕСТВО МОНЕТ: {levelStats.coins} <br />
+                        ВРЕМЯ РЕШЕНИЯ ЗАДАЧИ: {formatTime(levelStats.time)}
+                    </p>
                     <p>
                         ОБЩЕЕ КОЛИЧЕСТВО МОНЕТ: {currentSumma.coins} <br />
                         ОБЩЕЕ ВРЕМЯ РЕШЕНИЯ ЗАДАЧ: {formatTime(currentSumma.time)}
                     </p>
-
-                    <p className={styles.enterLogin}>Введите свой логин в Telegram:</p>
-                    <p className={styles.tgLogin}>
-                        @<input type="text" name="userName" id="userName"></input>
-                    </p>
-                    <button className={styles.appBut} onClick={ctrl.onSendResultsClick}>
-                        <div>ОТПРАВИТЬ</div>
+                    <button className={styles.appBut} onClick={ctrl.onBtNextLevelClick}>
+                        <div>
+                            К УРОВНЮ {shellState.levelIndex + 2} / {shellState.levels.length}
+                        </div>
                     </button>
                 </div>
             </div>

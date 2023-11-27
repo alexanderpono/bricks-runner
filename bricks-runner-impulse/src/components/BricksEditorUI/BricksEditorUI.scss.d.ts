@@ -17,6 +17,7 @@ interface CssExports {
   'editInventory': string;
   'editorUI': string;
   'enterLogin': string;
+  'finishLevelScreen': string;
   'gameOverScreen': string;
   'gameStats': string;
   'gold': string;
