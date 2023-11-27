@@ -32,7 +32,8 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ ctrl, shellState }) =>
                         <span className={styles.brick}></span> СТЕНА ПОЗВОЛЯЕТ ЗАКРЫТЬ ПУТЬ
                     </p>
                     <p>
-                        <span className={styles.space}></span> ПУСТОТА ПОЗВОЛЯЕТ СДЕЛАТЬ ПРОВАЛ
+                        <span className={styles.space}></span> ПУСТОТА ПОЗВОЛЯЕТ СДЕЛАТЬ ПРОВАЛ ИЛИ
+                        ПРОХОД
                     </p>
                     <p className={styles.pretty}>
                         <span className={styles.timer}></span> НЕ ЗАТЯГИВАЙТЕ С РЕШЕНИЕМ: ПРИ РАВНОМ
@@ -41,9 +42,11 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ ctrl, shellState }) =>
                     <p>
                         <span className={styles.level}></span> ВАС ЖДЕТ 5 УРОВНЕЙ
                     </p>
-                    <button onClick={ctrl.onBtToLevel1} className={cn(styles.appBut, styles.bt)}>
-                        <div>К УРОВНЮ 1</div>
-                    </button>
+                    <div className={styles.bt}>
+                        <button onClick={ctrl.onBtToLevel1} className={styles.appBut}>
+                            <div>ИГРАТЬ</div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
