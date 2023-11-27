@@ -42,18 +42,9 @@ export class MapStorageService {
         saveas(blob, 'save.txt');
     };
 
-    isMapInCache = (): boolean => {
-        const map = localStorage.getItem('map');
-        return Boolean(map);
-    };
-
     getDefaultMap = () => map2;
 
-    cacheMap = (map: string) => {
-        localStorage.setItem('map', map);
-    };
-
-    getMapFromCache = () => localStorage.getItem('map');
+    getMapFromCache = () => '';
 
     getMapFromHttpFile = (url: string): Promise<string> => {
         return axios({

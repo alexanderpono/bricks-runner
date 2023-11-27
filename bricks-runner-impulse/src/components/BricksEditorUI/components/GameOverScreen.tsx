@@ -2,23 +2,15 @@ import React from 'react';
 import { GameFieldController } from '@src/components/GameFieldUI/Game.types';
 import styles from '@src/components/BricksEditorUI/BricksEditorUI.scss';
 import { formatTime } from '@src/adapters/formatTime';
-import {
-    LevelStats,
-    ShellState,
-    defaultLevelStats
-} from '@src/bricksEditor/BricksEditorController.types';
+import { ShellState } from '@src/bricksEditor/BricksEditorController.types';
+import { calcSumma } from '@src/services/calcSumma';
 
 interface GameOverScreenProps {
     ctrl: GameFieldController;
     shellState: ShellState;
 }
 export const GameOverScreen: React.FC<GameOverScreenProps> = ({ ctrl, shellState }) => {
-    const currentSumma: LevelStats = { ...defaultLevelStats };
-    shellState.levelStats.forEach((level) => {
-        currentSumma.coins += level.coins;
-        currentSumma.steps += level.steps;
-        currentSumma.time += level.time;
-    });
+    const currentSumma = calcSumma(shellState.levelStats);
 
     return (
         <section className={styles.gameOverScreen}>

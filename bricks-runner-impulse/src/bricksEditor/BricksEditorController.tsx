@@ -155,13 +155,7 @@ export class BricksEditorController extends GameController {
     go = () => {
         this.installHashListener();
         this.processHash(this.getHash());
-        const isInCache = this.mapStorage.isMapInCache();
-        if (!isInCache) {
-            this.map = this.mapStorage.getDefaultMap();
-            this.mapStorage.cacheMap(this.map);
-        } else {
-            this.map = this.mapStorage.getMapFromCache();
-        }
+        this.map = this.mapStorage.getDefaultMap();
         this.calcField();
         this.renderUI();
 
@@ -220,7 +214,6 @@ export class BricksEditorController extends GameController {
 
         this.calcField();
         this.renderScene();
-        this.mapStorage.cacheMap(this.map);
     };
 
     renderUI = () => {
@@ -281,7 +274,6 @@ export class BricksEditorController extends GameController {
         try {
             this.mapStorage.readMap(file).then((map: string) => {
                 this.map = map;
-                this.mapStorage.cacheMap(this.map);
                 this.calcField();
                 this.renderScene();
             });
@@ -314,7 +306,6 @@ export class BricksEditorController extends GameController {
     onLoadLevel = (levelIndex: number, map: string) => {
         this.map = map.trim();
         this.inventory = [...this.levelsAnswer.levels[levelIndex].inventory];
-        this.mapStorage.cacheMap(this.map);
         this.curChar = this.inventory[0].char;
         this.levelTime = 0;
         this.calcField();
