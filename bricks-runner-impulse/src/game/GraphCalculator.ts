@@ -5,9 +5,10 @@ const NULL = -1;
 export const VERBOSE = true;
 export const SILENT = false;
 
-export const COST_WALL = 100;
+export const COST_WALL = 500;
 export const COST_SPACE = 1;
 export const ALL_NODES = 1000;
+const MAX_PATH_LENGTH = 400;
 
 export const defaultEdgeCost: EdgeCost = {
     cost: UNDEFINED_COST,
@@ -131,7 +132,7 @@ export class GraphCalculator {
         const newGraph = { ...graph };
         let curVertexIndex = toVertex;
         const pathFromDestToSrc: number[] = [];
-        const deadLoopProtection = 100;
+        const deadLoopProtection = MAX_PATH_LENGTH;
         let stepNo = 0;
         while (curVertexIndex !== fromVertex && stepNo < deadLoopProtection) {
             const curVertex = newGraph.vertices[curVertexIndex];
