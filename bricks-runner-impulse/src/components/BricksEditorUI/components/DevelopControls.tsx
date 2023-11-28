@@ -53,7 +53,7 @@ export const DevelopControls: React.FC<DevelopControlsProps> = ({ ctrl, shellSta
                 />
             </div>
             <button className={styles.save} onClick={ctrl.handleClickBtSaveAs}>
-                СОХРАНИТЬ УРОВЕНЬ
+                СОХРАНИТЬ&nbsp;УРОВЕНЬ
             </button>
         </section>
     );

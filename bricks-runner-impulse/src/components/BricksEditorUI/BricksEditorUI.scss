@@ -12,6 +12,8 @@
 :root {
     --text-color: #ffff40;
     --frame-color: #ffff40;
+    --button-bg: #c0c040;
+    --button-color: black;
 }
 
 .red {
@@ -290,12 +292,12 @@
         width: 100%;
         height: 40px;
         overflow: hidden;
-        border: 1px solid lightgrey;
         border-radius: 0px;
         font-family: Born2bsporty, Arial, Helvetica, sans-serif;
         font-size: 30px;
         margin: 0px;
         position: relative;
+
         &::before {
             content: 'ЗАГРУЗИТЬ УРОВЕНЬ';
             display: block;
@@ -308,7 +310,9 @@
             position: absolute;
             left: 0px;
             top: 0px;
-            background: black;
+            color: var(--button-color);
+            background: var(--button-bg);
+            border: var(--button-bg);
         }
     }
     
@@ -317,13 +321,13 @@
         height: 40px;
         width: 100%;
         border-radius: 0px;
-        border: 1px solid lightgrey;
         font-family: Born2bsporty, Arial, Helvetica, sans-serif;
         font-size: 30px;
-        background: black;
-        color: #ffff40;
         margin-bottom: 42px;
-    }
+        color: var(--button-color);
+        background: var(--button-bg);
+        border: var(--button-bg);
+}
     
     .cur {
         border: 1px solid var(--frame-color);
@@ -550,5 +554,26 @@
         
         }
         
+    }
+}
+
+:global(.controls) {
+    font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    label {
+        input {
+            margin-right: 6px;
+        }
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    button {
+        font-family: Born2bsporty, Arial, Helvetica, sans-serif;
+        font-size: 30px;
+        text-transform: uppercase;
+        color: var(--button-color);
+        background: var(--button-bg);
+        border: var(--button-bg);
     }
 }

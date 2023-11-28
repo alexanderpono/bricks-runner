@@ -98,6 +98,7 @@ export class BricksEditorController extends GameController {
             showBtCost: this.options.showBtCost,
             showProgress: this.options.showProgress
         };
+        this.onRouteChanged();
         this.showButtonsIfDevelopMode();
     }
 
@@ -495,6 +496,7 @@ export class BricksEditorController extends GameController {
         console.log('onBtToLevel1()');
         this.screen = GameScreen.level;
         this.levelTime = 0;
+        this.levelIndex = 0;
         this.renderUI();
     };
 
