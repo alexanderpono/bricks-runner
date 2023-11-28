@@ -1,6 +1,6 @@
 import { Cell, GameField } from '@src/game/GameField';
 import { SPRITE_HEIGHT, SPRITE_WIDTH } from './GR.types';
-import { AbstractGraph, Edge, UNDEFINED_COST } from '@src/game/Graph.types';
+import { AbstractGraph, Edge, UNDEFINED_COST, Vertex } from '@src/game/Graph.types';
 import { COST_SPACE } from '@src/game/GraphCalculator';
 import { RenderOptions } from '@src/components/GameFieldUI/Game.types';
 
@@ -157,10 +157,15 @@ export class GRGraph {
         }
     };
 
-    drawVertexCost = (x: number, y: number) => {
+    getVertexAt = (x: number, y: number): Vertex => {
         const w = this.field.field[0].length;
         const vIndex = y * w + x;
         const vertex = this.graph.vertices[vIndex];
+        return vertex;
+    };
+
+    drawVertexCost = (x: number, y: number) => {
+        const vertex = this.getVertexAt(x, y);
         if (vertex.accessCost === UNDEFINED_COST) {
             return;
         }

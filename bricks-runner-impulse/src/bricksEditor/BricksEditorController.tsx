@@ -6,7 +6,7 @@ import {
 } from '@src/components/GameFieldUI/Game.types';
 import { GameController } from '@src/game/GameController';
 import { Cell, GameField, defaultPoint2D } from '@src/game/GameField';
-import { ALL_NODES } from '@src/game/GraphCalculator';
+import { ALL_NODES, COST_WALL } from '@src/game/GraphCalculator';
 import { GraphFromField } from '@src/game/GraphFromField';
 import { GraphFromFieldAdvancedV2 } from '@src/game/GraphFromFieldAdvancedV2';
 import React from 'react';
@@ -28,11 +28,13 @@ import {
 import { ResultsStorageService } from '@src/services/ResultsStorageService';
 import { GameControllerBuilder } from '@src/game/GameControllerBuilder';
 import { GRCoin } from '@src/ports/GRCoin';
+import { GRGraph } from '@src/ports/GRGraph';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
     map: true,
     path: false,
+    nodesCost: false,
     showBtMap: true,
     showBtNodes: true,
     showBtEdges: true,
@@ -59,6 +61,7 @@ export class BricksEditorController extends GameController {
     private coinsTaken = 0;
     private levelTime = 0;
     private screen: GameScreen = GameScreen.intro;
+    private pathIsFound = true;
 
     constructor() {
         super(
@@ -238,7 +241,8 @@ export class BricksEditorController extends GameController {
                     coinsTaken: this.coinsTaken,
                     levelTime: this.levelTime,
                     render: this.getWhatToRender(),
-                    levels: this.levelsAnswer.levels
+                    levels: this.levelsAnswer.levels,
+                    pathIsFound: this.pathIsFound
                 }}
             />,
             document.getElementById('bricksEditor')
@@ -487,7 +491,28 @@ export class BricksEditorController extends GameController {
         }
     };
 
+    getAccessCostOfGold = (): number => {
+        const goldVertex = GRGraph.create(
+            null,
+            this.gameField,
+            this.graph,
+            this.options
+        ).getVertexAt(this.gameState.goldScreenXY.x, this.gameState.goldScreenXY.y);
+        return goldVertex.accessCost;
+    };
+
     onBtStartClick = () => {
+        const goldAccessCost = this.getAccessCostOfGold();
+        const pathIsThroughWall = goldAccessCost > COST_WALL;
+        if (pathIsThroughWall && !this.isDevelopMope) {
+            this.saveLevelStats();
+            this.pathIsFound = false;
+            this.screen = GameScreen.finishLevel;
+            this.stopTimer();
+            this.renderUI();
+            return;
+        }
+        this.pathIsFound = true;
         this.stopTimer();
         super.onBtStartClick();
     };

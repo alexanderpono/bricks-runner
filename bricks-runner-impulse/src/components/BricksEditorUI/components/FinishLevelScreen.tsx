@@ -21,6 +21,7 @@ export const FinishLevelScreen: React.FC<FinishLevelScreenProps> = ({ ctrl, shel
             <div className={styles.bg}></div>
             <div className={styles.content}>
                 <div className={styles.win}>
+                    {!shellState.pathIsFound && <h1>ПРОХОД НЕ НАЙДЕН...</h1>}
                     <h1>
                         ПРОЙДЕН УРОВЕНЬ {shellState.levelIndex + 1} / {shellState.levels.length}
                     </h1>

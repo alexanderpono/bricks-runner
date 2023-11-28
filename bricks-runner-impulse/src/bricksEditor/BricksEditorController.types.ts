@@ -21,6 +21,7 @@ export interface ShellState {
     levelTime: number;
     render: number;
     levels: LevelInfo[];
+    pathIsFound: boolean;
 }
 
 export interface InventoryItem {
