@@ -1,7 +1,9 @@
 import { EdgeCost } from '@src/game/Graph.types';
-import { COST_SPACE, COST_WALL, defaultEdgeCost } from '@src/game/GraphCalculator';
+import { COST_SPACE, COST_WALL } from '@src/game/GraphCalculator';
 import { Cell, GameField } from './GameField';
 import { GraphFromField } from './GraphFromField';
+const asEmpty = [Cell.space, Cell.coin, Cell.gold];
+const passable = [Cell.space, Cell.coin, Cell.gold, Cell.stairs, Cell.man];
 
 export class GraphFromFieldAdvancedV2 extends GraphFromField {
     getEdgeCost = (field: GameField, v0Index: number, v1Index: number): EdgeCost => {
@@ -22,10 +24,14 @@ export class GraphFromFieldAdvancedV2 extends GraphFromField {
         if (egdeIsHor && v0xy.x < v1xy.x) {
             const v0D = field.coordsToCell({ x: v0xy.x, y: v0xy.y + 1 });
             const v1D = field.coordsToCell({ x: v1xy.x, y: v1xy.y + 1 });
-            if (v0D === Cell.space) {
+
+            const isV0DEmpty = asEmpty.indexOf(v0D) >= 0;
+            const isV1DEmpty = asEmpty.indexOf(v1D) >= 0;
+
+            if (isV0DEmpty) {
                 result.v0v1Cost = COST_WALL;
             }
-            if (v1D === Cell.space) {
+            if (isV1DEmpty) {
                 result.v1v0Cost = COST_WALL;
             }
             if (cell1 === Cell.wall || cell0 === Cell.wall) {
@@ -38,19 +44,21 @@ export class GraphFromFieldAdvancedV2 extends GraphFromField {
             if (cell0 === Cell.space && cell1 === Cell.space) {
                 result.v1v0Cost = COST_WALL;
             }
-            if (
-                (cell0 === Cell.space || cell0 === Cell.stairs || cell0 === Cell.gold) &&
-                cell1 === Cell.wall
-            ) {
+            const cell0Passable = passable.indexOf(cell0) >= 0;
+            const cell1Passable = passable.indexOf(cell1) >= 0;
+            if (cell0Passable && cell1 === Cell.wall) {
                 result.v0v1Cost = COST_WALL;
                 result.v1v0Cost = COST_WALL;
             }
-            if (cell0 === Cell.wall && cell1 === Cell.space) {
+            if (cell0 === Cell.wall && cell1Passable) {
                 result.v0v1Cost = COST_WALL;
                 result.v1v0Cost = COST_WALL;
             }
             if (cell0 === Cell.wall && cell1 === Cell.wall) {
                 result.v0v1Cost = COST_WALL;
+                result.v1v0Cost = COST_WALL;
+            }
+            if (cell0 === Cell.stairs && cell1 != Cell.stairs) {
                 result.v1v0Cost = COST_WALL;
             }
         }

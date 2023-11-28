@@ -34,6 +34,7 @@ const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
     map: true,
     path: false,
+    lines: false,
     nodesCost: false,
     showBtMap: true,
     showBtNodes: true,
