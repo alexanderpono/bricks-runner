@@ -430,11 +430,11 @@ export class BricksEditorController extends GameController {
             setTimeout(() => {
                 this.screen = GameScreen.finishLevel;
                 this.renderUI();
-            }, 1500);
+            }, 1000);
         } else {
             setTimeout(() => {
                 this.gotoEndGame();
-            }, 1500);
+            }, 1000);
         }
     };
 
@@ -485,6 +485,9 @@ export class BricksEditorController extends GameController {
 
     isTimerStarted = false;
     startTimer = () => {
+        if (this.isTimerStarted) {
+            return;
+        }
         this.isTimerStarted = true;
         this.subsribeNextSecond();
     };
@@ -530,11 +533,12 @@ export class BricksEditorController extends GameController {
     };
 
     onBtToLevel1 = () => {
-        console.log('onBtToLevel1()');
         this.screen = GameScreen.level;
         this.levelTime = 0;
         this.levelIndex = 0;
-        this.renderUI();
+        this.coinsTaken = 0;
+        this.levelStats = [];
+        this.loadGame();
     };
 
     getHash = () => window.location.hash;
