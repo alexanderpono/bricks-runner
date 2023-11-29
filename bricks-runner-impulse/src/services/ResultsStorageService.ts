@@ -21,7 +21,7 @@ ${stats
     writeToFile = (fileText: string) => {
         var blob = new Blob([fileText], { type: 'text/plain;charset=utf-8' });
 
-        saveas(blob, 'results.txt');
+        saveas(blob, 'bricksrunnerstat.txt');
     };
 
     updateLocalStorage = (fileText: string) => {
