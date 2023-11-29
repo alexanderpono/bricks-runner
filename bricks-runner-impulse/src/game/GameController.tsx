@@ -163,7 +163,6 @@ export class GameController {
     onUIUnmounted() {}
 
     renderObjects(context: CanvasRenderingContext2D, options: RenderOptions) {
-        GRGold.create(context, this.gameState.goldScreenXY, this.gameState.pic).draw();
         GRGraph.create(context, this.gameField, this.graph, options).draw();
     }
 

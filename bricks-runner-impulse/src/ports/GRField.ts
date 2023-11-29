@@ -24,9 +24,6 @@ export class GRField {
                 if (cell === Cell.man) {
                     sprite = man;
                 }
-                if (cell === Cell.gold) {
-                    sprite = gold;
-                }
                 if (cell === Cell.teleport) {
                     sprite = telePortal;
                 }

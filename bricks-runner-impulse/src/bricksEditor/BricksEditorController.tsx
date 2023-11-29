@@ -29,6 +29,7 @@ import { ResultsStorageService } from '@src/services/ResultsStorageService';
 import { GameControllerBuilder } from '@src/game/GameControllerBuilder';
 import { GRCoin } from '@src/ports/GRCoin';
 import { GRGraph } from '@src/ports/GRGraph';
+import { GRGold } from '@src/ports/GRGold';
 
 const TELEPORT_CONTROLS: RenderOptions = {
     ...defaultRenderOptions,
@@ -338,11 +339,9 @@ export class BricksEditorController extends GameController {
     loading = false;
     loadLevel = async (levelLndex: number) => {
         this.loading = true;
-        console.log('loadLevel() this.loading=', this.loading);
         const levelMap = await this.getMapForLevel(levelLndex);
         console.log('loadLevel() levelMap=', levelMap);
         this.loading = false;
-        console.log('loadLevel() this.loading=', this.loading);
         return levelMap;
     };
 
@@ -419,15 +418,23 @@ export class BricksEditorController extends GameController {
     };
 
     onGoldCollision = () => {
-        console.log('gold collision');
+        const goldDObject = this.dObjects.find(
+            (obj) =>
+                obj.point.x === this.gameState.goldScreenXY.x &&
+                obj.point.y === this.gameState.goldScreenXY.y
+        );
+        this.removeCapturedCoinFromMap(goldDObject);
+        this.renderScene();
         this.saveLevelStats();
         if (this.levelIndex < this.levelsAnswer.levels.length - 1) {
             setTimeout(() => {
                 this.screen = GameScreen.finishLevel;
                 this.renderUI();
-            }, 0);
+            }, 1500);
         } else {
-            this.gotoEndGame();
+            setTimeout(() => {
+                this.gotoEndGame();
+            }, 1500);
         }
     };
 
@@ -469,6 +476,10 @@ export class BricksEditorController extends GameController {
         const coins = this.dObjects.filter((obj: DynamicObject) => obj.type === Cell.coin);
         coins.forEach((coin: DynamicObject) => {
             GRCoin.create(context, coin.point, this.gameState.pic).draw();
+        });
+        const golds = this.dObjects.filter((obj: DynamicObject) => obj.type === Cell.gold);
+        golds.forEach((gold: DynamicObject) => {
+            GRGold.create(context, gold.point, this.gameState.pic).draw();
         });
     };
 

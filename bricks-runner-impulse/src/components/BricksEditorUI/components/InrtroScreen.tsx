@@ -2,14 +2,12 @@ import React from 'react';
 import { GameFieldController } from '@src/components/GameFieldUI/Game.types';
 import styles from '@src/components/BricksEditorUI/BricksEditorUI.scss';
 import { ShellState } from '@src/bricksEditor/BricksEditorController.types';
-import cn from 'classnames';
 
 interface IntroScreenProps {
     ctrl: GameFieldController;
     shellState: ShellState;
 }
 export const IntroScreen: React.FC<IntroScreenProps> = ({ ctrl, shellState }) => {
-    console.log('IntroScreen()');
     return (
         <section className={styles.introScreen}>
             <div className={styles.bg}></div>
