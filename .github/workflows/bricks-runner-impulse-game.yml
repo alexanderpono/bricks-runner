@@ -1,7 +1,7 @@
-name: bricks-runner-impulse-tutorial
+name: bricks-runner-impulse-game
 on:
   push:
-    branches: [ bricks-runner-impulse-tutorial ]
+    branches: [ master ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: bricks-runner-impulse-tutorial
+        working-directory: bricks-runner-impulse-game
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -37,12 +37,12 @@ jobs:
         id: Project-build
         run: npm run build
 
-      - name: Deploy application to GHP /ponomarenko-alex-otus/bricks-runner/impulse/tutorial 🚀
+      - name: Deploy application to GHP /ponomarenko-alex-otus/bricks-runner/impulse/game 🚀
         id: Deploy-app
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: bricks-runner-impulse-tutorial/temp/ui-dist  # The folder the action should deploy.
-          TARGET_FOLDER: impulse/tutorial
+          FOLDER: bricks-runner-impulse-game/temp/ui-dist  # The folder the action should deploy.
+          TARGET_FOLDER: impulse/game
           CLEAN: true # Automatically remove deleted files from the deploy branch
