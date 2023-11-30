@@ -2,6 +2,7 @@ import React from 'react';
 import { GameFieldController } from '@src/components/GameFieldUI/Game.types';
 import styles from '@src/components/BricksEditorUI/BricksEditorUI.scss';
 import { ShellState } from '@src/bricksEditor/BricksEditorController.types';
+import cn from 'classnames';
 
 interface IntroScreenProps {
     ctrl: GameFieldController;
@@ -16,29 +17,32 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ ctrl, shellState }) =>
                     <h1>ПРАВИЛА ИГРЫ:</h1>
                     <p>
                         <span className={styles.gold}></span>
-                        ПЕРСОНАЖ ИЩЕТ КРАТЧАЙШИЙ ПУТЬ ДО СУНДУКА{' '}
+                        ПЕРСОНАЖ АВТОМАТИЧЕСКИ ИЩЕТ КРАТЧАЙШИЙ ПУТЬ ДО СУНДУКА{' '}
                     </p>
                     <p className={styles.pretty}>
                         <span className={styles.coin}></span> РАССТАВЬТЕ ИНВЕНТАРЬ ТАК, ЧТОБЫ НА
                         ПУТИ ПЕРСОНАЖА <br /> ОКАЗАЛОСЬ КАК МОЖНО БОЛЬШЕ МОНЕТ
                     </p>
+                    <p>ИНВЕНТАРЬ:</p>
                     <p>
-                        <span className={styles.stairs}></span> ЛЕСТНИЦА ПОЗВОЛЯЕТ ПОДНЯТЬСЯ ИЛИ
-                        СПУСТИТЬСЯ
+                        <span className={cn(styles.stairs, styles.li)}></span> ЛЕСТНИЦА ПОЗВОЛЯЕТ
+                        ПОДНЯТЬСЯ ИЛИ СПУСТИТЬСЯ
                     </p>
                     <p>
-                        <span className={styles.brick}></span> СТЕНА ПОЗВОЛЯЕТ ЗАКРЫТЬ ПУТЬ
+                        <span className={cn(styles.brick, styles.li)}></span> СТЕНА ПОЗВОЛЯЕТ
+                        ЗАКРЫТЬ ПУТЬ
                     </p>
                     <p>
-                        <span className={styles.space}></span> ПУСТОТА ПОЗВОЛЯЕТ СДЕЛАТЬ ПРОВАЛ ИЛИ
-                        ПРОХОД
+                        <span className={cn(styles.space, styles.li)}></span> ПУСТОТА ПОЗВОЛЯЕТ
+                        УБРАТЬ ЛЮБОЙ ЭЛЕМЕНТ С ЭКРАНА
                     </p>
                     <p className={styles.pretty}>
                         <span className={styles.timer}></span> НЕ ЗАТЯГИВАЙТЕ С РЕШЕНИЕМ: ПРИ РАВНОМ
                         КОЛИЧЕСТВЕ <br /> МОНЕТ ПОБЕДИТ ТОТ, КТО РЕШИТ ЗАДАЧУ БЫСТРЕЕ
                     </p>
                     <p>
-                        <span className={styles.level}></span> ВАС ЖДЕТ 5 УРОВНЕЙ
+                        <span className={styles.level}></span> ВАС ЖДЕТ 5 УРОВНЕЙ. ПРОЙДИТЕ ВСЕ,
+                        ЧТОБЫ ЗАВЕРШИТЬ ИГРУ
                     </p>
                     <div className={styles.bt}>
                         <button onClick={ctrl.onBtToLevel1} className={styles.appBut}>

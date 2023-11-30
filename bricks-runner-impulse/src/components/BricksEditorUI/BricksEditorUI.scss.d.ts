@@ -24,6 +24,7 @@ interface CssExports {
   'introScreen': string;
   'inventory': string;
   'level': string;
+  'li': string;
   'pretty': string;
   'red': string;
   'save': string;
