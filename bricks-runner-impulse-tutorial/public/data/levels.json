@@ -4,19 +4,9 @@
             "mapFile": "01.txt",
             "inventory": [
                 {
-                    "name": "brick",
-                    "count": 10,
-                    "char": "▓"
-                },
-                {
                     "name": "stairs",
-                    "count": 10,
+                    "count": 5,
                     "char": "╡"
-                },
-                {
-                    "name": "space",
-                    "count": 10,
-                    "char": " "
                 }
             ]
         },
@@ -25,18 +15,8 @@
             "inventory": [
                 {
                     "name": "brick",
-                    "count": 10,
+                    "count": 1,
                     "char": "▓"
-                },
-                {
-                    "name": "stairs",
-                    "count": 15,
-                    "char": "╡"
-                },
-                {
-                    "name": "space",
-                    "count": 10,
-                    "char": " "
                 }
             ]
         },
@@ -44,19 +24,24 @@
             "mapFile": "03.txt",
             "inventory": [
                 {
-                    "name": "brick",
-                    "count": 10,
-                    "char": "▓"
-                },
+                    "name": "space",
+                    "count": 1,
+                    "char": " "
+                }
+            ]
+        },
+        {
+            "mapFile": "04.txt",
+            "inventory": [
                 {
                     "name": "stairs",
-                    "count": 10,
+                    "count": 7,
                     "char": "╡"
                 },
                 {
-                    "name": "space",
-                    "count": 10,
-                    "char": " "
+                    "name": "brick",
+                    "count": 1,
+                    "char": "▓"
                 }
             ]
         }

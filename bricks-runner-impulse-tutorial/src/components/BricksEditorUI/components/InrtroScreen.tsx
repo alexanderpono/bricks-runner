@@ -41,7 +41,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ ctrl, shellState }) =>
                         КОЛИЧЕСТВЕ <br /> МОНЕТ ПОБЕДИТ ТОТ, КТО РЕШИТ ЗАДАЧУ БЫСТРЕЕ
                     </p>
                     <p>
-                        <span className={styles.level}></span> ВАС ЖДЕТ 5 УРОВНЕЙ. ПРОЙДИТЕ ВСЕ,
+                        <span className={styles.level}></span> ВАС ЖДЕТ 4 УРОВНЯ. ПРОЙДИТЕ ВСЕ,
                         ЧТОБЫ ЗАВЕРШИТЬ ИГРУ
                     </p>
                     <div className={styles.bt}>
