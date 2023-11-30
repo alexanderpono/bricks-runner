@@ -7,8 +7,9 @@ import { GameLevelControls } from './components/GameLevelControls';
 import { DevelopControls } from './components/DevelopControls';
 import { LevelStats } from './components/LevelStats';
 import { GameFieldController, GameState } from '../GameFieldUI/Game.types';
-import { IntroScreen } from './components/InrtroScreen';
+import { IntroScreen } from './components/IntroScreen';
 import { FinishLevelScreen } from './components/FinishLevelScreen';
+import { LevelIntroScreen } from './components/LevelIntroScreen';
 
 interface BricksEditorUIProps {
     id: string;
@@ -51,6 +52,9 @@ export const BricksEditorUI = React.forwardRef<HTMLCanvasElement, BricksEditorUI
                         )}
                         {ifRender(Render.finishLevelScreen) && (
                             <FinishLevelScreen ctrl={ctrl} shellState={shellState} />
+                        )}
+                        {ifRender(Render.levelIntroScreen) && (
+                            <LevelIntroScreen ctrl={ctrl} shellState={shellState} />
                         )}
                     </div>
                     <div className={styles.editControls}>

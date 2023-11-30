@@ -30,6 +30,8 @@ export interface GameFieldController {
     onSendResultsClick?: () => void;
     onBtToLevel1?: () => void;
     onBtNextLevelClick?: () => void;
+    gotoLevel?: (levelNumber: number) => void;
+    gotoLevelIntro?: () => void;
 }
 export interface GameState {
     nodesChecked: boolean;

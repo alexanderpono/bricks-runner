@@ -117,6 +117,10 @@ export class BricksEditorController extends GameController {
                     whatToRender = whatToRender | Render.introScreen;
                     break;
                 }
+                case GameScreen.levelIntro: {
+                    whatToRender = whatToRender | Render.levelIntroScreen;
+                    break;
+                }
                 case GameScreen.level: {
                     whatToRender = whatToRender | Render.gameScreen;
                     whatToRender = whatToRender | Render.gameLevelControls | Render.levelStats;
@@ -439,8 +443,9 @@ export class BricksEditorController extends GameController {
     };
 
     onBtNextLevelClick = () => {
-        this.gotoNewLevel();
-        this.screen = GameScreen.level;
+        this.levelIndex++;
+        this.screen = GameScreen.levelIntro;
+        this.renderUI();
     };
 
     saveLevelStats = () => {
@@ -453,9 +458,7 @@ export class BricksEditorController extends GameController {
     };
     gotoNewLevel = () => {
         console.log('gotoNewLevel()');
-        this.levelIndex++;
-        this.coinsTaken = 0;
-        this.loadGame();
+        this.screen = GameScreen.level;
     };
 
     gotoEndGame = () => {
@@ -533,9 +536,12 @@ export class BricksEditorController extends GameController {
     };
 
     onBtToLevel1 = () => {
+        this.screen = GameScreen.levelIntro;
+    };
+    gotoLevel = (index: number) => {
         this.screen = GameScreen.level;
         this.levelTime = 0;
-        this.levelIndex = 0;
+        this.levelIndex = index;
         this.coinsTaken = 0;
         this.levelStats = [];
         this.loadGame();

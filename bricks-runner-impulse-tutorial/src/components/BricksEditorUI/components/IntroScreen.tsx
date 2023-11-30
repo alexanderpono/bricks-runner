@@ -42,7 +42,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ ctrl, shellState }) =>
                     </p>
                     <p>
                         <span className={styles.level}></span> ВАС ЖДЕТ 4 УРОВНЯ. ПРОЙДИТЕ ВСЕ,
-                        ЧТОБЫ ЗАВЕРШИТЬ ИГРУ
+                        ЧТОБЫ ЗАВЕРШИТЬ ОБУЧЕНИЕ
                     </p>
                     <div className={styles.bt}>
                         <button onClick={ctrl.onBtToLevel1} className={styles.appBut}>

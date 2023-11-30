@@ -39,6 +39,7 @@ const defaultInventoryItem: InventoryItem = {
 export interface LevelInfo {
     mapFile: string;
     inventory: InventoryItem[];
+    introText: string;
 }
 
 export interface LevelsApiAnswer {
@@ -69,7 +70,8 @@ export enum GameScreen {
     intro = 'intro',
     level = 'level',
     finishLevel = 'finishLevel',
-    gameOver = 'gameOver'
+    gameOver = 'gameOver',
+    levelIntro = 'levelIntro'
 }
 
 export enum Render {
@@ -79,5 +81,6 @@ export enum Render {
     developControls = 8,
     levelStats = 16,
     introScreen = 32,
-    finishLevelScreen = 64
+    finishLevelScreen = 64,
+    levelIntroScreen = 128
 }
