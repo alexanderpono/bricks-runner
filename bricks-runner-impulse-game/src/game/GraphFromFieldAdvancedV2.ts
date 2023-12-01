@@ -4,6 +4,7 @@ import { Cell, GameField } from './GameField';
 import { GraphFromField } from './GraphFromField';
 const asEmpty = [Cell.space, Cell.coin, Cell.gold];
 const passable = [Cell.space, Cell.coin, Cell.gold, Cell.stairs, Cell.man];
+const passableNotStairs = [Cell.space, Cell.coin, Cell.gold, Cell.man];
 
 export class GraphFromFieldAdvancedV2 extends GraphFromField {
     getEdgeCost = (field: GameField, v0Index: number, v1Index: number): EdgeCost => {
@@ -41,11 +42,13 @@ export class GraphFromFieldAdvancedV2 extends GraphFromField {
         }
 
         if (egdeIsVertical && v0xy.y < v1xy.y) {
-            if (cell0 === Cell.space && cell1 === Cell.space) {
-                result.v1v0Cost = COST_WALL;
-            }
             const cell0Passable = passable.indexOf(cell0) >= 0;
             const cell1Passable = passable.indexOf(cell1) >= 0;
+            const cell0PassableNotStairs = passableNotStairs.indexOf(cell0) >= 0;
+            const cell1PassableNotStairs = passableNotStairs.indexOf(cell1) >= 0;
+            if (cell1PassableNotStairs && cell0PassableNotStairs) {
+                result.v1v0Cost = COST_WALL;
+            }
             if (cell0Passable && cell1 === Cell.wall) {
                 result.v0v1Cost = COST_WALL;
                 result.v1v0Cost = COST_WALL;

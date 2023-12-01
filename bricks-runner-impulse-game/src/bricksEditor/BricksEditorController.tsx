@@ -192,6 +192,10 @@ export class BricksEditorController extends GameController {
         if (!this.isDevelopMope && curVal === this.curChar) {
             return;
         }
+        const notDeletable = [Cell.man, Cell.gold, Cell.coin];
+        if (!this.isDevelopMope && notDeletable.indexOf(curVal as Cell) >= 0) {
+            return;
+        }
         if (!this.isDevelopMope) {
             const currentInventoryItem = this.inventory.find(
                 (item: InventoryItem) => item.char === this.curChar
@@ -406,7 +410,8 @@ export class BricksEditorController extends GameController {
 
     removeCapturedCoinFromMap = (coin: DynamicObject) => {
         const newDObjects = this.dObjects.filter(
-            (obj: DynamicObject) => obj.point.x !== coin.point.x || obj.point.y !== coin.point.y
+            (obj: DynamicObject) =>
+                obj?.point?.x !== coin?.point?.x || obj?.point?.y !== coin?.point?.y
         );
         this.dObjects = newDObjects;
     };
@@ -455,6 +460,7 @@ export class BricksEditorController extends GameController {
         console.log('gotoNewLevel()');
         this.levelIndex++;
         this.coinsTaken = 0;
+        this.pathIsFound = true;
         this.loadGame();
     };
 
