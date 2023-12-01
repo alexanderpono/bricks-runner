@@ -16,6 +16,7 @@ export const FinishLevelScreen: React.FC<FinishLevelScreenProps> = ({ ctrl, shel
             : { ...defaultLevelStats };
 
     const currentSumma = calcSumma(shellState.levelStats);
+    const finishGame = shellState.levelIndex + 1 >= shellState.levels.length;
     return (
         <section className={styles.finishLevelScreen}>
             <div className={styles.bg}></div>
@@ -33,11 +34,20 @@ export const FinishLevelScreen: React.FC<FinishLevelScreenProps> = ({ ctrl, shel
                         ОБЩЕЕ КОЛИЧЕСТВО МОНЕТ: {currentSumma.coins} <br />
                         ОБЩЕЕ ВРЕМЯ РЕШЕНИЯ ЗАДАЧ: {formatTime(currentSumma.time)}
                     </p>
-                    <button className={styles.appBut} onClick={ctrl.onBtNextLevelClick}>
-                        <div>
-                            К УРОВНЮ {shellState.levelIndex + 2} / {shellState.levels.length}
+                    {!finishGame && (
+                        <button className={styles.appBut} onClick={ctrl.onBtNextLevelClick}>
+                            <div>
+                                К УРОВНЮ {shellState.levelIndex + 2} / {shellState.levels.length}
+                            </div>
+                        </button>
+                    )}
+                    {finishGame && (
+                        <div className={styles.bt}>
+                            <button className={styles.appBut} onClick={ctrl.onSendResultsClick}>
+                                <div>ОК</div>
+                            </button>
                         </div>
-                    </button>
+                    )}
                 </div>
             </div>
         </section>

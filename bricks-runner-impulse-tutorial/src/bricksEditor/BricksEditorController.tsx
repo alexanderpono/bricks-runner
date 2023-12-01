@@ -196,6 +196,10 @@ export class BricksEditorController extends GameController {
         if (!this.isDevelopMope && curVal === this.curChar) {
             return;
         }
+        const notDeletable = [Cell.man, Cell.gold, Cell.coin];
+        if (!this.isDevelopMope && notDeletable.indexOf(curVal as Cell) >= 0) {
+            return;
+        }
         if (!this.isDevelopMope) {
             const currentInventoryItem = this.inventory.find(
                 (item: InventoryItem) => item.char === this.curChar
