@@ -527,8 +527,13 @@ export class BricksEditorController extends GameController {
         const pathIsThroughWall = goldAccessCost > COST_WALL;
         if (pathIsThroughWall && !this.isDevelopMope) {
             this.saveLevelStats();
+            const finishGame = this.levelIndex + 1 >= this.levelsAnswer.levels.length;
             this.pathIsFound = false;
-            this.screen = GameScreen.finishLevel;
+            if (finishGame) {
+                this.screen = GameScreen.gameOver;
+            } else {
+                this.screen = GameScreen.finishLevel;
+            }
             this.stopTimer();
             this.renderUI();
             return;

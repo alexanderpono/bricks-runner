@@ -17,6 +17,7 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({ ctrl, shellState
             <div className={styles.bg}></div>
             <div className={styles.content}>
                 <div className={styles.win}>
+                    {!shellState.pathIsFound && <h1>ПРОХОД НЕ НАЙДЕН...</h1>}
                     <h1>ВАШИ РЕЗУЛЬТАТЫ:</h1>
                     {shellState.levelStats.map((levelStats, index) => (
                         <div key={index}>
