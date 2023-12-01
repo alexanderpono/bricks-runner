@@ -17,27 +17,12 @@ export const GameOverScreen: React.FC<GameOverScreenProps> = ({ ctrl, shellState
             <div className={styles.bg}></div>
             <div className={styles.content}>
                 <div className={styles.win}>
-                    <h1>ВАШИ РЕЗУЛЬТАТЫ:</h1>
-                    {shellState.levelStats.map((levelStats, index) => (
-                        <div key={index}>
-                            УРОВЕНЬ {index + 1} &nbsp; МОНЕТ:
-                            {levelStats.coins} &nbsp; ВРЕМЯ:
-                            {formatTime(levelStats.time)} <br />
-                        </div>
-                    ))}
-
-                    <p>
-                        ОБЩЕЕ КОЛИЧЕСТВО МОНЕТ: {currentSumma.coins} <br />
-                        ОБЩЕЕ ВРЕМЯ РЕШЕНИЯ ЗАДАЧ: {formatTime(currentSumma.time)}
-                    </p>
-
-                    <p className={styles.enterLogin}>Введите свой логин в Telegram:</p>
-                    <p className={styles.tgLogin}>
-                        @<input type="text" name="userName" id="userName"></input>
-                    </p>
-                    <button className={styles.appBut} onClick={ctrl.onSendResultsClick}>
-                        <div>ОТПРАВИТЬ</div>
-                    </button>
+                    <h1>ПОЗДРАВЛЯЕМ! ОБУЧЕНИЕ ЗАВЕРШЕНО!</h1>
+                    <div className={styles.bt}>
+                        <button className={styles.appBut} onClick={ctrl.onSendResultsClick}>
+                            <div>ОК</div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

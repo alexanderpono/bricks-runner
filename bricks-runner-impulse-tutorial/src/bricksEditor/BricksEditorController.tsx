@@ -410,7 +410,8 @@ export class BricksEditorController extends GameController {
 
     removeCapturedCoinFromMap = (coin: DynamicObject) => {
         const newDObjects = this.dObjects.filter(
-            (obj: DynamicObject) => obj.point.x !== coin.point.x || obj.point.y !== coin.point.y
+            (obj: DynamicObject) =>
+                obj?.point?.x !== coin?.point?.x || obj?.point?.y !== coin?.point?.y
         );
         this.dObjects = newDObjects;
     };
@@ -468,8 +469,6 @@ export class BricksEditorController extends GameController {
     };
 
     onSendResultsClick = () => {
-        const userName = (document.getElementById('userName') as HTMLInputElement).value;
-        this.resultsStorage.saveGameResults(userName, this.levelStats);
         this.screen = GameScreen.intro;
         this.renderUI();
     };
@@ -536,7 +535,9 @@ export class BricksEditorController extends GameController {
     };
 
     onBtToLevel1 = () => {
+        this.levelIndex = 0;
         this.screen = GameScreen.levelIntro;
+        this.renderUI();
     };
     gotoLevel = (index: number) => {
         this.screen = GameScreen.level;
