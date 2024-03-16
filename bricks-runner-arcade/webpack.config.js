@@ -1,10 +1,17 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/assets/index-dev.html'
+        }),
+        new CompressionWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            chunkFilename: '[name].[chunkhash].css'
         })
     ],
     resolve: {
@@ -49,6 +56,7 @@ module.exports = {
                 test: /\.(scss)$/,
                 exclude: /node_modules/,
                 use: [
+                    MiniCssExtractPlugin.loader,
                     { loader: 'css-modules-typescript-loader' },
                     {
                         loader: 'css-loader',
@@ -71,5 +79,7 @@ module.exports = {
     },
     devtool: 'source-map',
     target: ['web', 'es6'],
-    optimization: {}
+    optimization: {
+        minimizer: ['...', new CssMinimizerWebpackPlugin()]
+    }
 };
