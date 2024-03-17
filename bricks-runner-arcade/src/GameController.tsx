@@ -3,28 +3,25 @@ import { render } from 'react-dom';
 import { UI } from './components/UI';
 import ImgSprite from '@src/components/UI/sprite.png';
 import { level1 } from './ports/levels/level1';
-import { LevelMap, Point2D, defaultPoint2D } from './game/LevelMap';
-import { GRMap } from './ports/GR/GRMap';
-import { GRMan } from './ports/GR/GRMan';
-import { ManAni, SPRITE_HEIGHT, SPRITE_WIDTH } from './ports/GR/GR.types';
+import { LevelMap } from './game/LevelMap';
+import { GRScene } from './ports/GR/GRScene';
+import { Ani, Man } from './game/Man';
 
 export class GameController {
     picLoaded: boolean;
     levelMap: LevelMap = null;
     pic: InstanceType<typeof Image> = new Image();
-    miniCounter: number;
-    manFieldXY: Point2D;
-    nextManFieldXY: Point2D;
-    manAni: ManAni;
+    man: Man;
+
+    constructor() {
+        this.man = new Man();
+    }
 
     run() {
         this.levelMap = LevelMap.create().initFromText(level1);
 
         render(<UI />, document.getElementById('game'));
-        this.miniCounter = 0;
-        this.manFieldXY = { x: 8, y: 0 };
-        this.nextManFieldXY = { ...this.manFieldXY };
-        this.manAni = ManAni.STAND;
+        this.man.onStart();
 
         this.loadPic().then(() => {
             this.picLoaded = true;
@@ -55,90 +52,35 @@ export class GameController {
     };
 
     renderScene(): CanvasRenderingContext2D {
-        if (!this.picLoaded) {
-            console.log('!picLoaded');
-            return null;
-        }
-
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-
-        if (canvas === null) {
-            console.log('canvas === null');
-            return null;
-        }
-        const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-        context.fillStyle = 'orange';
-        context.strokeStyle = '#FF0000';
-        context.lineWidth = 3;
-        context.strokeRect(0, 0, canvas.width, canvas.height);
-
-        if (canvas === null || context === null) {
-            console.log('graph === null');
-            return;
-        }
-
-        GRMap.create(context, this.levelMap, this.pic).draw();
-        let manTargetScreenXY: Point2D = { ...defaultPoint2D };
-
-        GRMan.create(
-            context,
-            calcManScreenPos(this.manFieldXY, this.nextManFieldXY, this.miniCounter),
-            manTargetScreenXY,
-            this.manAni,
-            this.pic,
-            this.miniCounter
-        ).draw();
-        return context;
+        return GRScene.create().render(this.picLoaded, this.levelMap, this.pic, this.man);
     }
 
     stepRight = () => {
-        this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x + 1, y: this.manFieldXY.y };
-        this.manAni = ManAni.RIGHT;
+        this.man.stepRight();
         this.tick();
     };
 
     stepLeft = () => {
-        this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x - 1, y: this.manFieldXY.y };
-        this.manAni = ManAni.LEFT;
+        this.man.stepLeft();
         this.tick();
     };
 
     stepDown = () => {
-        this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y + 1 };
-        this.manAni = ManAni.STAIRS;
+        this.man.stepDown();
         this.tick();
     };
 
     stepUp = () => {
-        this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y - 1 };
-        this.manAni = ManAni.STAIRS;
+        this.man.stepUp();
         this.tick();
     };
 
     tick = () => {
-        if ((this.miniCounter + 1) % 10 === 0) {
-            this.manFieldXY = { ...this.nextManFieldXY };
-            this.manAni = ManAni.STAND;
-            this.renderScene();
+        const manAnimationState = this.man.tick();
+        if (manAnimationState === Ani.STOPPED) {
         } else {
-            const miniCounter = this.miniCounter + 1;
-            this.miniCounter = miniCounter;
-            this.renderScene();
             setTimeout(() => this.tick(), 100);
         }
+        this.renderScene();
     };
-}
-
-function calcManScreenPos(manFieldXY: Point2D, nextManFieldXY: Point2D, miniCounter: number) {
-    const deltaX = nextManFieldXY.x - manFieldXY.x;
-    const deltaY = nextManFieldXY.y - manFieldXY.y;
-    const manScreenXY = {
-        x: (manFieldXY.x + (deltaX / 10) * (miniCounter % 10)) * SPRITE_WIDTH,
-        y: (manFieldXY.y + (deltaY / 10) * (miniCounter % 10)) * SPRITE_HEIGHT
-    };
-    return manScreenXY;
 }
