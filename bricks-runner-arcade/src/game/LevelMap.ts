@@ -17,6 +17,11 @@ export const defaultPoint2D: Point2D = {
     y: 0
 };
 
+export interface DynamicObject {
+    point: Point2D;
+    type: Cell;
+}
+
 export class LevelMap {
     field: Cell[][] = [];
 

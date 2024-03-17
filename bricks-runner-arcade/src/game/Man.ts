@@ -11,10 +11,10 @@ export class Man {
     miniCounter: number;
     manAni: ManAni;
 
-    onStart = () => {
+    onStart = (manFieldXY: Point2D) => {
         this.miniCounter = 0;
-        this.manFieldXY = { x: 8, y: 0 };
-        this.nextManFieldXY = { ...this.manFieldXY };
+        this.manFieldXY = { ...manFieldXY };
+        this.nextManFieldXY = { ...manFieldXY };
         this.manAni = ManAni.STAND;
     };
 

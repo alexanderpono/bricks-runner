@@ -1,15 +1,17 @@
-import { LevelMap, Point2D, defaultPoint2D } from '@src/game/LevelMap';
+import { Cell, DynamicObject, LevelMap, Point2D, defaultPoint2D } from '@src/game/LevelMap';
 import { GRMan } from './GRMan';
 import { GRMap } from './GRMap';
 import { SPRITE_HEIGHT, SPRITE_WIDTH } from './GR.types';
 import { Man } from '@src/game/Man';
+import { GRGold } from './GRGold';
 
 export class GRScene {
     render(
         picLoaded: boolean,
         levelMap: LevelMap,
         pic: InstanceType<typeof Image>,
-        man: Man
+        man: Man,
+        dObjects: DynamicObject[]
     ): CanvasRenderingContext2D {
         if (!picLoaded) {
             console.log('!picLoaded');
@@ -35,6 +37,10 @@ export class GRScene {
 
         GRMap.create(context, levelMap, pic).draw();
         let manTargetScreenXY: Point2D = { ...defaultPoint2D };
+        const golds = dObjects.filter((obj: DynamicObject) => obj.type === Cell.gold);
+        golds.forEach((gold: DynamicObject) => {
+            GRGold.create(context, gold.point, pic).draw();
+        });
 
         GRMan.create(
             context,
