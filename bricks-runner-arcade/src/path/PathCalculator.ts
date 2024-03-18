@@ -10,7 +10,7 @@ const MAX_PATH_LENGTH = 400;
 
 export class PathCalculator {
     protected toVertex = -1;
-    protected gameField: LevelMap = null;
+    protected levelMap: LevelMap = null;
     protected A: number;
     protected B: number;
     protected C: number;
@@ -21,12 +21,12 @@ export class PathCalculator {
         toVertex: number,
         verbose: boolean,
         maxStep: number,
-        gameField: LevelMap
+        levelMap: LevelMap
     ) => {
-        this.gameField = gameField;
+        this.levelMap = levelMap;
         this.toVertex = toVertex;
-        const v0 = this.gameField.vertexIndexToCoords(fromVertex, this.gameField.getWidth());
-        const v1 = this.gameField.vertexIndexToCoords(toVertex, this.gameField.getWidth());
+        const v0 = this.levelMap.vertexIndexToCoords(fromVertex);
+        const v1 = this.levelMap.vertexIndexToCoords(toVertex);
         this.A = this.getA(v0, v1);
         this.B = this.getB(v0, v1);
         this.C = this.getC(v0, v1);
@@ -106,11 +106,8 @@ export class PathCalculator {
     };
 
     protected heuristic = (v0Index: number, targetIndex: number) => {
-        const v0: Point2D = this.gameField.vertexIndexToCoords(v0Index, this.gameField.getWidth());
-        const v1: Point2D = this.gameField.vertexIndexToCoords(
-            targetIndex,
-            this.gameField.getWidth()
-        );
+        const v0: Point2D = this.levelMap.vertexIndexToCoords(v0Index);
+        const v1: Point2D = this.levelMap.vertexIndexToCoords(targetIndex);
         const h = Math.abs(v0.x - v1.x) + Math.abs(v0.y - v1.y);
         const d = this.getDistance(this.A, this.B, this.C, v0);
         return 5 * (h * 4 + d);

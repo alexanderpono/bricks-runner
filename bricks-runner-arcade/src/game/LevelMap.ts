@@ -24,8 +24,11 @@ export interface DynamicObject {
 
 export class LevelMap {
     field: Cell[][] = [];
+    private text: string = '';
+    private w: number = 0;
 
     initFromText = (text: string) => {
+        this.text = text;
         const lines = text.trim().split('\n');
         const fieldWidth = lines.reduce(
             (width: number, line) => (line.length < width ? width : line.length),
@@ -44,14 +47,16 @@ export class LevelMap {
             });
             return fieldLine;
         });
+
+        this.w = this.field[0].length;
         return this;
     };
 
     getWidth = () => this.field[0].length;
 
-    vertexIndexToCoords = (vertexIndex: number, w: number): Point2D => {
-        const x = vertexIndex % w;
-        const y = Math.floor(vertexIndex / w);
+    vertexIndexToCoords = (vertexIndex: number): Point2D => {
+        const x = vertexIndex % this.w;
+        const y = Math.floor(vertexIndex / this.w);
         return { x, y };
     };
 
@@ -61,6 +66,36 @@ export class LevelMap {
             return Cell.wall;
         }
         return this.field[point.y][point.x];
+    };
+
+    getVertexIndex = (char: string): number => {
+        const s = this.text.trim().split('\n').join('');
+        return s.indexOf(char);
+    };
+
+    coordToVertexIndex = (point: Point2D): number => {
+        return point.y * this.w + point.x;
+    };
+
+    charToCoords = (char: string): Point2D => {
+        return this.vertexIndexToCoords(this.getVertexIndex(char));
+    };
+
+    getDynanicObjects = (): DynamicObject[] => {
+        const dynamicTypes = [Cell.gold, Cell.man, Cell.coin];
+        const h = this.field.length;
+        const w = this.field[0].length;
+        const result: DynamicObject[] = [];
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const cell = this.field[y][x];
+                const pos = dynamicTypes.findIndex((type) => type === cell);
+                if (pos >= 0) {
+                    result.push({ point: { x, y }, type: cell });
+                }
+            }
+        }
+        return result;
     };
 
     static create = (): LevelMap => {

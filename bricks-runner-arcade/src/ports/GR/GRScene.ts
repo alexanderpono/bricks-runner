@@ -4,6 +4,8 @@ import { GRMap } from './GRMap';
 import { SPRITE_HEIGHT, SPRITE_WIDTH } from './GR.types';
 import { Man } from '@src/game/Man';
 import { GRGold } from './GRGold';
+import { Grid } from '@src/path/path.types';
+import { GRPath } from './GRPath';
 
 export class GRScene {
     render(
@@ -11,7 +13,8 @@ export class GRScene {
         levelMap: LevelMap,
         pic: InstanceType<typeof Image>,
         man: Man,
-        dObjects: DynamicObject[]
+        dObjects: DynamicObject[],
+        grid: Grid
     ): CanvasRenderingContext2D {
         if (!picLoaded) {
             console.log('!picLoaded');
@@ -50,6 +53,9 @@ export class GRScene {
             pic,
             man.miniCounter
         ).draw();
+
+        GRPath.create(context, levelMap, grid).draw();
+
         return context;
     }
 

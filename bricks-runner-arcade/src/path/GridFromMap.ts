@@ -47,9 +47,8 @@ export class GridFromMap {
     };
 
     getEdgeCost = (field: LevelMap, v0Index: number, v1Index: number): EdgeCost => {
-        const w = field.field[0].length;
-        const v0xy = field.vertexIndexToCoords(v0Index, w);
-        const v1xy = field.vertexIndexToCoords(v1Index, w);
+        const v0xy = field.vertexIndexToCoords(v0Index);
+        const v1xy = field.vertexIndexToCoords(v1Index);
         const cell0 = field.coordsToCell(v0xy);
         const cell1 = field.coordsToCell(v1xy);
         const result: EdgeCost = {
@@ -105,10 +104,5 @@ export class GridFromMap {
             }
         }
         return result;
-    };
-
-    getVertexIndex = (fieldString: string, char: string): number => {
-        const s = fieldString.trim().split('\n').join('');
-        return s.indexOf(char);
     };
 }

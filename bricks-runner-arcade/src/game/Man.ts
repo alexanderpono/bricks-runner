@@ -1,5 +1,8 @@
 import { ManAni } from '@src/ports/GR/GR.types';
-import { Point2D } from './LevelMap';
+import { LevelMap, Point2D } from './LevelMap';
+import { ALL_NODES, PathCalculator, SILENT } from '@src/path/PathCalculator';
+import { GridFromMap } from '@src/path/GridFromMap';
+import { Grid } from '@src/path/path.types';
 
 export enum Ani {
     RUNNING = 'RUNNING',
@@ -10,13 +13,19 @@ export class Man {
     nextManFieldXY: Point2D;
     miniCounter: number;
     manAni: ManAni;
+    grid: Grid;
 
-    onStart = (manFieldXY: Point2D) => {
+    constructor(
+        private levelMap: LevelMap,
+        private pathCalculator: PathCalculator,
+        private gridBuilder: GridFromMap,
+        manFieldXY: Point2D
+    ) {
         this.miniCounter = 0;
         this.manFieldXY = { ...manFieldXY };
         this.nextManFieldXY = { ...manFieldXY };
         this.manAni = ManAni.STAND;
-    };
+    }
 
     stepRight = () => {
         this.miniCounter = 0;
@@ -52,5 +61,20 @@ export class Man {
             this.miniCounter = miniCounter;
             return Ani.RUNNING;
         }
+    };
+
+    calculatePath = () => {
+        let grid = this.gridBuilder.gridFromMap(this.levelMap);
+        const mIndex = this.levelMap.coordToVertexIndex(this.manFieldXY);
+        const dIndex = this.levelMap.getVertexIndex('$');
+        grid = this.pathCalculator.calculateGraph(
+            grid,
+            mIndex,
+            dIndex,
+            SILENT,
+            ALL_NODES,
+            this.levelMap
+        );
+        this.grid = grid;
     };
 }
