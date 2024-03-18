@@ -3,11 +3,12 @@ import { render } from 'react-dom';
 import { UI } from './components/UI';
 import ImgSprite from '@src/components/UI/sprite.png';
 import { level1 } from './ports/levels/level1';
-import { DynamicObject, LevelMap, Point2D } from './game/LevelMap';
+import { DynamicObject, LevelMap } from './game/LevelMap';
 import { GRScene } from './ports/GR/GRScene';
 import { Ani, Man } from './game/Man';
 import { GridFromMap } from './path/GridFromMap';
 import { PathCalculator } from './path/PathCalculator';
+import { Enemy } from './game/Enemy';
 
 export class GameController {
     picLoaded: boolean;
@@ -15,6 +16,7 @@ export class GameController {
     emptyLevel: LevelMap = null;
     pic: InstanceType<typeof Image> = new Image();
     man: Man;
+    enemy: Enemy;
     private dObjects: DynamicObject[] = [];
 
     constructor() {}
@@ -33,6 +35,12 @@ export class GameController {
             this.levelMap.charToCoords('M')
         );
         this.man.calculatePath();
+        this.enemy = new Enemy(
+            this.levelMap,
+            new PathCalculator(),
+            new GridFromMap(),
+            this.levelMap.charToCoords('E')
+        );
 
         this.loadPic().then(() => {
             this.picLoaded = true;
@@ -68,7 +76,8 @@ export class GameController {
             this.pic,
             this.man,
             this.dObjects,
-            this.man.grid
+            this.man.grid,
+            this.enemy
         );
         return context;
     }
