@@ -62,19 +62,4 @@ export class Man {
             return Ani.RUNNING;
         }
     };
-
-    calculatePath = () => {
-        let grid = this.gridBuilder.gridFromMap(this.levelMap);
-        const mIndex = this.levelMap.coordToVertexIndex(this.manFieldXY);
-        const dIndex = this.levelMap.getVertexIndex('$');
-        grid = this.pathCalculator.calculateGraph(
-            grid,
-            mIndex,
-            dIndex,
-            SILENT,
-            ALL_NODES,
-            this.levelMap
-        );
-        this.grid = grid;
-    };
 }

@@ -34,13 +34,14 @@ export class GameController {
             new GridFromMap(),
             this.levelMap.charToCoords('M')
         );
-        this.man.calculatePath();
         this.enemy = new Enemy(
             this.levelMap,
             new PathCalculator(),
             new GridFromMap(),
-            this.levelMap.charToCoords('E')
+            this.levelMap.charToCoords('E'),
+            this.man
         );
+        this.enemy.calculatePath();
 
         this.loadPic().then(() => {
             this.picLoaded = true;
@@ -76,7 +77,7 @@ export class GameController {
             this.pic,
             this.man,
             this.dObjects,
-            this.man.grid,
+            this.enemy.grid,
             this.enemy
         );
         return context;
@@ -108,7 +109,7 @@ export class GameController {
         } else {
             setTimeout(() => this.tick(), 100);
         }
-        this.man.calculatePath();
+        this.enemy.calculatePath();
         this.renderScene();
     };
 
