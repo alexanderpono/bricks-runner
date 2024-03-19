@@ -5,10 +5,11 @@ import ImgSprite from '@src/components/UI/sprite.png';
 import { level1 } from './ports/levels/level1';
 import { DynamicObject, LevelMap } from './game/LevelMap';
 import { GRScene } from './ports/GR/GRScene';
-import { Ani, Man } from './game/Man';
+import { Ani, Man, Scenario } from './game/Man';
 import { GridFromMap } from './path/GridFromMap';
 import { PathCalculator } from './path/PathCalculator';
 import { Eater } from './game/Eater';
+import { Keyboard } from './ports/keyboard';
 
 export class GameController {
     picLoaded: boolean;
@@ -19,6 +20,7 @@ export class GameController {
     guard: Eater;
     private dObjects: DynamicObject[] = [];
     private isRunningTick: boolean = false;
+    private kb: Keyboard = null;
 
     constructor() {}
 
@@ -26,14 +28,17 @@ export class GameController {
         this.levelMap = LevelMap.create().initFromText(level1);
         this.emptyLevel = this.initEmptyField(level1);
         this.dObjects = this.levelMap.getDynanicObjects();
-
-        render(<UI />, document.getElementById('game'));
+        this.kb = new Keyboard(this);
+        this.kb.listen();
+        this.renderUI();
 
         this.man = new Man(
             this.levelMap,
             new PathCalculator(),
             new GridFromMap(),
-            this.levelMap.charToCoords('M')
+            this.levelMap.charToCoords('M'),
+            this.kb,
+            this
         );
         this.guard = new Eater(
             this.levelMap,
@@ -101,22 +106,22 @@ export class GameController {
     }
 
     stepRight = () => {
-        this.man.stepRight();
+        this.man.stepRight(Scenario.FIRST_PRESS);
         this.runTick();
     };
 
     stepLeft = () => {
-        this.man.stepLeft();
+        this.man.stepLeft(Scenario.FIRST_PRESS);
         this.runTick();
     };
 
     stepDown = () => {
-        this.man.stepDown();
+        this.man.stepDown(Scenario.FIRST_PRESS);
         this.runTick();
     };
 
     stepUp = () => {
-        this.man.stepUp();
+        this.man.stepUp(Scenario.FIRST_PRESS);
         this.runTick();
     };
 
@@ -167,5 +172,14 @@ export class GameController {
         };
         const emptyMap = getEmptyMap(level);
         return LevelMap.create().initFromText(emptyMap);
+    };
+
+    renderUI = () => {
+        render(<UI kb={this.kb} />, document.getElementById('game'));
+    };
+    onKeyEvent = () => {
+        this.man.onKeyEvent(Scenario.FIRST_PRESS);
+        this.renderUI();
+        this.runTick();
     };
 }

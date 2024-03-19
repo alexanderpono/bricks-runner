@@ -88,8 +88,11 @@ export class Eater {
         this.calculatePath();
         const distance = this.grid.cheapestPath.length;
         if (distance > 0) {
-            const nextVertexIndex = this.grid.cheapestPath[0];
-            const nextPos = this.levelMap.vertexIndexToCoords(nextVertexIndex);
+            const nextEdgeIndex = this.grid.cheapestPath[0];
+            const edge = this.grid.edges[nextEdgeIndex];
+            const v0 = this.levelMap.vertexIndexToCoords(edge.vertex0);
+            const v1 = this.levelMap.vertexIndexToCoords(edge.vertex1);
+            const nextPos = v0.x === this.manFieldXY.x && v0.y === this.manFieldXY.y ? v1 : v0;
             return this.doStep(this.manFieldXY, nextPos);
         }
         return Ani.STOPPED;

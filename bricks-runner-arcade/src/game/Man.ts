@@ -1,13 +1,23 @@
 import { ManAni } from '@src/ports/GR/GR.types';
 import { LevelMap, Point2D } from './LevelMap';
-import { ALL_NODES, PathCalculator, SILENT } from '@src/path/PathCalculator';
+import { PathCalculator } from '@src/path/PathCalculator';
 import { GridFromMap } from '@src/path/GridFromMap';
 import { Grid } from '@src/path/path.types';
+import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
+
+interface MainController {
+    runTick: () => void;
+}
 
 export enum Ani {
     RUNNING = 'RUNNING',
     STOPPED = 'STOPPED'
 }
+export enum Scenario {
+    FIRST_PRESS = 'FIRST_PRESS',
+    CONTINUE_MOVEMENT = 'CONTINUE_MOVEMENT'
+}
+
 export class Man {
     manFieldXY: Point2D;
     nextManFieldXY: Point2D;
@@ -20,7 +30,9 @@ export class Man {
         private levelMap: LevelMap,
         private pathCalculator: PathCalculator,
         private gridBuilder: GridFromMap,
-        manFieldXY: Point2D
+        manFieldXY: Point2D,
+        private kb: IKeyboard,
+        private main: MainController
     ) {
         this.miniCounter = 0;
         this.manFieldXY = { ...manFieldXY };
@@ -29,8 +41,8 @@ export class Man {
         this.state = Ani.STOPPED;
     }
 
-    stepRight = () => {
-        if (this.state === Ani.RUNNING) {
+    stepRight = (scenario: Scenario) => {
+        if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
         this.miniCounter = 0;
@@ -38,8 +50,8 @@ export class Man {
         this.manAni = ManAni.RIGHT;
     };
 
-    stepLeft = () => {
-        if (this.state === Ani.RUNNING) {
+    stepLeft = (scenario: Scenario) => {
+        if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
         this.miniCounter = 0;
@@ -47,8 +59,8 @@ export class Man {
         this.manAni = ManAni.LEFT;
     };
 
-    stepDown = () => {
-        if (this.state === Ani.RUNNING) {
+    stepDown = (scenario: Scenario) => {
+        if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
         this.miniCounter = 0;
@@ -56,8 +68,8 @@ export class Man {
         this.manAni = ManAni.STAIRS;
     };
 
-    stepUp = () => {
-        if (this.state === Ani.RUNNING) {
+    stepUp = (scenario: Scenario) => {
+        if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
         this.miniCounter = 0;
@@ -68,6 +80,11 @@ export class Man {
     tick = (): Ani => {
         if ((this.miniCounter + 1) % 10 === 0) {
             this.manFieldXY = { ...this.nextManFieldXY };
+            if (this.isKeypressed()) {
+                this.onKeyEvent(Scenario.CONTINUE_MOVEMENT);
+                this.main.runTick();
+                return this.state;
+            }
             this.manAni = ManAni.STAND;
             this.state = Ani.STOPPED;
             return this.state;
@@ -78,4 +95,25 @@ export class Man {
             return this.state;
         }
     };
+
+    onKeyEvent = (scenario: Scenario) => {
+        if (this.kb.isUpPressed) {
+            this.stepUp(scenario);
+        }
+        if (this.kb.isDownPressed) {
+            this.stepDown(scenario);
+        }
+        if (this.kb.isRightPressed) {
+            this.stepRight(scenario);
+        }
+        if (this.kb.isLeftPressed) {
+            this.stepLeft(scenario);
+        }
+    };
+
+    isKeypressed = () =>
+        this.kb.isUpPressed ||
+        this.kb.isDownPressed ||
+        this.kb.isRightPressed ||
+        this.kb.isLeftPressed;
 }

@@ -25,7 +25,6 @@ export class GREater {
 
     draw = () => {
         let sprite: Sprite = eater;
-        console.log('draw()');
         if (this.manAni === ManAni.RIGHT) {
             const frames = [eaterR0, eaterR1];
             sprite = frames[Math.floor((this.counter % 8) / 4)];
