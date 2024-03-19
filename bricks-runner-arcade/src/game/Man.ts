@@ -14,6 +14,7 @@ export class Man {
     miniCounter: number;
     manAni: ManAni;
     grid: Grid;
+    state: Ani;
 
     constructor(
         private levelMap: LevelMap,
@@ -25,27 +26,40 @@ export class Man {
         this.manFieldXY = { ...manFieldXY };
         this.nextManFieldXY = { ...manFieldXY };
         this.manAni = ManAni.STAND;
+        this.state = Ani.STOPPED;
     }
 
     stepRight = () => {
+        if (this.state === Ani.RUNNING) {
+            return;
+        }
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x + 1, y: this.manFieldXY.y };
         this.manAni = ManAni.RIGHT;
     };
 
     stepLeft = () => {
+        if (this.state === Ani.RUNNING) {
+            return;
+        }
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x - 1, y: this.manFieldXY.y };
         this.manAni = ManAni.LEFT;
     };
 
     stepDown = () => {
+        if (this.state === Ani.RUNNING) {
+            return;
+        }
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y + 1 };
         this.manAni = ManAni.STAIRS;
     };
 
     stepUp = () => {
+        if (this.state === Ani.RUNNING) {
+            return;
+        }
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y - 1 };
         this.manAni = ManAni.STAIRS;
@@ -55,11 +69,13 @@ export class Man {
         if ((this.miniCounter + 1) % 10 === 0) {
             this.manFieldXY = { ...this.nextManFieldXY };
             this.manAni = ManAni.STAND;
-            return Ani.STOPPED;
+            this.state = Ani.STOPPED;
+            return this.state;
         } else {
             const miniCounter = this.miniCounter + 1;
             this.miniCounter = miniCounter;
-            return Ani.RUNNING;
+            this.state = Ani.RUNNING;
+            return this.state;
         }
     };
 }

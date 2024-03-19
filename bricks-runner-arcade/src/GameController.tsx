@@ -18,6 +18,7 @@ export class GameController {
     man: Man;
     guard: Eater;
     private dObjects: DynamicObject[] = [];
+    private isRunningTick: boolean = false;
 
     constructor() {}
 
@@ -47,7 +48,7 @@ export class GameController {
             const guardState = this.guard.think();
             this.renderScene();
             if (guardState === Ani.RUNNING) {
-                this.tick();
+                this.runTick();
             }
         });
 
@@ -101,51 +102,60 @@ export class GameController {
 
     stepRight = () => {
         this.man.stepRight();
-        this.tick();
+        this.runTick();
     };
 
     stepLeft = () => {
         this.man.stepLeft();
-        this.tick();
+        this.runTick();
     };
 
     stepDown = () => {
         this.man.stepDown();
-        this.tick();
+        this.runTick();
     };
 
     stepUp = () => {
         this.man.stepUp();
-        this.tick();
+        this.runTick();
     };
 
     gstepRight = () => {
         this.guard.stepRight();
-        this.tick();
+        this.runTick();
     };
 
     gstepLeft = () => {
         this.guard.stepLeft();
-        this.tick();
+        this.runTick();
     };
 
     gstepDown = () => {
         this.guard.stepDown();
-        this.tick();
+        this.runTick();
     };
 
     gstepUp = () => {
         this.guard.stepUp();
-        this.tick();
+        this.runTick();
     };
 
-    tick = () => {
+    runTick = () => {
+        if (this.isRunningTick) {
+            return;
+        }
+        this.doTick();
+    };
+
+    doTick = () => {
         const manAnimationState = this.man.tick();
         const guardAnimationState = this.guard.tick();
         if (manAnimationState !== Ani.STOPPED || guardAnimationState !== Ani.STOPPED) {
-            setTimeout(() => this.tick(), 100);
+            this.isRunningTick = true;
+            setTimeout(() => this.doTick(), 100);
+        } else {
+            this.isRunningTick = false;
         }
-        this.guard.calculatePath();
         this.renderScene();
     };
 
