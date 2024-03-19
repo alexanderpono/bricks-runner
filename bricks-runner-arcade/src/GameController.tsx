@@ -33,12 +33,10 @@ export class GameController {
         this.renderUI();
 
         this.man = new Man(
-            this.levelMap,
-            new PathCalculator(),
-            new GridFromMap(),
             this.levelMap.charToCoords('M'),
             this.kb,
-            this
+            this,
+            'RRRRRRRRDDLLLLLLLLDDLLLLLLDDRRRRRRRRRRRR'
         );
         this.guard = new Eater(
             this.levelMap,
@@ -51,6 +49,7 @@ export class GameController {
         this.loadPic().then(() => {
             this.picLoaded = true;
             const guardState = this.guard.think();
+            const manState = this.man.think();
             this.renderScene();
             if (guardState === Ani.RUNNING) {
                 this.runTick();

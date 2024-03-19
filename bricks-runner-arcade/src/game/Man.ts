@@ -1,7 +1,5 @@
 import { ManAni } from '@src/ports/GR/GR.types';
-import { LevelMap, Point2D } from './LevelMap';
-import { PathCalculator } from '@src/path/PathCalculator';
-import { GridFromMap } from '@src/path/GridFromMap';
+import { Point2D } from './LevelMap';
 import { Grid } from '@src/path/path.types';
 import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
 
@@ -28,12 +26,10 @@ export class Man {
     state: Ani;
 
     constructor(
-        private levelMap: LevelMap,
-        private pathCalculator: PathCalculator,
-        private gridBuilder: GridFromMap,
         manFieldXY: Point2D,
         private kb: IKeyboard,
-        private main: MainController
+        private main: MainController,
+        private moveCommands: string
     ) {
         this.miniCounter = 0;
         this.manFieldXY = { ...manFieldXY };
@@ -86,6 +82,11 @@ export class Man {
                 this.onKeyEvent(Scenario.CONTINUE_MOVEMENT);
                 this.main.runTick();
                 return this.state;
+            } else {
+                if (this.moveCommands.length) {
+                    this.state = this.think();
+                    return this.state;
+                }
             }
             this.manAni = ManAni.STAND;
             this.state = Ani.STOPPED;
@@ -118,4 +119,28 @@ export class Man {
         this.kb.isDownPressed ||
         this.kb.isRightPressed ||
         this.kb.isLeftPressed;
+
+    think = (): Ani => {
+        if (this.moveCommands.length) {
+            const commands = this.moveCommands.split('');
+            const command = commands.shift();
+            this.moveCommands = commands.join('');
+            this.doMoveCommand(command);
+            return Ani.RUNNING;
+        }
+        return Ani.STOPPED;
+    };
+
+    doMoveCommand = (cmd: string) => {
+        switch (cmd) {
+            case 'L':
+                return this.stepLeft(Scenario.CONTINUE_MOVEMENT);
+            case 'R':
+                return this.stepRight(Scenario.CONTINUE_MOVEMENT);
+            case 'U':
+                return this.stepUp(Scenario.CONTINUE_MOVEMENT);
+            case 'D':
+                return this.stepDown(Scenario.CONTINUE_MOVEMENT);
+        }
+    };
 }
