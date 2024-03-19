@@ -41,11 +41,14 @@ export class GameController {
             this.levelMap.charToCoords('E'),
             this.man
         );
-        this.guard.calculatePath();
 
         this.loadPic().then(() => {
             this.picLoaded = true;
+            const guardState = this.guard.think();
             this.renderScene();
+            if (guardState === Ani.RUNNING) {
+                this.tick();
+            }
         });
 
         document.getElementById('btRight').addEventListener('click', () => {

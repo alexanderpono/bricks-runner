@@ -44,31 +44,63 @@ export class Eater {
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x + 1, y: this.manFieldXY.y };
         this.manAni = ManAni.RIGHT;
+        return Ani.RUNNING;
     };
 
     stepLeft = () => {
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x - 1, y: this.manFieldXY.y };
         this.manAni = ManAni.LEFT;
+        return Ani.RUNNING;
     };
 
     stepDown = () => {
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y + 1 };
         this.manAni = ManAni.DOWN;
+        return Ani.RUNNING;
     };
 
     stepUp = () => {
         this.miniCounter = 0;
         this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y - 1 };
         this.manAni = ManAni.UP;
+        return Ani.RUNNING;
+    };
+
+    doStep = (curPos: Point2D, nextPos: Point2D) => {
+        if (nextPos.x < curPos.x) {
+            return this.stepLeft();
+        }
+        if (nextPos.x > curPos.x) {
+            return this.stepRight();
+        }
+        if (nextPos.y > curPos.y) {
+            return this.stepDown();
+        }
+        if (nextPos.y < curPos.y) {
+            return this.stepUp();
+        }
+        return Ani.STOPPED;
+    };
+
+    think = () => {
+        this.calculatePath();
+        const distance = this.grid.cheapestPath.length;
+        if (distance > 0) {
+            const nextVertexIndex = this.grid.cheapestPath[0];
+            const nextPos = this.levelMap.vertexIndexToCoords(nextVertexIndex);
+            return this.doStep(this.manFieldXY, nextPos);
+        }
+        return Ani.STOPPED;
     };
 
     tick = (): Ani => {
         if ((this.miniCounter + 1) % 10 === 0) {
             this.manFieldXY = { ...this.nextManFieldXY };
             this.manAni = ManAni.STAND;
-            return Ani.STOPPED;
+            const guardState = this.think();
+            return guardState;
         } else {
             const miniCounter = this.miniCounter + 1;
             this.miniCounter = miniCounter;
