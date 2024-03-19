@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { UI } from './components/UI';
 import ImgSprite from '@src/components/UI/sprite.png';
 import { level1 } from './ports/levels/level1';
-import { DynamicObject, LevelMap } from './game/LevelMap';
+import { Cell, DynamicObject, LevelMap } from './game/LevelMap';
 import { GRScene } from './ports/GR/GRScene';
 import { Ani, Man, Scenario } from './game/Man';
 import { GridFromMap } from './path/GridFromMap';
@@ -177,9 +177,36 @@ export class GameController {
     renderUI = () => {
         render(<UI kb={this.kb} />, document.getElementById('game'));
     };
+
     onKeyEvent = () => {
         this.man.onKeyEvent(Scenario.FIRST_PRESS);
         this.renderUI();
         this.runTick();
+    };
+
+    checkCollisions() {
+        const golds = this.dObjects.filter((obj: DynamicObject) => obj.type === Cell.gold);
+        golds.forEach((gold: DynamicObject, index) => {
+            if (gold.point.x === this.man.manFieldXY.x && gold.point.y === this.man.manFieldXY.y) {
+                this.onGoldCollision(gold);
+            }
+        });
+    }
+
+    onGoldCollision = (gold: DynamicObject) => {
+        this.removeCapturedGoldFromMap(gold);
+        this.renderUI();
+    };
+
+    removeCapturedGoldFromMap = (gold: DynamicObject) => {
+        const newDObjects = this.dObjects.filter(
+            (obj: DynamicObject) =>
+                obj?.point?.x !== gold?.point?.x || obj?.point?.y !== gold?.point?.y
+        );
+        this.dObjects = newDObjects;
+    };
+
+    onManAniNewLoop = () => {
+        this.checkCollisions();
     };
 }

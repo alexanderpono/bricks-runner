@@ -7,6 +7,7 @@ import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
 
 interface MainController {
     runTick: () => void;
+    onManAniNewLoop: () => void;
 }
 
 export enum Ani {
@@ -80,6 +81,7 @@ export class Man {
     tick = (): Ani => {
         if ((this.miniCounter + 1) % 10 === 0) {
             this.manFieldXY = { ...this.nextManFieldXY };
+            this.main.onManAniNewLoop();
             if (this.isKeypressed()) {
                 this.onKeyEvent(Scenario.CONTINUE_MOVEMENT);
                 this.main.runTick();
