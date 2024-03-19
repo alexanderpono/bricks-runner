@@ -6,7 +6,7 @@ import { Man } from '@src/game/Man';
 import { GRGold } from './GRGold';
 import { Grid } from '@src/path/path.types';
 import { GRPath } from './GRPath';
-import { Enemy } from '@src/game/Enemy';
+import { Eater } from '@src/game/Eater';
 import { GREater } from './GREater';
 
 export class GRScene {
@@ -17,7 +17,7 @@ export class GRScene {
         man: Man,
         dObjects: DynamicObject[],
         grid: Grid,
-        enemy: Enemy
+        eater: Eater
     ): CanvasRenderingContext2D {
         if (!picLoaded) {
             console.log('!picLoaded');
@@ -60,10 +60,10 @@ export class GRScene {
         GRPath.create(context, levelMap, grid).draw();
         GREater.create(
             context,
-            calcManScreenPos(enemy.manFieldXY, enemy.nextManFieldXY, enemy.miniCounter),
-            enemy.manAni,
+            calcManScreenPos(eater.manFieldXY, eater.nextManFieldXY, eater.miniCounter),
+            eater.manAni,
             pic,
-            enemy.miniCounter
+            eater.miniCounter
         ).draw();
 
         return context;

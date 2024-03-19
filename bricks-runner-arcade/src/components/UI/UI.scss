@@ -1,6 +1,33 @@
-.canvas {
-    border: 0px solid red;
+.ui {
+    display: grid;
+    grid-template-areas: "game game" "playerCtrl guardCtrl";
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 400px auto;
+    height: 430px;
+    width: 800px;
 }
+
+:global(#canvas) {
+    grid-area: game;
+}
+
+.playerControls {
+    grid-area: playerCtrl;
+    display: flex;
+    button {
+        width: 30px;
+    }
+}
+
+.guardianControls {
+    grid-area: guardCtrl;
+    display: flex;
+    justify-content: flex-end;
+    button {
+        width: 30px;
+    }
+}
+
 body {
     padding: 0;
     margin: 0;

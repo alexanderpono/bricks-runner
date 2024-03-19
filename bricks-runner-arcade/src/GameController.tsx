@@ -8,7 +8,7 @@ import { GRScene } from './ports/GR/GRScene';
 import { Ani, Man } from './game/Man';
 import { GridFromMap } from './path/GridFromMap';
 import { PathCalculator } from './path/PathCalculator';
-import { Enemy } from './game/Enemy';
+import { Eater } from './game/Eater';
 
 export class GameController {
     picLoaded: boolean;
@@ -16,7 +16,7 @@ export class GameController {
     emptyLevel: LevelMap = null;
     pic: InstanceType<typeof Image> = new Image();
     man: Man;
-    enemy: Enemy;
+    guard: Eater;
     private dObjects: DynamicObject[] = [];
 
     constructor() {}
@@ -34,14 +34,14 @@ export class GameController {
             new GridFromMap(),
             this.levelMap.charToCoords('M')
         );
-        this.enemy = new Enemy(
+        this.guard = new Eater(
             this.levelMap,
             new PathCalculator(),
             new GridFromMap(),
             this.levelMap.charToCoords('E'),
             this.man
         );
-        this.enemy.calculatePath();
+        this.guard.calculatePath();
 
         this.loadPic().then(() => {
             this.picLoaded = true;
@@ -60,6 +60,19 @@ export class GameController {
         document.getElementById('btUp').addEventListener('click', () => {
             this.stepUp();
         });
+
+        document.getElementById('btGRight').addEventListener('click', () => {
+            this.gstepRight();
+        });
+        document.getElementById('btGLeft').addEventListener('click', () => {
+            this.gstepLeft();
+        });
+        document.getElementById('btGDown').addEventListener('click', () => {
+            this.gstepDown();
+        });
+        document.getElementById('btGUp').addEventListener('click', () => {
+            this.gstepUp();
+        });
     }
     loadPic = () => {
         return new Promise((resolve) => {
@@ -77,8 +90,8 @@ export class GameController {
             this.pic,
             this.man,
             this.dObjects,
-            this.enemy.grid,
-            this.enemy
+            this.guard.grid,
+            this.guard
         );
         return context;
     }
@@ -103,13 +116,33 @@ export class GameController {
         this.tick();
     };
 
+    gstepRight = () => {
+        this.guard.stepRight();
+        this.tick();
+    };
+
+    gstepLeft = () => {
+        this.guard.stepLeft();
+        this.tick();
+    };
+
+    gstepDown = () => {
+        this.guard.stepDown();
+        this.tick();
+    };
+
+    gstepUp = () => {
+        this.guard.stepUp();
+        this.tick();
+    };
+
     tick = () => {
         const manAnimationState = this.man.tick();
-        if (manAnimationState === Ani.STOPPED) {
-        } else {
+        const guardAnimationState = this.guard.tick();
+        if (manAnimationState !== Ani.STOPPED || guardAnimationState !== Ani.STOPPED) {
             setTimeout(() => this.tick(), 100);
         }
-        this.enemy.calculatePath();
+        this.guard.calculatePath();
         this.renderScene();
     };
 

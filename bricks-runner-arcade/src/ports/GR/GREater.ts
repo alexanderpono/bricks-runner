@@ -4,10 +4,12 @@ import {
     eater,
     eaterD0,
     eaterD1,
-    eaterL,
+    eaterL0,
+    eaterL1,
     eaterR0,
     eaterR1,
-    eaterU
+    eaterU0,
+    eaterU1
 } from './GR.types';
 import { putSprite_ } from './GR.lib';
 import { Point2D } from '@src/game/LevelMap';
@@ -29,12 +31,12 @@ export class GREater {
             sprite = frames[Math.floor((this.counter % 8) / 4)];
         }
         if (this.manAni === ManAni.LEFT) {
-            const frames = [eaterL];
-            sprite = frames[0];
+            const frames = [eaterL0, eaterL1];
+            sprite = frames[Math.floor((this.counter % 8) / 4)];
         }
         if (this.manAni === ManAni.UP) {
-            const frames = [eaterU];
-            sprite = frames[0];
+            const frames = [eaterU0, eaterU1];
+            sprite = frames[Math.floor((this.counter % 8) / 4)];
         }
         if (this.manAni === ManAni.DOWN) {
             const frames = [eaterD0, eaterD1];

@@ -60,8 +60,12 @@ export const select: Sprite = {
     x: 0,
     y: 40
 };
-export const eaterU: Sprite = {
+export const eaterU0: Sprite = {
     x: 200,
+    y: 40
+};
+export const eaterU1: Sprite = {
+    x: 280,
     y: 40
 };
 export const eaterD0: Sprite = {
@@ -80,8 +84,12 @@ export const eaterR1: Sprite = {
     x: 240,
     y: 40
 };
-export const eaterL: Sprite = {
+export const eaterL0: Sprite = {
     x: 160,
+    y: 40
+};
+export const eaterL1: Sprite = {
+    x: 320,
     y: 40
 };
 export const eater: Sprite = {
