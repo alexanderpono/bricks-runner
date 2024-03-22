@@ -8,6 +8,7 @@ import { Grid } from '@src/path/path.types';
 import { GRPath } from './GRPath';
 import { Eater } from '@src/game/Eater';
 import { GREater } from './GREater';
+import { UIState } from '@src/types/UIState';
 
 export class GRScene {
     render(
@@ -17,7 +18,8 @@ export class GRScene {
         man: Man,
         dObjects: DynamicObject[],
         grid: Grid,
-        eater: Eater
+        eater: Eater,
+        uiState: UIState
     ): CanvasRenderingContext2D {
         if (!picLoaded) {
             console.log('!picLoaded');
@@ -41,7 +43,7 @@ export class GRScene {
             return;
         }
 
-        GRMap.create(context, levelMap, pic).draw();
+        GRMap.create(context, levelMap, pic).draw(uiState);
         let manTargetScreenXY: Point2D = { ...defaultPoint2D };
         const golds = dObjects.filter((obj: DynamicObject) => obj.type === Cell.gold);
         golds.forEach((gold: DynamicObject) => {
@@ -57,7 +59,7 @@ export class GRScene {
             man.miniCounter
         ).draw();
 
-        GRPath.create(context, levelMap, grid).draw();
+        GRPath.create(context, levelMap, grid, uiState).draw();
         GREater.create(
             context,
             calcManScreenPos(eater.manFieldXY, eater.nextManFieldXY, eater.miniCounter),

@@ -2,6 +2,7 @@ import { Cell, LevelMap } from '@src/game/LevelMap';
 import { SPRITE_HEIGHT, SPRITE_WIDTH } from './GR.types';
 import { Edge, Grid, UNDEFINED_COST, Vertex } from '@src/path/path.types';
 import { COST_SPACE } from '@src/path/PathCalculator';
+import { UIState } from '@src/types/UIState';
 
 const w2 = SPRITE_WIDTH / 2;
 const h2 = SPRITE_HEIGHT / 2;
@@ -11,7 +12,8 @@ export class GRPath {
     constructor(
         private context: CanvasRenderingContext2D,
         private field: LevelMap,
-        private graph: Grid
+        private graph: Grid,
+        private uiState: UIState
     ) {}
 
     renderVertices = () => {
@@ -51,11 +53,18 @@ export class GRPath {
     };
 
     draw = () => {
-        // this.renderLines();
-        // this.renderVertices();
-        this.renderPath();
-        // this.renderVerticesCost();
-        // this.renderCurVertex();
+        if (this.uiState.showLines) {
+            this.renderLines();
+        }
+        if (this.uiState.showNodes) {
+            this.renderVertices();
+        }
+        if (this.uiState.showPath) {
+            this.renderPath();
+        }
+        if (this.uiState.showNodesCost) {
+            this.renderVerticesCost();
+        }
     };
 
     drawVertex = (x: number, y: number) =>
@@ -145,8 +154,12 @@ export class GRPath {
         );
     };
 
-    static create = (context: CanvasRenderingContext2D, field: LevelMap, graph: Grid): GRPath =>
-        new GRPath(context, field, graph);
+    static create = (
+        context: CanvasRenderingContext2D,
+        field: LevelMap,
+        graph: Grid,
+        uiState: UIState
+    ): GRPath => new GRPath(context, field, graph, uiState);
 }
 
 function drawCircle(context: CanvasRenderingContext2D, xPos: number, yPos: number, radius: number) {

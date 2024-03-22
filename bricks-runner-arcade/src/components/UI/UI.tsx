@@ -2,12 +2,23 @@ import React from 'react';
 import styles from './UI.scss';
 import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
 import cn from 'classnames';
+import { UIState } from '@src/types/UIState';
+import { Label } from '@src/components/Label';
 
+interface Ctrl {
+    nodesClicked: () => void;
+    linesClicked: () => void;
+    pathClicked: () => void;
+    nodesCostClicked: () => void;
+    mapClicked: () => void;
+}
 interface UIProps {
     kb: IKeyboard;
+    uiState: UIState;
+    ctrl: Ctrl;
 }
 
-export const UI: React.FC<UIProps> = ({ kb }) => {
+export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl }) => {
     return (
         <div className={styles.ui}>
             <canvas id="canvas" height={400} width={800}></canvas>
@@ -30,6 +41,13 @@ export const UI: React.FC<UIProps> = ({ kb }) => {
                 <button id="btGRight">&gt;</button>
                 <button id="btGDown">D</button>
                 <button id="btGUp">U</button>
+            </div>
+            <div className={styles.uiOptions}>
+                {Label(uiState.showNodes, ctrl.nodesClicked, `nodes`, 'Узлы')}
+                {Label(uiState.showLines, ctrl.linesClicked, `lines`, 'Ребра')}
+                {Label(uiState.showPath, ctrl.pathClicked, `path`, 'Путь')}
+                {Label(uiState.showNodesCost, ctrl.nodesCostClicked, `nodesCost`, 'Стоимость')}
+                {Label(uiState.showMap, ctrl.mapClicked, `map`, 'Карта')}
             </div>
         </div>
     );

@@ -10,6 +10,7 @@ import { GridFromMap } from './path/GridFromMap';
 import { PathCalculator } from './path/PathCalculator';
 import { Eater } from './game/Eater';
 import { Keyboard } from './ports/keyboard';
+import { UIState, defaultUIState } from './types/UIState';
 
 export class GameController {
     picLoaded: boolean;
@@ -21,6 +22,12 @@ export class GameController {
     private dObjects: DynamicObject[] = [];
     private isRunningTick: boolean = false;
     private kb: Keyboard = null;
+    private uiState: UIState = {
+        ...defaultUIState,
+        showPath: true,
+        showNodesCost: true,
+        showMap: true
+    };
 
     constructor() {}
 
@@ -99,7 +106,8 @@ export class GameController {
             this.man,
             this.dObjects,
             this.guard.grid,
-            this.guard
+            this.guard,
+            this.uiState
         );
         return context;
     }
@@ -174,7 +182,10 @@ export class GameController {
     };
 
     renderUI = () => {
-        render(<UI kb={this.kb} />, document.getElementById('game'));
+        render(
+            <UI kb={this.kb} uiState={this.uiState} ctrl={this} />,
+            document.getElementById('game')
+        );
     };
 
     onKeyEvent = () => {
@@ -207,5 +218,32 @@ export class GameController {
 
     onManAniNewLoop = () => {
         this.checkCollisions();
+    };
+
+    patchState = (mixin: Partial<UIState>) => (this.uiState = { ...this.uiState, ...mixin });
+    nodesClicked = () => {
+        this.patchState({ showNodes: !this.uiState.showNodes });
+        this.renderUI();
+        this.renderScene();
+    };
+    linesClicked = () => {
+        this.patchState({ showLines: !this.uiState.showLines });
+        this.renderUI();
+        this.renderScene();
+    };
+    pathClicked = () => {
+        this.patchState({ showPath: !this.uiState.showPath });
+        this.renderUI();
+        this.renderScene();
+    };
+    nodesCostClicked = () => {
+        this.patchState({ showNodesCost: !this.uiState.showNodesCost });
+        this.renderUI();
+        this.renderScene();
+    };
+    mapClicked = () => {
+        this.patchState({ showMap: !this.uiState.showMap });
+        this.renderUI();
+        this.renderScene();
     };
 }

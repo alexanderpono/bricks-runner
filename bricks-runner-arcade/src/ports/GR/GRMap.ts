@@ -2,6 +2,7 @@ import { Sprite, space, stairs, wall } from '@src/ports/GR/GR.types';
 import { putSprite } from '@src/ports/GR/GR.lib';
 
 import { Cell, LevelMap } from '@src/game/LevelMap';
+import { UIState } from '@src/types/UIState';
 
 export class GRMap {
     constructor(
@@ -10,14 +11,14 @@ export class GRMap {
         private pic: CanvasImageSource
     ) {}
 
-    draw = () => {
+    draw = (uiState: UIState) => {
         this.level.field.forEach((line: Cell[], y: number) => {
             line.forEach((cell: Cell, x: number) => {
                 let sprite: Sprite = space;
-                if (cell === Cell.wall) {
+                if (uiState.showMap && cell === Cell.wall) {
                     sprite = wall;
                 }
-                if (cell === Cell.stairs) {
+                if (uiState.showMap && cell === Cell.stairs) {
                     sprite = stairs;
                 }
                 putSprite(this.context, this.pic, sprite, x, y);

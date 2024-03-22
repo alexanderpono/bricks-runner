@@ -4,6 +4,7 @@ interface CssExports {
   'guardianControls': string;
   'playerControls': string;
   'ui': string;
+  'uiOptions': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
