@@ -3,6 +3,7 @@
 interface CssExports {
   'guardCtrl2': string;
   'guardianControls': string;
+  'manCtrl2': string;
   'playerControls': string;
   'ui': string;
   'uiOptions': string;

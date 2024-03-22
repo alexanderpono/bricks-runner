@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { UIState } from '@src/types/UIState';
 import { Label } from '@src/components/Label';
 import { GuardState } from '@src/types/GuardState';
+import { ManState } from '@src/types/ManState';
 
 interface Ctrl {
     nodesClicked: () => void;
@@ -13,15 +14,17 @@ interface Ctrl {
     nodesCostClicked: () => void;
     mapClicked: () => void;
     guardRunClicked: () => void;
+    manRunClicked: () => void;
 }
 interface UIProps {
     kb: IKeyboard;
     uiState: UIState;
     ctrl: Ctrl;
     guardState: GuardState;
+    manState: ManState;
 }
 
-export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl, guardState }) => {
+export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl, guardState, manState }) => {
     return (
         <div className={styles.ui}>
             <canvas id="canvas" height={400} width={800}></canvas>
@@ -53,7 +56,10 @@ export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl, guardState }) => {
                 {Label(uiState.showMap, ctrl.mapClicked, `map`, 'Карта')}
             </div>
             <div className={styles.guardCtrl2}>
-                {Label(guardState.run, ctrl.guardRunClicked, `run`, 'Бежать')}
+                {Label(guardState.run, ctrl.guardRunClicked, `guardRun`, 'Бежать')}
+            </div>
+            <div className={styles.manCtrl2}>
+                {Label(manState.run, ctrl.manRunClicked, `manRun`, 'Бежать')}
             </div>
         </div>
     );

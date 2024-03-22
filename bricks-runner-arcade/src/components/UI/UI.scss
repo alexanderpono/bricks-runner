@@ -1,6 +1,6 @@
 .ui {
     display: grid;
-    grid-template-areas: "game game game" "playerCtrl uiOptions guardCtrl" "playerCtrl2 uiOptions2 guardCtrl2";
+    grid-template-areas: "game game game" "playerCtrl uiOptions guardCtrl" "manCtrl2 uiOptions2 guardCtrl2";
     grid-template-columns: 122px auto 122px;
     grid-template-rows: 400px 30px 30px;
     height: 430px;
@@ -33,7 +33,12 @@
     display: flex;
 }
 
-.guardCtrl2, .uiOptions {
+.manCtrl2 {
+    grid-area: manCtrl2;
+    display: flex;
+}
+
+.guardCtrl2, .uiOptions, .manCtrl2 {
     font-family: Arial, Helvetica, sans-serif;
     label {
         margin: 0px 0px 0px 0px;

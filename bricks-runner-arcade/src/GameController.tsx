@@ -12,6 +12,7 @@ import { Eater } from './game/Eater';
 import { Keyboard } from './ports/keyboard';
 import { UIState, defaultUIState } from './types/UIState';
 import { GuardState, defaultGuardState } from './types/GuardState';
+import { ManState } from './types/ManState';
 
 export class GameController {
     picLoaded: boolean;
@@ -30,6 +31,10 @@ export class GameController {
         showMap: true
     };
     private guardState: GuardState = {
+        ...defaultGuardState,
+        run: true
+    };
+    private manState: GuardState = {
         ...defaultGuardState,
         run: true
     };
@@ -61,6 +66,7 @@ export class GameController {
         this.loadPic().then(() => {
             this.picLoaded = true;
             this.guard.setState(this.guardState);
+            this.man.setState(this.manState);
             const guardState = this.guard.think();
             const manState = this.man.think();
             this.renderScene();
@@ -189,7 +195,13 @@ export class GameController {
 
     renderUI = () => {
         render(
-            <UI kb={this.kb} uiState={this.uiState} ctrl={this} guardState={this.guardState} />,
+            <UI
+                kb={this.kb}
+                uiState={this.uiState}
+                ctrl={this}
+                guardState={this.guardState}
+                manState={this.manState}
+            />,
             document.getElementById('game')
         );
     };
@@ -258,6 +270,15 @@ export class GameController {
     guardRunClicked = () => {
         this.patchGState({ run: !this.guardState.run });
         this.guard.setState(this.guardState);
+        this.runTick();
+        this.renderUI();
+        this.renderScene();
+    };
+
+    patchMState = (mixin: Partial<ManState>) => (this.manState = { ...this.manState, ...mixin });
+    manRunClicked = () => {
+        this.patchMState({ run: !this.manState.run });
+        this.man.setState(this.manState);
         this.runTick();
         this.renderUI();
         this.renderScene();

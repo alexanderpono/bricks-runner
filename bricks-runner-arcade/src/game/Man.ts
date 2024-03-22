@@ -2,6 +2,7 @@ import { ManAni } from '@src/ports/GR/GR.types';
 import { Point2D } from './LevelMap';
 import { Grid } from '@src/path/path.types';
 import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
+import { ManState, defaultManState } from '@src/types/ManState';
 
 interface MainController {
     runTick: () => void;
@@ -24,6 +25,7 @@ export class Man {
     manAni: ManAni;
     grid: Grid;
     state: Ani;
+    private manState: ManState = { ...defaultManState };
 
     constructor(
         manFieldXY: Point2D,
@@ -121,7 +123,7 @@ export class Man {
         this.kb.isLeftPressed;
 
     think = (): Ani => {
-        if (this.moveCommands.length) {
+        if (this.manState.run && this.moveCommands.length) {
             const commands = this.moveCommands.split('');
             const command = commands.shift();
             this.moveCommands = commands.join('');
@@ -142,5 +144,9 @@ export class Man {
             case 'D':
                 return this.stepDown(Scenario.CONTINUE_MOVEMENT);
         }
+    };
+
+    setState = (manState: ManState) => {
+        this.manState = manState;
     };
 }
