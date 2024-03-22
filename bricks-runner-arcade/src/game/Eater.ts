@@ -4,6 +4,7 @@ import { ALL_NODES, PathCalculator, SILENT } from '@src/path/PathCalculator';
 import { GridFromMap } from '@src/path/GridFromMap';
 import { Grid } from '@src/path/path.types';
 import { Ani, Man } from './Man';
+import { GuardState, defaultGuardState } from '@src/types/GuardState';
 
 export class Eater {
     manFieldXY: Point2D;
@@ -11,6 +12,7 @@ export class Eater {
     miniCounter: number;
     manAni: ManAni;
     grid: Grid;
+    private guardState: GuardState = { ...defaultGuardState };
 
     constructor(
         private levelMap: LevelMap,
@@ -87,7 +89,7 @@ export class Eater {
     think = () => {
         this.calculatePath();
         const distance = this.grid.cheapestPath.length;
-        if (distance > 0) {
+        if (this.guardState.run && distance > 0) {
             const nextEdgeIndex = this.grid.cheapestPath[0];
             const edge = this.grid.edges[nextEdgeIndex];
             const v0 = this.levelMap.vertexIndexToCoords(edge.vertex0);
@@ -109,5 +111,9 @@ export class Eater {
             this.miniCounter = miniCounter;
             return Ani.RUNNING;
         }
+    };
+
+    setState = (guardState: GuardState) => {
+        this.guardState = guardState;
     };
 }

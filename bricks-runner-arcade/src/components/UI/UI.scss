@@ -1,8 +1,8 @@
 .ui {
     display: grid;
-    grid-template-areas: "game game game" "playerCtrl uiOptions guardCtrl";
+    grid-template-areas: "game game game" "playerCtrl uiOptions guardCtrl" "playerCtrl2 uiOptions2 guardCtrl2";
     grid-template-columns: 122px auto 122px;
-    grid-template-rows: 400px auto;
+    grid-template-rows: 400px 30px 30px;
     height: 430px;
     width: 800px;
 }
@@ -28,19 +28,13 @@
     }
 }
 
-:global(.pressed) {
-    background: grey;
-}
-body {
-    padding: 0;
-    margin: 0;
+.guardCtrl2 {
+    grid-area: guardCtrl2;
+    display: flex;
 }
 
-.uiOptions {
+.guardCtrl2, .uiOptions {
     font-family: Arial, Helvetica, sans-serif;
-    grid-area: uiOptions;
-    display: flex;
-    justify-content: center;
     label {
         margin: 0px 0px 0px 0px;
         padding-left: 0px;
@@ -112,4 +106,17 @@ body {
 
 
 
+:global(.pressed) {
+    background: grey;
+}
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.uiOptions {
+    grid-area: uiOptions;
+    display: flex;
+    justify-content: center;
+}
 

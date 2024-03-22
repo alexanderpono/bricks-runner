@@ -11,6 +11,7 @@ import { PathCalculator } from './path/PathCalculator';
 import { Eater } from './game/Eater';
 import { Keyboard } from './ports/keyboard';
 import { UIState, defaultUIState } from './types/UIState';
+import { GuardState, defaultGuardState } from './types/GuardState';
 
 export class GameController {
     picLoaded: boolean;
@@ -27,6 +28,10 @@ export class GameController {
         showPath: true,
         showNodesCost: true,
         showMap: true
+    };
+    private guardState: GuardState = {
+        ...defaultGuardState,
+        run: true
     };
 
     constructor() {}
@@ -55,6 +60,7 @@ export class GameController {
 
         this.loadPic().then(() => {
             this.picLoaded = true;
+            this.guard.setState(this.guardState);
             const guardState = this.guard.think();
             const manState = this.man.think();
             this.renderScene();
@@ -183,7 +189,7 @@ export class GameController {
 
     renderUI = () => {
         render(
-            <UI kb={this.kb} uiState={this.uiState} ctrl={this} />,
+            <UI kb={this.kb} uiState={this.uiState} ctrl={this} guardState={this.guardState} />,
             document.getElementById('game')
         );
     };
@@ -243,6 +249,16 @@ export class GameController {
     };
     mapClicked = () => {
         this.patchState({ showMap: !this.uiState.showMap });
+        this.renderUI();
+        this.renderScene();
+    };
+
+    patchGState = (mixin: Partial<GuardState>) =>
+        (this.guardState = { ...this.guardState, ...mixin });
+    guardRunClicked = () => {
+        this.patchGState({ run: !this.guardState.run });
+        this.guard.setState(this.guardState);
+        this.runTick();
         this.renderUI();
         this.renderScene();
     };

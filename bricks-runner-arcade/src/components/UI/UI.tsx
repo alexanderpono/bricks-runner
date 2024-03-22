@@ -4,6 +4,7 @@ import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
 import cn from 'classnames';
 import { UIState } from '@src/types/UIState';
 import { Label } from '@src/components/Label';
+import { GuardState } from '@src/types/GuardState';
 
 interface Ctrl {
     nodesClicked: () => void;
@@ -11,14 +12,16 @@ interface Ctrl {
     pathClicked: () => void;
     nodesCostClicked: () => void;
     mapClicked: () => void;
+    guardRunClicked: () => void;
 }
 interface UIProps {
     kb: IKeyboard;
     uiState: UIState;
     ctrl: Ctrl;
+    guardState: GuardState;
 }
 
-export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl }) => {
+export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl, guardState }) => {
     return (
         <div className={styles.ui}>
             <canvas id="canvas" height={400} width={800}></canvas>
@@ -48,6 +51,9 @@ export const UI: React.FC<UIProps> = ({ kb, uiState, ctrl }) => {
                 {Label(uiState.showPath, ctrl.pathClicked, `path`, 'Путь')}
                 {Label(uiState.showNodesCost, ctrl.nodesCostClicked, `nodesCost`, 'Стоимость')}
                 {Label(uiState.showMap, ctrl.mapClicked, `map`, 'Карта')}
+            </div>
+            <div className={styles.guardCtrl2}>
+                {Label(guardState.run, ctrl.guardRunClicked, `run`, 'Бежать')}
             </div>
         </div>
     );
