@@ -28,7 +28,8 @@ export class GameController {
         ...defaultUIState,
         showPath: true,
         showNodesCost: true,
-        showMap: true
+        showMap: true,
+        showLines: false
     };
     private guardState: GuardState = {
         ...defaultGuardState,

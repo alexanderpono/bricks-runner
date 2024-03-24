@@ -53,6 +53,7 @@ export class LevelMap {
     };
 
     getWidth = () => this.field[0].length;
+    getHeight = () => this.field.length;
 
     vertexIndexToCoords = (vertexIndex: number): Point2D => {
         const x = vertexIndex % this.w;
