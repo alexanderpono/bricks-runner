@@ -31,7 +31,6 @@ const gridToString = (grid: Grid, map: LevelMap): string => {
         if (color === 'red') {
             return;
         }
-        console.log(`line(${v0.x}, ${v0.y}), (${v1.x}, ${v1.y}), ${color}`);
         if (v0.y === v1.y && v0.x < v1.x) {
             if (Math.floor(v0.x) === v0.x) {
                 canvas[v0.y][v0.x].r = 1;
@@ -48,7 +47,6 @@ const gridToString = (grid: Grid, map: LevelMap): string => {
                 canvas[v1.y][v1.x].u = 1;
             }
         }
-        console.log('line canvas=', canvas);
     };
 
     const drawEdge = (edge: Edge, index: number) => {
@@ -69,7 +67,6 @@ const gridToString = (grid: Grid, map: LevelMap): string => {
         } else {
             color = 'green';
         }
-        console.log(`drawEdge(${index}) color=`, color);
         line({ x: midX, y: midY }, { x: v1x, y: v1y }, color);
     };
 
@@ -85,7 +82,6 @@ const gridToString = (grid: Grid, map: LevelMap): string => {
                 const cellS = `${cell.u ? 'u' : ''}${cell.d ? 'd' : ''}${cell.l ? 'l' : ''}${
                     cell.r ? 'r' : ''
                 }`;
-                console.log('cellS=', JSON.stringify(cellS));
                 switch (cellS) {
                     case 'r':
                         return '╶';
@@ -113,14 +109,12 @@ const gridToString = (grid: Grid, map: LevelMap): string => {
                         return '?';
                 }
             });
-            console.log('line=', line.join(''));
             return line.join('');
         });
         return lines.join('\n');
     };
 
     renderLines();
-    console.log('gridToString() canvas2=', JSON.stringify(canvas));
     const result = canvasToString();
 
     return result;
@@ -138,10 +132,8 @@ describe('GridFromMap', () => {
             ${cases.c6.level} | ${null}    | ${cases.c6.expected}
         `('returns $expected from $level', ({ level, expected }) => {
             const map = LevelMap.create().initFromText(level);
-            console.log('gridToString() map=', JSON.stringify(map));
             const builder = new GridFromMap();
             const grid = builder.gridFromMap(map);
-            console.log('gridToString() grid=', JSON.stringify(grid.edges));
             const gridS = gridToString(grid, map);
             expect(gridS).toBe(expected.trim());
         });
