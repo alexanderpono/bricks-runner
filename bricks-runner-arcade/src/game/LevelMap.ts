@@ -6,7 +6,8 @@ export enum Cell {
     teleport = '1',
     space = ' ',
     coin = 'c',
-    guard = 'E'
+    guard = 'E',
+    pipe = '~'
 }
 
 export interface Point2D {

@@ -13,6 +13,33 @@ const c2 = {
                 `
 };
 
+const c3 = {
+    level: `
+▓M~~ E▓
+▓╡   ▓▓
+▓▓▓▓▓▓▓
+    `,
+    expected: `
+.*..*..
+.****..
+.......
+                    `
+};
+
+const c4 = {
+    level: `
+▓M~ ~E▓
+▓╡   ▓▓
+▓▓▓▓▓▓▓
+    `,
+    expected: `
+.*.**..
+.***...
+.......
+                    `
+};
 export const cases = {
-    c2
+    c2,
+    c3,
+    c4
 };

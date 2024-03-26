@@ -126,9 +126,16 @@ export class PathCalculator {
         curVertex: Vertex,
         edgeIndex: number
     ) => {
+        const V0V1 = 1;
+        const V1V0 = 2;
+
         const adjacentEdge = graph.edges[edgeIndex];
         const adjacentVertex = graph.vertices[adjacentVertexIndex];
-        const newAccessCost = curVertex.accessCost + adjacentEdge.cost.cost;
+        const direction = adjacentEdge.vertex0 === graph.curVertexIndex ? V0V1 : V1V0;
+        const moveCost =
+            direction === V0V1 ? adjacentEdge.cost.v0v1Cost : adjacentEdge.cost.v1v0Cost;
+
+        const newAccessCost = curVertex.accessCost + moveCost;
         if (
             adjacentVertex.accessCost === UNDEFINED_COST ||
             newAccessCost < adjacentVertex.accessCost

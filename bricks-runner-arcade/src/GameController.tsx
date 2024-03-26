@@ -54,7 +54,7 @@ export class GameController {
             this.levelMap.charToCoords('M'),
             this.kb,
             this,
-            'RRRRRRRRDDLLLLLLLLDDLLLLLLDDRRRRRRRRRRRR'
+            'LLLLLRRRRRRRRRRRRRRRDDLLLLLLLLDDLLLLLLDDRRRRRRRRRRRR'
         );
         this.guard = new Eater(
             this.levelMap,

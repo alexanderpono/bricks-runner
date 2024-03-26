@@ -67,10 +67,24 @@ const c6 = {
     `
 };
 
+const c7 = {
+    level: `
+▓ ~~ ▓
+▓╡  ▓▓
+▓▓▓▓▓▓
+      `,
+    expected: `
+▓┌┬┬╴▓
+▓└─╴▓▓
+▓▓▓▓▓▓
+        `
+};
+
 export const cases = {
     c2,
     c3,
     c4,
     c5,
-    c6
+    c6,
+    c7
 };

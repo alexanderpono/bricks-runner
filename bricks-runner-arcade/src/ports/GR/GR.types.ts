@@ -124,6 +124,10 @@ export const coin: Sprite = {
     x: 600,
     y: 40
 };
+export const pipe: Sprite = {
+    x: 280,
+    y: 120
+};
 
 export enum ManAni {
     STAND = 'STAND',

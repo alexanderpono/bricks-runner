@@ -1,4 +1,4 @@
-import { Sprite, space, stairs, wall } from '@src/ports/GR/GR.types';
+import { Sprite, pipe, space, stairs, wall } from '@src/ports/GR/GR.types';
 import { putSprite } from '@src/ports/GR/GR.lib';
 
 import { Cell, LevelMap } from '@src/game/LevelMap';
@@ -20,6 +20,9 @@ export class GRMap {
                 }
                 if (uiState.showMap && cell === Cell.stairs) {
                     sprite = stairs;
+                }
+                if (uiState.showMap && cell === Cell.pipe) {
+                    sprite = pipe;
                 }
                 putSprite(this.context, this.pic, sprite, x, y);
             });

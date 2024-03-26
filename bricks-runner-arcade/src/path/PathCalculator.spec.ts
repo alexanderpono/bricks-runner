@@ -68,6 +68,8 @@ describe('PathCalculator', () => {
         level             | expected
         ${'▓M E▓'}        | ${'.**..'}
         ${cases.c2.level} | ${cases.c2.expected}
+        ${cases.c3.level} | ${cases.c3.expected}
+        ${cases.c4.level} | ${cases.c4.expected}
     `('returns $expected from $level', ({ level, expected }) => {
         const map = LevelMap.create().initFromText(level);
         const builder = new GridFromMap();

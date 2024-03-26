@@ -4,7 +4,7 @@ import { COST_SPACE, COST_WALL } from './PathCalculator';
 
 const asEmpty = [Cell.space, Cell.coin, Cell.gold];
 const passable = [Cell.space, Cell.coin, Cell.gold, Cell.stairs, Cell.man];
-const passableNotStairs = [Cell.space, Cell.coin, Cell.gold, Cell.man];
+const passableNotStairs = [Cell.space, Cell.coin, Cell.gold, Cell.man, Cell.pipe];
 
 export class GridFromMap {
     gridFromMap = (field: LevelMap): Grid => {
@@ -67,10 +67,10 @@ export class GridFromMap {
             const isV0DEmpty = asEmpty.indexOf(v0D) >= 0;
             const isV1DEmpty = asEmpty.indexOf(v1D) >= 0;
 
-            if (isV0DEmpty) {
+            if (isV0DEmpty && cell0 !== Cell.pipe) {
                 result.v0v1Cost = COST_WALL;
             }
-            if (isV1DEmpty) {
+            if (isV1DEmpty && cell1 !== Cell.pipe) {
                 result.v1v0Cost = COST_WALL;
             }
             if (cell1 === Cell.wall || cell0 === Cell.wall) {
