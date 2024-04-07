@@ -1,8 +1,9 @@
 import { ManAni } from '@src/ports/GR/GR.types';
-import { Point2D } from './LevelMap';
-import { Grid } from '@src/path/path.types';
+import { Cell, LevelMap, Point2D } from './LevelMap';
+import { Edge, Grid } from '@src/path/path.types';
 import { IKeyboard } from '@src/ports/keyboard/Keyboard.types';
 import { ManState, defaultManState } from '@src/types/ManState';
+import { GridFromMap } from '@src/path/GridFromMap';
 
 interface MainController {
     runTick: () => void;
@@ -31,49 +32,142 @@ export class Man {
         manFieldXY: Point2D,
         private kb: IKeyboard,
         private main: MainController,
-        private moveCommands: string
+        private moveCommands: string,
+        private levelMap: LevelMap,
+        private gridBuilder: GridFromMap
     ) {
         this.miniCounter = 0;
         this.manFieldXY = { ...manFieldXY };
         this.nextManFieldXY = { ...manFieldXY };
         this.manAni = ManAni.STAND;
         this.state = Ani.STOPPED;
+        this.grid = this.gridBuilder.gridFromMap(this.levelMap);
     }
 
     stepRight = (scenario: Scenario) => {
         if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
-        this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x + 1, y: this.manFieldXY.y };
-        this.manAni = ManAni.RIGHT;
+        const nextManFieldXY = { x: this.manFieldXY.x + 1, y: this.manFieldXY.y };
+        if (this.canGoTo(nextManFieldXY)) {
+            this.miniCounter = 0;
+            this.nextManFieldXY = nextManFieldXY;
+            this.aniRight();
+        } else {
+            console.log('cant go RIGHT');
+            this.aniStand();
+        }
     };
 
     stepLeft = (scenario: Scenario) => {
         if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
+        const nextManFieldXY = { x: this.manFieldXY.x - 1, y: this.manFieldXY.y };
         this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x - 1, y: this.manFieldXY.y };
-        this.manAni = ManAni.LEFT;
+        if (this.canGoTo(nextManFieldXY)) {
+            this.nextManFieldXY = nextManFieldXY;
+            this.aniLeft();
+        } else {
+            console.log('cant go LEFT');
+            this.aniStand();
+        }
     };
 
     stepDown = (scenario: Scenario) => {
         if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
+        const nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y + 1 };
+
         this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y + 1 };
-        this.manAni = ManAni.STAIRS;
+        if (this.canGoTo(nextManFieldXY)) {
+            this.nextManFieldXY = nextManFieldXY;
+            this.aniDown();
+        } else {
+            console.log('cant go DOWN');
+            this.aniStand();
+        }
+    };
+
+    aniDown = () => {
+        const cell = this.levelMap.coordsToCell(this.manFieldXY);
+        const cellT = this.levelMap.coordsToCell(this.nextManFieldXY);
+        if (cell === Cell.stairs || cellT === Cell.stairs) {
+            this.manAni = ManAni.STAIRS;
+        } else {
+            this.manAni = ManAni.STAND;
+        }
+    };
+
+    getEdgesOfVertex = (edges: Edge[], vertexIndex: number): number[] => {
+        const edgesOfVertex = edges
+            .map((edge: Edge, index: number) =>
+                edge.vertex0 === vertexIndex || edge.vertex1 === vertexIndex ? index : -1
+            )
+            .filter((index) => index !== -1);
+        return edgesOfVertex;
     };
 
     stepUp = (scenario: Scenario) => {
         if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
+
+        const nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y - 1 };
         this.miniCounter = 0;
-        this.nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y - 1 };
-        this.manAni = ManAni.STAIRS;
+        if (this.canGoTo(nextManFieldXY)) {
+            this.nextManFieldXY = nextManFieldXY;
+            this.manAni = ManAni.STAIRS;
+        } else {
+            console.log('cant go UP');
+            this.aniStand();
+        }
+    };
+
+    aniStand = () => {
+        const cell = this.levelMap.coordsToCell(this.manFieldXY);
+        if (cell === Cell.pipe) {
+            this.manAni = ManAni.PIPE_STAND;
+        } else {
+            this.manAni = ManAni.STAND;
+        }
+        this.state = Ani.STOPPED;
+    };
+
+    aniLeft = () => {
+        const cell = this.levelMap.coordsToCell(this.manFieldXY);
+        const cellT = this.levelMap.coordsToCell(this.nextManFieldXY);
+        if (cell === Cell.pipe || cellT === Cell.pipe) {
+            this.manAni = ManAni.PIPE_LEFT;
+        } else {
+            this.manAni = ManAni.LEFT;
+        }
+    };
+
+    aniRight = () => {
+        const cell = this.levelMap.coordsToCell(this.manFieldXY);
+        const cellT = this.levelMap.coordsToCell(this.nextManFieldXY);
+        if (cell === Cell.pipe || cellT === Cell.pipe) {
+            this.manAni = ManAni.PIPE_RIGHT;
+        } else {
+            this.manAni = ManAni.RIGHT;
+        }
+    };
+
+    canGoTo = (nextManFieldXY: Point2D) => {
+        const mIndex = this.levelMap.coordToVertexIndex(this.manFieldXY);
+        const dIndex = this.levelMap.coordToVertexIndex(nextManFieldXY);
+        const edges = this.getEdgesOfVertex(this.grid.edges, mIndex);
+        const edge = edges
+            .map((edgeIndex: number) => this.grid.edges[edgeIndex])
+            .filter(
+                (edge: Edge) =>
+                    (edge.vertex0 === mIndex && edge.vertex1 === dIndex) ||
+                    (edge.vertex1 === mIndex && edge.vertex0 === dIndex)
+            );
+        const cost = edge[0].vertex0 === mIndex ? edge[0].cost.v0v1Cost : edge[0].cost.v1v0Cost;
+        return cost === 1;
     };
 
     tick = (): Ani => {
@@ -90,8 +184,13 @@ export class Man {
                     return this.state;
                 }
             }
-            this.manAni = ManAni.STAND;
-            this.state = Ani.STOPPED;
+
+            if (this.calcAutoFall()) {
+                this.state = Ani.STOPPED;
+            } else {
+                this.aniStand();
+                this.state = Ani.STOPPED;
+            }
             return this.state;
         } else {
             const miniCounter = this.miniCounter + 1;
@@ -99,6 +198,10 @@ export class Man {
             this.state = Ani.RUNNING;
             return this.state;
         }
+    };
+
+    calcAutoFall = () => {
+        return false;
     };
 
     onKeyEvent = (scenario: Scenario) => {

@@ -1,6 +1,7 @@
+import { ManAni, Sprite } from './GR.types';
+import { putSprite_ } from './GR.lib';
+import { Point2D } from '@src/game/LevelMap';
 import {
-    ManAni,
-    Sprite,
     eater,
     eaterD0,
     eaterD1,
@@ -10,9 +11,7 @@ import {
     eaterR1,
     eaterU0,
     eaterU1
-} from './GR.types';
-import { putSprite_ } from './GR.lib';
-import { Point2D } from '@src/game/LevelMap';
+} from './GR.sprite';
 
 export class GREater {
     constructor(

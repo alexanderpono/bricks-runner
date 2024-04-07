@@ -1,8 +1,9 @@
-import { Sprite, pipe, space, stairs, wall } from '@src/ports/GR/GR.types';
+import { Sprite } from '@src/ports/GR/GR.types';
 import { putSprite } from '@src/ports/GR/GR.lib';
 
 import { Cell, LevelMap } from '@src/game/LevelMap';
 import { UIState } from '@src/types/UIState';
+import { pipe, space, stairs, wall } from './GR.sprite';
 
 export class GRMap {
     constructor(

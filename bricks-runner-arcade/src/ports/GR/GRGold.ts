@@ -1,6 +1,7 @@
-import { Sprite, gold } from './GR.types';
+import { Sprite } from './GR.types';
 import { putSprite } from './GR.lib';
 import { Point2D } from '@src/game/LevelMap';
+import { gold } from './GR.sprite';
 
 export class GRGold {
     constructor(

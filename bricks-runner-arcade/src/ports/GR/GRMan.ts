@@ -1,23 +1,8 @@
-import {
-    ManAni,
-    Sprite,
-    man,
-    manL0,
-    manL1,
-    manL2,
-    manR0,
-    manR1,
-    manR2,
-    manU0,
-    manU1,
-    spark0,
-    spark1,
-    spark2,
-    spark3,
-    spark4
-} from './GR.types';
+import { ManAni, Sprite } from './GR.types';
 import { putSprite_ } from './GR.lib';
 import { Point2D } from '@src/game/LevelMap';
+import { man, manL0, manL1, manL2, manR0, manR1, manR2, manU0, manU1 } from './GR.sprite-man';
+import { spark0, spark1, spark2, spark3, spark4 } from './GR.sprite';
 
 export class GRMan {
     constructor(

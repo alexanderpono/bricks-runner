@@ -33,7 +33,7 @@ export class GameController {
     };
     private guardState: GuardState = {
         ...defaultGuardState,
-        run: true
+        run: false
     };
     private manState: GuardState = {
         ...defaultGuardState,
@@ -54,7 +54,9 @@ export class GameController {
             this.levelMap.charToCoords('M'),
             this.kb,
             this,
-            'LLLLLRRRRRRRRRRRRRRRDDLLLLLLLLDDLLLLLLDDRRRRRRRRRRRR'
+            'U', //LLLRRRRRRRRRRRRRRRDDLLLLLLLLDDLLLLLLDDRRRRRRRRRRRR',
+            this.levelMap,
+            new GridFromMap()
         );
         this.guard = new Eater(
             this.levelMap,
@@ -72,6 +74,9 @@ export class GameController {
             const manState = this.man.think();
             this.renderScene();
             if (guardState === Ani.RUNNING) {
+                this.runTick();
+            }
+            if (manState === Ani.RUNNING) {
                 this.runTick();
             }
         });

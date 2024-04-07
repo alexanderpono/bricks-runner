@@ -1,6 +1,7 @@
-import { Sprite, pipe } from './GR.types';
+import { Sprite } from './GR.types';
 import { putSprite } from './GR.lib';
 import { Point2D } from '@src/game/LevelMap';
+import { pipe } from './GR.sprite';
 
 export class GRPipe {
     constructor(
