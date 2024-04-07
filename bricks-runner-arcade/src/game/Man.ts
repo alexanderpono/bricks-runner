@@ -186,7 +186,7 @@ export class Man {
             }
 
             if (this.calcAutoFall()) {
-                this.state = Ani.STOPPED;
+                this.state = Ani.RUNNING;
             } else {
                 this.aniStand();
                 this.state = Ani.STOPPED;
@@ -201,6 +201,18 @@ export class Man {
     };
 
     calcAutoFall = () => {
+        const cell = this.levelMap.coordsToCell(this.manFieldXY);
+        const nextManFieldXY = { x: this.manFieldXY.x, y: this.manFieldXY.y + 1 };
+        const cellD = this.levelMap.coordsToCell(nextManFieldXY);
+        if (cell === Cell.space && cellD === Cell.space) {
+            if (this.canGoTo(nextManFieldXY)) {
+                this.manAni = ManAni.STAND;
+                this.stepDown(Scenario.CONTINUE_MOVEMENT);
+                this.main.runTick();
+                return true;
+            }
+        }
+
         return false;
     };
 
