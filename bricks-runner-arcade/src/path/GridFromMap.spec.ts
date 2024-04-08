@@ -143,6 +143,7 @@ describe('GridFromMap', () => {
             ${cases.c5.level} | ${null}    | ${cases.c5.expected}
             ${cases.c6.level} | ${null}    | ${cases.c6.expected}
             ${cases.c7.level} | ${null}    | ${cases.c7.expected}
+            ${cases.c8.level} | ${null}    | ${cases.c8.expected}
         `('returns $expected from $level', ({ level, expected }) => {
             const map = LevelMap.create().initFromText(level);
             console.log('gridToString() map=', JSON.stringify(map));
