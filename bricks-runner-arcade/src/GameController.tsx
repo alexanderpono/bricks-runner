@@ -54,7 +54,7 @@ export class GameController {
             this.levelMap.charToCoords('M'),
             this.kb,
             this,
-            'LL', //LLLRRRRRRRRRRRRRRRDDLLLLLLLLDDLLLLLLDDRRRRRRRRRRRR',
+            'D',
             this.levelMap,
             new GridFromMap()
         );

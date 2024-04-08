@@ -18,6 +18,8 @@ export enum Scenario {
     FIRST_PRESS = 'FIRST_PRESS',
     CONTINUE_MOVEMENT = 'CONTINUE_MOVEMENT'
 }
+const CAN_GO = true;
+const CANNOT_GO = false;
 
 export class Man {
     manFieldXY: Point2D;
@@ -53,9 +55,11 @@ export class Man {
             this.miniCounter = 0;
             this.nextManFieldXY = nextManFieldXY;
             this.aniRight();
+            return CAN_GO;
         } else {
             console.log('cant go RIGHT');
             this.aniStand();
+            return CANNOT_GO;
         }
     };
 
@@ -68,9 +72,11 @@ export class Man {
         if (this.canGoTo(nextManFieldXY)) {
             this.nextManFieldXY = nextManFieldXY;
             this.aniLeft();
+            return CAN_GO;
         } else {
             console.log('cant go LEFT');
             this.aniStand();
+            return CANNOT_GO;
         }
     };
 
@@ -84,9 +90,11 @@ export class Man {
         if (this.canGoTo(nextManFieldXY)) {
             this.nextManFieldXY = nextManFieldXY;
             this.aniDown();
+            return CAN_GO;
         } else {
             console.log('cant go DOWN');
             this.aniStand();
+            return CANNOT_GO;
         }
     };
 
@@ -109,7 +117,7 @@ export class Man {
         return edgesOfVertex;
     };
 
-    stepUp = (scenario: Scenario) => {
+    stepUp = (scenario: Scenario): boolean => {
         if (this.state === Ani.RUNNING && scenario === Scenario.FIRST_PRESS) {
             return;
         }
@@ -119,9 +127,11 @@ export class Man {
         if (this.canGoTo(nextManFieldXY)) {
             this.nextManFieldXY = nextManFieldXY;
             this.manAni = ManAni.STAIRS;
+            return CAN_GO;
         } else {
             console.log('cant go UP');
             this.aniStand();
+            return CANNOT_GO;
         }
     };
 
@@ -175,8 +185,9 @@ export class Man {
             this.manFieldXY = { ...this.nextManFieldXY };
             this.main.onManAniNewLoop();
             if (this.isKeypressed()) {
-                this.onKeyEvent(Scenario.CONTINUE_MOVEMENT);
-                this.main.runTick();
+                if (this.onKeyEvent(Scenario.CONTINUE_MOVEMENT) === CAN_GO) {
+                    this.main.runTick();
+                }
                 return this.state;
             } else {
                 if (this.moveCommands.length) {
@@ -216,19 +227,21 @@ export class Man {
         return false;
     };
 
-    onKeyEvent = (scenario: Scenario) => {
+    onKeyEvent = (scenario: Scenario): boolean => {
+        let move = false;
         if (this.kb.isUpPressed) {
-            this.stepUp(scenario);
+            move = move || this.stepUp(scenario);
         }
         if (this.kb.isDownPressed) {
-            this.stepDown(scenario);
+            move = move || this.stepDown(scenario);
         }
         if (this.kb.isRightPressed) {
-            this.stepRight(scenario);
+            move = move || this.stepRight(scenario);
         }
         if (this.kb.isLeftPressed) {
-            this.stepLeft(scenario);
+            move = move || this.stepLeft(scenario);
         }
+        return move;
     };
 
     isKeypressed = () =>
