@@ -3,7 +3,7 @@ import { EdgeCost, Grid, defaultGrid, defaultVertex } from './path.types';
 import { COST_SPACE, COST_WALL } from './PathCalculator';
 
 const asEmpty = [Cell.space, Cell.coin, Cell.gold];
-const passable = [Cell.space, Cell.coin, Cell.gold, Cell.stairs, Cell.man, Cell.pipe];
+const passable = [Cell.space, Cell.coin, Cell.gold, Cell.stairs, Cell.man, Cell.pipe, Cell.guard];
 const passableNotStairs = [Cell.space, Cell.coin, Cell.gold, Cell.man, Cell.pipe];
 
 export class GridFromMap {

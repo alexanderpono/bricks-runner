@@ -6,7 +6,7 @@ export const SILENT = false;
 export const COST_WALL = 500;
 export const COST_SPACE = 1;
 export const ALL_NODES = 1000;
-const MAX_PATH_LENGTH = 400;
+export const MAX_PATH_LENGTH = 400;
 
 export class PathCalculator {
     protected toVertex = -1;

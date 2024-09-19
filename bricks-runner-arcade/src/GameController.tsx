@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { UI } from './components/UI';
 import ImgSprite from '@src/components/UI/sprite.png';
 import { level1 } from './ports/levels/level1';
+import { level2 } from './ports/levels/level2';
 import { Cell, DynamicObject, LevelMap } from './game/LevelMap';
 import { GRScene } from './ports/GR/GRScene';
 import { Ani, Man, Scenario } from './game/Man';
@@ -13,6 +14,7 @@ import { Keyboard } from './ports/keyboard';
 import { UIState, defaultUIState } from './types/UIState';
 import { GuardState, defaultGuardState } from './types/GuardState';
 import { ManState } from './types/ManState';
+import { SimplePathCalculator } from './path/SimplePathCalculator';
 
 export class GameController {
     picLoaded: boolean;
@@ -45,6 +47,8 @@ export class GameController {
     run() {
         this.levelMap = LevelMap.create().initFromText(level1);
         this.emptyLevel = this.initEmptyField(level1);
+        this.levelMap = LevelMap.create().initFromText(level2);
+        this.emptyLevel = this.initEmptyField(level2);
         this.dObjects = this.levelMap.getDynanicObjects();
         this.kb = new Keyboard(this);
         this.kb.listen();
@@ -61,6 +65,7 @@ export class GameController {
         this.guard = new Eater(
             this.levelMap,
             new PathCalculator(),
+            // new SimplePathCalculator(),
             new GridFromMap(),
             this.levelMap.charToCoords('E'),
             this.man
